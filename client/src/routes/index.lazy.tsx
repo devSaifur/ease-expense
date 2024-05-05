@@ -1,8 +1,13 @@
-import { api } from '@/lib/api.ts'
+import { api } from '@/lib/api'
 import { cn } from '@/lib/utils'
 import { useQuery } from '@tanstack/react-query'
+import { createLazyFileRoute } from '@tanstack/react-router'
 
-function App() {
+export const Route = createLazyFileRoute('/')({
+  component: Index,
+})
+
+function Index() {
   const { data, isPending } = useQuery({
     queryKey: ['expenses'],
     queryFn: async () => {
@@ -21,5 +26,3 @@ function App() {
     </div>
   )
 }
-
-export default App
