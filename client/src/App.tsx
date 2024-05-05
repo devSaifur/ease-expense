@@ -1,8 +1,10 @@
-import { cn } from './lib/utils'
+import { cn } from '@/lib/utils'
 
 function App() {
   return (
-    <div className={cn('font-geist h-screen w-full bg-black text-white')}>
+    <div
+      className={cn('h-screen w-full bg-background font-geist text-foreground')}
+    >
       hello vite
     </div>
   )
