@@ -12,17 +12,20 @@ function Index() {
     queryKey: ['expenses'],
     queryFn: async () => {
       const res = await api.expenses.$get()
+      if (!res.ok) {
+        throw new Error('Failed to fetch expenses')
+      }
       const { expenses } = await res.json()
       return expenses
     },
   })
 
   return (
-    <div
-      className={cn('h-screen w-full bg-background font-geist text-foreground')}
-    >
-      hello vite
-      <div>{isPending ? 'loading...' : JSON.stringify(data)}</div>
+    <div className={cn('')}>
+      hello vite ok
+      <div>
+        <pre>{isPending ? 'loading...' : JSON.stringify(data)}</pre>
+      </div>
     </div>
   )
 }

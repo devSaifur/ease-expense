@@ -12,6 +12,8 @@ const fakeExpenses: Expense[] = [
     { id: 1, title: 'Groceries', amount: 200 },
     { id: 2, title: 'Rent', amount: 1000 },
     { id: 3, title: 'Utilities', amount: 500 },
+    { id: 4, title: 'Food', amount: 300 },
+    { id: 5, title: 'Entertainment', amount: 100 },
 ]
 
 export const expensesRoute = new Hono()
