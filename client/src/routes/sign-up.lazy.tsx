@@ -10,47 +10,45 @@ import {
 import { Input } from '@/components/ui/input'
 import { api } from '@/lib/api'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { TExpenseSchema, expenseSchema } from '@server/lib/validators'
+import { TRegisterSchema, registerSchema } from '@server/lib/validators'
 import { useMutation } from '@tanstack/react-query'
 import { createLazyFileRoute, useRouter } from '@tanstack/react-router'
 import { useForm } from 'react-hook-form'
 import { toast } from 'sonner'
 
-export const Route = createLazyFileRoute('/expenses/new')({
-  component: NewExpense,
+export const Route = createLazyFileRoute('/sign-up')({
+  component: Register,
 })
 
-function NewExpense() {
+function Register() {
   const router = useRouter()
-
-  const { mutate: createExpense, isPending } = useMutation({
-    mutationFn: async (values: TExpenseSchema) => {
-      const res = await api.expenses.$post({ json: values })
+  const { mutate: register, isPending } = useMutation({
+    mutationFn: async (values: TRegisterSchema) => {
+      const res = await api.auth.register.$post({ json: values })
       if (!res.ok) {
-        throw new Error('Failed to create expense')
+        throw new Error('Failed to create user')
       }
-      const createdExpense = await res.json()
-      console.log('created', createdExpense)
     },
     onSuccess: () => {
-      router.navigate({ to: '/expenses' })
-      toast.success('Expense created successfully')
+      toast.success('User created successfully')
+      router.navigate({ to: '/login' })
     },
     onError: () => {
-      toast.error('Failed to create expense')
+      toast.error('Failed to sign up user')
     },
   })
 
-  const form = useForm<TExpenseSchema>({
-    resolver: zodResolver(expenseSchema),
+  const form = useForm<TRegisterSchema>({
+    resolver: zodResolver(registerSchema),
     defaultValues: {
-      title: '',
-      amount: 0,
+      name: '',
+      email: '',
+      password: '',
     },
   })
 
-  function onSubmit(values: TExpenseSchema) {
-    createExpense(values)
+  function onSubmit(values: TRegisterSchema) {
+    register(values)
   }
 
   return (
@@ -59,12 +57,12 @@ function NewExpense() {
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
           <FormField
             control={form.control}
-            name="title"
+            name="name"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Title</FormLabel>
+                <FormLabel>Name</FormLabel>
                 <FormControl>
-                  <Input placeholder="Title" {...field} />
+                  <Input placeholder="Name" {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -72,17 +70,25 @@ function NewExpense() {
           />
           <FormField
             control={form.control}
-            name="amount"
+            name="email"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Amount</FormLabel>
+                <FormLabel>Email</FormLabel>
                 <FormControl>
-                  <Input
-                    placeholder="Amount"
-                    onFocus={(e) => e.target.select()}
-                    type="number"
-                    {...field}
-                  />
+                  <Input placeholder="Email" {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="password"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Password</FormLabel>
+                <FormControl>
+                  <Input placeholder="********" type="password" {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>

@@ -65,12 +65,11 @@ function Expenses() {
 
   return (
     <main>
-      <Table className="mx-auto max-w-2xl">
+      <Table className="mx-auto max-w-4xl">
         <TableCaption>A list of your recent expenses</TableCaption>
         <TableHeader>
           <TableRow>
             <TableHead />
-            <TableHead>ID</TableHead>
             <TableHead>Title</TableHead>
             <TableHead>Amount</TableHead>
           </TableRow>
@@ -88,7 +87,6 @@ function Expenses() {
                   <Cross1Icon className="size-5" />
                 </Button>
               </TableCell>
-              <TableCell className="font-medium">{e.id}</TableCell>
               <TableCell>{e.title}</TableCell>
               <TableCell>{e.amount}</TableCell>
             </TableRow>
@@ -96,7 +94,7 @@ function Expenses() {
         </TableBody>
         <TableFooter>
           <TableRow>
-            <TableCell colSpan={3}>Total</TableCell>
+            <TableCell colSpan={2}>Total</TableCell>
             <TableCell>{totalExpense}</TableCell>
           </TableRow>
         </TableFooter>

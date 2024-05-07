@@ -4,7 +4,7 @@ import { getCookie } from 'hono/cookie'
 import { csrf } from 'hono/csrf'
 import type { User, Session } from 'lucia'
 
-const app = new Hono<{
+export const app = new Hono<{
     Variables: {
         user: User | null
         session: Session | null
@@ -22,7 +22,6 @@ app.use('*', async (c, next) => {
     }
     const { session, user } = await lucia.validateSession(sessionId)
     if (session && session.fresh) {
-        // use `header()` instead of `setCookie()` to avoid TS errors
         c.header('Set-Cookie', lucia.createSessionCookie(session.id).serialize(), {
             append: true,
         })

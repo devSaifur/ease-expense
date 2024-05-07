@@ -31,7 +31,7 @@ async function seedExpenses() {
         await db.insert(expenses).values({
             title: faker.lorem.sentence(),
             amount: faker.number.int({ min: 10, max: 500 }),
-            userId: 'fqhyb8c7ito6zgugqyii12mb',
+            userId: 'w6gfdkr68x8pxmw',
         })
     }
 }

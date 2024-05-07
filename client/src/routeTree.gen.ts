@@ -16,11 +16,23 @@ import { Route as rootRoute } from './routes/__root'
 
 // Create Virtual Routes
 
+const SignUpLazyImport = createFileRoute('/sign-up')()
+const LoginLazyImport = createFileRoute('/login')()
 const ExpensesLazyImport = createFileRoute('/expenses')()
 const IndexLazyImport = createFileRoute('/')()
 const ExpensesNewLazyImport = createFileRoute('/expenses/new')()
 
 // Create/Update Routes
+
+const SignUpLazyRoute = SignUpLazyImport.update({
+  path: '/sign-up',
+  getParentRoute: () => rootRoute,
+} as any).lazy(() => import('./routes/sign-up.lazy').then((d) => d.Route))
+
+const LoginLazyRoute = LoginLazyImport.update({
+  path: '/login',
+  getParentRoute: () => rootRoute,
+} as any).lazy(() => import('./routes/login.lazy').then((d) => d.Route))
 
 const ExpensesLazyRoute = ExpensesLazyImport.update({
   path: '/expenses',
@@ -49,6 +61,14 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ExpensesLazyImport
       parentRoute: typeof rootRoute
     }
+    '/login': {
+      preLoaderRoute: typeof LoginLazyImport
+      parentRoute: typeof rootRoute
+    }
+    '/sign-up': {
+      preLoaderRoute: typeof SignUpLazyImport
+      parentRoute: typeof rootRoute
+    }
     '/expenses/new': {
       preLoaderRoute: typeof ExpensesNewLazyImport
       parentRoute: typeof rootRoute
@@ -61,6 +81,8 @@ declare module '@tanstack/react-router' {
 export const routeTree = rootRoute.addChildren([
   IndexLazyRoute,
   ExpensesLazyRoute,
+  LoginLazyRoute,
+  SignUpLazyRoute,
   ExpensesNewLazyRoute,
 ])
 

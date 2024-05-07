@@ -1,10 +1,9 @@
+import { app } from './middleware'
+import { authRoute } from './routes/auth'
 import { expensesRoute } from './routes/expenses'
-import { Hono } from 'hono'
 import { serveStatic } from 'hono/bun'
 
-const app = new Hono()
-
-const apiRoutes = app.basePath('/api').route('/expenses', expensesRoute)
+const apiRoutes = app.basePath('/api').route('/expenses', expensesRoute).route('/auth', authRoute)
 
 app.use('*', serveStatic({ root: './client/dist' }))
 app.get('*', serveStatic({ path: './client/dist/index.html' }))

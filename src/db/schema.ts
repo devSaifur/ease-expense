@@ -1,11 +1,9 @@
-import { createId } from '@paralleldrive/cuid2'
 import { relations, sql } from 'drizzle-orm'
 import { sqliteTable, text, integer } from 'drizzle-orm/sqlite-core'
+import { generateId } from 'lucia'
 
 export const users = sqliteTable('user', {
-    id: text('id')
-        .primaryKey()
-        .$defaultFn(() => createId()),
+    id: text('id').primaryKey(),
     name: text('name').notNull(),
     email: text('email').notNull().unique(),
     password: text('password').notNull(),
@@ -26,7 +24,7 @@ export const sessions = sqliteTable('session', {
 export const expenses = sqliteTable('expense', {
     id: text('id')
         .primaryKey()
-        .$defaultFn(() => createId()),
+        .$defaultFn(() => generateId(15)),
     title: text('title').notNull(),
     amount: integer('amount').notNull(),
     userId: text('user_id')

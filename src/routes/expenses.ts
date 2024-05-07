@@ -1,6 +1,7 @@
-import { createExpenseSchema } from '../lib/validators'
+import { db } from '../db'
+import { expenseSchema } from '../lib/validators'
+import { app } from '../middleware'
 import { zValidator } from '@hono/zod-validator'
-import { Hono } from 'hono'
 
 type Expense = {
     id: number
@@ -16,11 +17,12 @@ const fakeExpenses: Expense[] = [
     { id: 5, title: 'Entertainment', amount: 100 },
 ]
 
-export const expensesRoute = new Hono()
-    .get('/', (c) => {
-        return c.json({ expenses: fakeExpenses })
+export const expensesRoute = app
+    .get('/', async (c) => {
+        const expenses = await db.query.expenses.findMany()
+        return c.json({ expenses })
     })
-    .post('/', zValidator('json', createExpenseSchema), (c) => {
+    .post('/', zValidator('json', expenseSchema), (c) => {
         const expense = c.req.valid('json')
         fakeExpenses.push({ id: fakeExpenses.length + 1, ...expense })
         return c.json(expense)
