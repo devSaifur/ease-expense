@@ -1,4 +1,4 @@
-import { type ApiRoute } from '../../../src/app'
+import { type ApiRoute } from '@server/app'
 import { hc } from 'hono/client'
 
 const client = hc<ApiRoute>('/')

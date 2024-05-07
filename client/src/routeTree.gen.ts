@@ -18,6 +18,7 @@ import { Route as rootRoute } from './routes/__root'
 
 const ExpensesLazyImport = createFileRoute('/expenses')()
 const IndexLazyImport = createFileRoute('/')()
+const ExpensesNewLazyImport = createFileRoute('/expenses/new')()
 
 // Create/Update Routes
 
@@ -31,6 +32,11 @@ const IndexLazyRoute = IndexLazyImport.update({
   getParentRoute: () => rootRoute,
 } as any).lazy(() => import('./routes/index.lazy').then((d) => d.Route))
 
+const ExpensesNewLazyRoute = ExpensesNewLazyImport.update({
+  path: '/expenses/new',
+  getParentRoute: () => rootRoute,
+} as any).lazy(() => import('./routes/expenses_.new.lazy').then((d) => d.Route))
+
 // Populate the FileRoutesByPath interface
 
 declare module '@tanstack/react-router' {
@@ -43,6 +49,10 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ExpensesLazyImport
       parentRoute: typeof rootRoute
     }
+    '/expenses/new': {
+      preLoaderRoute: typeof ExpensesNewLazyImport
+      parentRoute: typeof rootRoute
+    }
   }
 }
 
@@ -51,6 +61,7 @@ declare module '@tanstack/react-router' {
 export const routeTree = rootRoute.addChildren([
   IndexLazyRoute,
   ExpensesLazyRoute,
+  ExpensesNewLazyRoute,
 ])
 
 /* prettier-ignore-end */

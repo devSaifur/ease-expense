@@ -10,6 +10,9 @@ export default function Navbar() {
         <Link to="/expenses" className="[&.active]:font-bold">
           Expenses
         </Link>
+        <Link to="/expenses/new" className="[&.active]:font-bold">
+          Create Expense
+        </Link>
       </ul>
     </nav>
   )

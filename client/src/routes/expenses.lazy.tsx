@@ -48,6 +48,9 @@ function Expenses() {
       queryClient.invalidateQueries({ queryKey: ['expenses'] })
       toast.success('Expense deleted successfully')
     },
+    onError: () => {
+      toast.error('Failed to delete expense')
+    },
   })
 
   if (isPending || isDeleting) {
@@ -76,7 +79,6 @@ function Expenses() {
           {expenses?.map((e) => (
             <TableRow key={e.id}>
               <TableCell>
-                {' '}
                 <Button
                   onClick={() => deleteExpense(e.id.toString())}
                   variant="ghost"

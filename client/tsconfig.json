@@ -23,7 +23,8 @@
     /* Formatting */
     "baseUrl": ".",
     "paths": {
-      "@/*": ["./src/*"]
+      "@/*": ["./src/*"],
+      "@server/*": ["../src/*"]
     }
   },
   "include": ["src", "tailwind.config.js"],
