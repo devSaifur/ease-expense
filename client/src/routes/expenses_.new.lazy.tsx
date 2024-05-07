@@ -80,7 +80,12 @@ function NewExpense() {
               <FormItem>
                 <FormLabel>Amount</FormLabel>
                 <FormControl>
-                  <Input placeholder="Amount" type="number" {...field} />
+                  <Input
+                    placeholder="Amount"
+                    onFocus={(e) => e.target.select()}
+                    type="number"
+                    {...field}
+                  />
                 </FormControl>
                 <FormMessage />
               </FormItem>
