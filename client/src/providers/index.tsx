@@ -1,10 +1,11 @@
 import { routeTree } from '../routeTree.gen'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { RouterProvider, createRouter } from '@tanstack/react-router'
-import { useState } from 'react'
 import { Toaster } from 'sonner'
 
-const router = createRouter({ routeTree })
+const queryClient = new QueryClient()
+
+const router = createRouter({ routeTree, context: { queryClient } })
 
 declare module '@tanstack/react-router' {
   interface Register {
@@ -13,8 +14,6 @@ declare module '@tanstack/react-router' {
 }
 
 export default function Providers() {
-  const [queryClient] = useState(new QueryClient())
-
   return (
     <QueryClientProvider client={queryClient}>
       <RouterProvider router={router} />

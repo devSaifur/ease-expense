@@ -15,7 +15,7 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { createLazyFileRoute } from '@tanstack/react-router'
 import { toast } from 'sonner'
 
-export const Route = createLazyFileRoute('/expenses')({
+export const Route = createLazyFileRoute('/_authenticated/expenses')({
   component: Expenses,
 })
 

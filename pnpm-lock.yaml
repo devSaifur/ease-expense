@@ -10,7 +10,7 @@ importers:
     dependencies:
       '@hono/zod-validator':
         specifier: ^0.2.1
-        version: 0.2.1(hono@4.3.3)(zod@3.23.7)
+        version: 0.2.1(hono@4.3.3)(zod@3.23.8)
       '@lucia-auth/adapter-drizzle':
         specifier: ^1.0.7
         version: 1.0.7(lucia@3.2.0)
@@ -24,8 +24,8 @@ importers:
         specifier: ^3.2.0
         version: 3.2.0
       zod:
-        specifier: ^3.23.7
-        version: 3.23.7
+        specifier: ^3.23.8
+        version: 3.23.8
     devDependencies:
       '@faker-js/faker':
         specifier: ^8.4.1
@@ -1079,8 +1079,8 @@ packages:
       utf-8-validate:
         optional: true
 
-  zod@3.23.7:
-    resolution: {integrity: sha512-NBeIoqbtOiUMomACV/y+V3Qfs9+Okr18vR5c/5pHClPpufWOrsx8TENboDPe265lFdfewX2yBtNTLPvnmCxwog==}
+  zod@3.23.8:
+    resolution: {integrity: sha512-XBx9AXhXktjUqnepgTiE5flcKIYWi/rme0Eaj+5Y0lftuGBq+jyRu/md4WnuxqgP1ubdpNCsYEYPxrzVHD8d6g==}
 
 snapshots:
 
@@ -1323,10 +1323,10 @@ snapshots:
 
   '@hono/node-server@1.11.1': {}
 
-  '@hono/zod-validator@0.2.1(hono@4.3.3)(zod@3.23.7)':
+  '@hono/zod-validator@0.2.1(hono@4.3.3)(zod@3.23.8)':
     dependencies:
       hono: 4.3.3
-      zod: 3.23.7
+      zod: 3.23.8
 
   '@jridgewell/gen-mapping@0.3.5':
     dependencies:
@@ -1643,7 +1643,7 @@ snapshots:
     dependencies:
       '@esbuild-kit/esm-loader': 2.6.5
       '@hono/node-server': 1.11.1
-      '@hono/zod-validator': 0.2.1(hono@4.3.3)(zod@3.23.7)
+      '@hono/zod-validator': 0.2.1(hono@4.3.3)(zod@3.23.8)
       camelcase: 7.0.1
       chalk: 5.3.0
       commander: 9.5.0
@@ -1657,7 +1657,7 @@ snapshots:
       minimatch: 7.4.6
       semver: 7.6.1
       superjson: 2.2.1
-      zod: 3.23.7
+      zod: 3.23.8
     transitivePeerDependencies:
       - supports-color
 
@@ -1965,4 +1965,4 @@ snapshots:
   ws@8.17.0:
     optional: true
 
-  zod@3.23.7: {}
+  zod@3.23.8: {}

@@ -19,6 +19,9 @@ export default function Navbar() {
         <Link to="/sign-up" className="[&.active]:font-bold">
           Sign Up
         </Link>
+        <Link to="/profile" className="[&.active]:font-bold">
+          Profile
+        </Link>
       </ul>
     </nav>
   )

@@ -13,14 +13,22 @@ import { createFileRoute } from '@tanstack/react-router'
 // Import Routes
 
 import { Route as rootRoute } from './routes/__root'
+import { Route as AuthenticatedImport } from './routes/_authenticated'
 
 // Create Virtual Routes
 
 const SignUpLazyImport = createFileRoute('/sign-up')()
 const SignInLazyImport = createFileRoute('/sign-in')()
-const ExpensesLazyImport = createFileRoute('/expenses')()
 const IndexLazyImport = createFileRoute('/')()
-const ExpensesNewLazyImport = createFileRoute('/expenses/new')()
+const AuthenticatedProfileLazyImport = createFileRoute(
+  '/_authenticated/profile',
+)()
+const AuthenticatedExpensesLazyImport = createFileRoute(
+  '/_authenticated/expenses',
+)()
+const AuthenticatedExpensesNewLazyImport = createFileRoute(
+  '/_authenticated/expenses/new',
+)()
 
 // Create/Update Routes
 
@@ -34,20 +42,37 @@ const SignInLazyRoute = SignInLazyImport.update({
   getParentRoute: () => rootRoute,
 } as any).lazy(() => import('./routes/sign-in.lazy').then((d) => d.Route))
 
-const ExpensesLazyRoute = ExpensesLazyImport.update({
-  path: '/expenses',
+const AuthenticatedRoute = AuthenticatedImport.update({
+  id: '/_authenticated',
   getParentRoute: () => rootRoute,
-} as any).lazy(() => import('./routes/expenses.lazy').then((d) => d.Route))
+} as any)
 
 const IndexLazyRoute = IndexLazyImport.update({
   path: '/',
   getParentRoute: () => rootRoute,
 } as any).lazy(() => import('./routes/index.lazy').then((d) => d.Route))
 
-const ExpensesNewLazyRoute = ExpensesNewLazyImport.update({
-  path: '/expenses/new',
-  getParentRoute: () => rootRoute,
-} as any).lazy(() => import('./routes/expenses_.new.lazy').then((d) => d.Route))
+const AuthenticatedProfileLazyRoute = AuthenticatedProfileLazyImport.update({
+  path: '/profile',
+  getParentRoute: () => AuthenticatedRoute,
+} as any).lazy(() =>
+  import('./routes/_authenticated/profile.lazy').then((d) => d.Route),
+)
+
+const AuthenticatedExpensesLazyRoute = AuthenticatedExpensesLazyImport.update({
+  path: '/expenses',
+  getParentRoute: () => AuthenticatedRoute,
+} as any).lazy(() =>
+  import('./routes/_authenticated/expenses.lazy').then((d) => d.Route),
+)
+
+const AuthenticatedExpensesNewLazyRoute =
+  AuthenticatedExpensesNewLazyImport.update({
+    path: '/expenses/new',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any).lazy(() =>
+    import('./routes/_authenticated/expenses_.new.lazy').then((d) => d.Route),
+  )
 
 // Populate the FileRoutesByPath interface
 
@@ -57,8 +82,8 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexLazyImport
       parentRoute: typeof rootRoute
     }
-    '/expenses': {
-      preLoaderRoute: typeof ExpensesLazyImport
+    '/_authenticated': {
+      preLoaderRoute: typeof AuthenticatedImport
       parentRoute: typeof rootRoute
     }
     '/sign-in': {
@@ -69,9 +94,17 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof SignUpLazyImport
       parentRoute: typeof rootRoute
     }
-    '/expenses/new': {
-      preLoaderRoute: typeof ExpensesNewLazyImport
-      parentRoute: typeof rootRoute
+    '/_authenticated/expenses': {
+      preLoaderRoute: typeof AuthenticatedExpensesLazyImport
+      parentRoute: typeof AuthenticatedImport
+    }
+    '/_authenticated/profile': {
+      preLoaderRoute: typeof AuthenticatedProfileLazyImport
+      parentRoute: typeof AuthenticatedImport
+    }
+    '/_authenticated/expenses/new': {
+      preLoaderRoute: typeof AuthenticatedExpensesNewLazyImport
+      parentRoute: typeof AuthenticatedImport
     }
   }
 }
@@ -80,10 +113,13 @@ declare module '@tanstack/react-router' {
 
 export const routeTree = rootRoute.addChildren([
   IndexLazyRoute,
-  ExpensesLazyRoute,
+  AuthenticatedRoute.addChildren([
+    AuthenticatedExpensesLazyRoute,
+    AuthenticatedProfileLazyRoute,
+    AuthenticatedExpensesNewLazyRoute,
+  ]),
   SignInLazyRoute,
   SignUpLazyRoute,
-  ExpensesNewLazyRoute,
 ])
 
 /* prettier-ignore-end */

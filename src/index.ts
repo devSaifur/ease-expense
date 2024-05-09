@@ -18,8 +18,7 @@ const app = new Hono<{
 app.use('*', logger())
 app.use(csrf())
 
-app.get('*', serveStatic({ path: './client/dist/index.html' }))
-app.use('*', serveStatic({ root: './client/dist' }))
+const apiRoutes = app.basePath('/api').route('/expenses', expensesRoute).route('/auth', authRoute)
 
 app.use('*', async (c, next) => {
     const sessionId = getCookie(c, lucia.sessionCookieName) ?? null
@@ -44,7 +43,8 @@ app.use('*', async (c, next) => {
     return next()
 })
 
-const apiRoutes = app.basePath('/api').route('/expenses', expensesRoute).route('/auth', authRoute)
+app.get('*', serveStatic({ path: './client/dist/index.html' }))
+app.use('*', serveStatic({ root: './client/dist' }))
 
 export type ApiRoute = typeof apiRoutes
 

@@ -6,7 +6,32 @@ import { zValidator } from '@hono/zod-validator'
 import { eq } from 'drizzle-orm'
 import { Hono } from 'hono'
 import { getCookie } from 'hono/cookie'
-import { generateId } from 'lucia'
+import { createMiddleware } from 'hono/factory'
+import { generateId, type User } from 'lucia'
+
+type Env = {
+    Variables: {
+        user: User
+    }
+}
+
+const getUser = createMiddleware<Env>(async (c, next) => {
+    const sessionId = getCookie(c, lucia.sessionCookieName) ?? null
+    if (!sessionId) {
+        return c.json({ error: 'Unauthorized' }, 401)
+    }
+    const { session, user } = await lucia.validateSession(sessionId)
+    if (session && session.fresh) {
+        c.header('Set-Cookie', lucia.createSessionCookie(session.id).serialize(), {
+            append: true,
+        })
+    }
+    if (!session) {
+        return c.json({ error: 'Unauthorized' }, 401)
+    }
+    c.set('user', user)
+    await next()
+})
 
 export const authRoute = new Hono()
     .post('/register', zValidator('json', registerSchema), async (c) => {
@@ -30,7 +55,7 @@ export const authRoute = new Hono()
             c.header('Set-Cookie', sessionCookie.serialize(), {
                 append: true,
             })
-            return c.redirect('/sign-in', 300)
+            return c.body('Registration successful', 200)
         } catch (err) {
             console.error(err)
             return c.body('Something went wrong', 400)
@@ -51,7 +76,7 @@ export const authRoute = new Hono()
         c.header('Set-Cookie', sessionCookie.serialize(), {
             append: true,
         })
-        return c.redirect('/', 300)
+        return c.body('Login successful', 200)
     })
     .post('/logout', async (c) => {
         const sessionId = getCookie(c, lucia.sessionCookieName) ?? null
@@ -64,19 +89,7 @@ export const authRoute = new Hono()
         })
         return c.body('Logout successful', 200)
     })
-    .get('/me', async (c) => {
-        const sessionId = getCookie(c, lucia.sessionCookieName) ?? null
-        if (!sessionId) {
-            return c.json({ user: null })
-        }
-        const { session, user } = await lucia.validateSession(sessionId)
-        if (session && session.fresh) {
-            c.header('Set-Cookie', lucia.createSessionCookie(session.id).serialize(), {
-                append: true,
-            })
-        }
-        if (!session) {
-            return c.json({ user: null })
-        }
-        return c.json({ user })
+    .get('/me', getUser, async (c) => {
+        const user = c.var.user
+        return c.json({ user }, 200)
     })

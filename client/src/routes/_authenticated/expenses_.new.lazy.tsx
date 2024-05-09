@@ -16,7 +16,7 @@ import { createLazyFileRoute, useRouter } from '@tanstack/react-router'
 import { useForm } from 'react-hook-form'
 import { toast } from 'sonner'
 
-export const Route = createLazyFileRoute('/expenses/new')({
+export const Route = createLazyFileRoute('/_authenticated/expenses/new')({
   component: NewExpense,
 })
 
