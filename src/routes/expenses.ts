@@ -26,7 +26,7 @@ export const expensesRoute = app
             return c.json('Something went wrong', 400)
         }
     })
-    .get('/:id{[0-9]+}', getUser, async (c) => {
+    .get('/:id', getUser, async (c) => {
         const expenseId = c.req.param('id')
         const { id } = c.var.user
         const expense = await getExpenseByUserId({ expenseId, userId: id })
@@ -35,7 +35,7 @@ export const expensesRoute = app
         }
         return c.json({ expense }, 200)
     })
-    .delete('/:id{[0-9]+}', getUser, async (c) => {
+    .delete('/:id', getUser, async (c) => {
         const expenseId = c.req.param('id')
         const { id } = c.var.user
         try {

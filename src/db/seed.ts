@@ -1,14 +1,43 @@
 import { db } from '.'
-import { users, expenses } from './schema'
-import { faker } from '@faker-js/faker'
-import { generateId } from 'lucia'
+import { expenses } from './schema'
+
+const mokedExpenses = [
+    {
+        title: 'Groceries',
+        amount: 100,
+        userId: 'z1x28kkdyibl4si',
+    },
+    {
+        title: 'Rent',
+        amount: 500,
+        userId: 'z1x28kkdyibl4si',
+    },
+    {
+        title: 'Gas',
+        amount: 50,
+        userId: 'z1x28kkdyibl4si',
+    },
+    {
+        title: 'Groceries',
+        amount: 100,
+        userId: 'w6gfdkr68x8pxmw',
+    },
+    {
+        title: 'Rent',
+        amount: 500,
+        userId: 'w6gfdkr68x8pxmw',
+    },
+    {
+        title: 'Gas',
+        amount: 50,
+        userId: 'w6gfdkr68x8pxmw',
+    },
+]
 
 async function runSeed() {
     console.log('⏳ Running seed...')
 
     const start = Date.now()
-
-    // await seedUsers()
 
     await seedExpenses()
 
@@ -19,22 +48,9 @@ async function runSeed() {
     process.exit(0)
 }
 
-async function seedUsers() {
-    await db.insert(users).values({
-        name: faker.person.fullName(),
-        email: faker.internet.email(),
-        password: faker.internet.password(),
-        id: generateId(15),
-    })
-}
-
 async function seedExpenses() {
-    for (let i = 0; i < 10; i++) {
-        await db.insert(expenses).values({
-            title: faker.lorem.sentence(),
-            amount: faker.number.int({ min: 10, max: 500 }),
-            userId: 'w6gfdkr68x8pxmw',
-        })
+    for (let i = 0; i < mokedExpenses.length; i++) {
+        await db.insert(expenses).values(mokedExpenses[i])
     }
 }
 
