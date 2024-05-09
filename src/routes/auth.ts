@@ -1,9 +1,7 @@
-import { db } from '../db'
-import { users } from '../db/schema'
+import { createUser, getUserByEmail } from '../data/user'
 import { lucia } from '../lib/auth'
 import { loginSchema, registerSchema } from '../lib/validators'
 import { zValidator } from '@hono/zod-validator'
-import { eq } from 'drizzle-orm'
 import { Hono } from 'hono'
 import { getCookie } from 'hono/cookie'
 import { createMiddleware } from 'hono/factory'
@@ -38,32 +36,27 @@ export const authRoute = new Hono()
         const { name, email, password } = c.req.valid('json')
         try {
             const hashedPassword = await Bun.password.hash(password)
-            const existingUser = await db.query.users.findFirst({ where: eq(users.email, email) })
+            const existingUser = await getUserByEmail(email)
             if (existingUser) {
                 return c.body('User already exists', 400)
             }
             const userId = generateId(15)
-            await db.insert(users).values({
-                id: userId,
-                name,
-                email,
-                password: hashedPassword,
-            })
+            await createUser({ id: userId, name, email, password: hashedPassword })
             //todo: send email verification code
             const session = await lucia.createSession(userId, {})
             const sessionCookie = lucia.createSessionCookie(session.id)
             c.header('Set-Cookie', sessionCookie.serialize(), {
                 append: true,
             })
-            return c.body('Registration successful', 200)
+            return c.json('Registration successful', 200)
         } catch (err) {
             console.error(err)
-            return c.body('Something went wrong', 400)
+            return c.json('Something went wrong', 400)
         }
     })
     .post('/login', zValidator('json', loginSchema), async (c) => {
         const { email, password } = c.req.valid('json')
-        const user = await db.query.users.findFirst({ where: eq(users.email, email) })
+        const user = await getUserByEmail(email)
         if (!user) {
             return c.body('User not found', 404)
         }

@@ -9,6 +9,8 @@ export const users = sqliteTable('user', {
     password: text('password').notNull(),
 })
 
+export type TUserInsert = typeof users.$inferInsert
+
 export const usersRelations = relations(users, ({ many }) => ({
     expenses: many(expenses),
 }))
