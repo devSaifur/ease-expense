@@ -15,7 +15,7 @@ type Env = {
     }
 }
 
-const getUser = createMiddleware<Env>(async (c, next) => {
+export const getUser = createMiddleware<Env>(async (c, next) => {
     const sessionId = getCookie(c, lucia.sessionCookieName) ?? null
     if (!sessionId) {
         return c.json({ error: 'Unauthorized' }, 401)
@@ -89,7 +89,7 @@ export const authRoute = new Hono()
         })
         return c.body('Logout successful', 200)
     })
-    .get('/me', getUser, async (c) => {
+    .get('/me', getUser, (c) => {
         const user = c.var.user
         return c.json({ user }, 200)
     })

@@ -1,48 +1,47 @@
-import { db } from '../db'
+import { addExpense, deleteExpense, getExpenseByUserId, getExpensesByUserId } from '../data/expense'
 import { expenseSchema } from '../lib/validators'
+import { getUser } from './auth'
 import { zValidator } from '@hono/zod-validator'
 import { Hono } from 'hono'
 
 const app = new Hono()
 
-type Expense = {
-    id: number
-    title: string
-    amount: number
-}
-
-const fakeExpenses: Expense[] = [
-    { id: 1, title: 'Groceries', amount: 200 },
-    { id: 2, title: 'Rent', amount: 1000 },
-    { id: 3, title: 'Utilities', amount: 500 },
-    { id: 4, title: 'Food', amount: 300 },
-    { id: 5, title: 'Entertainment', amount: 100 },
-]
-
 export const expensesRoute = app
-    .get('/', async (c) => {
-        const expenses = await db.query.expenses.findMany()
-        return c.json({ expenses })
+    .get('/', getUser, async (c) => {
+        const { id } = c.var.user
+        try {
+            const usersExpenses = await getExpensesByUserId(id)
+            return c.json({ expenses: usersExpenses }, 200)
+        } catch (err) {
+            return c.json('Something went wrong', 400)
+        }
     })
-    .post('/', zValidator('json', expenseSchema), (c) => {
+    .post('/', getUser, zValidator('json', expenseSchema), async (c) => {
         const expense = c.req.valid('json')
-        fakeExpenses.push({ id: fakeExpenses.length + 1, ...expense })
-        return c.json(expense)
+        const { id } = c.var.user
+        try {
+            const insertedExpense = await addExpense({ ...expense, userId: id })
+            return c.json({ expense: insertedExpense }, 200)
+        } catch (err) {
+            return c.json('Something went wrong', 400)
+        }
     })
-    .get('/:id{[0-9]+}', (c) => {
-        const id = Number.parseInt(c.req.param('id'))
-        const expense = fakeExpenses.find((e) => e.id === id)
+    .get('/:id{[0-9]+}', getUser, async (c) => {
+        const expenseId = c.req.param('id')
+        const { id } = c.var.user
+        const expense = await getExpenseByUserId({ expenseId, userId: id })
         if (!expense) {
             return c.notFound()
         }
-        return c.json({ expense })
+        return c.json({ expense }, 200)
     })
-    .delete('/:id{[0-9]+}', (c) => {
-        const id = Number.parseInt(c.req.param('id'))
-        const index = fakeExpenses.findIndex((e) => e.id === id)
-        if (index === -1) {
-            return c.notFound()
+    .delete('/:id{[0-9]+}', getUser, async (c) => {
+        const expenseId = c.req.param('id')
+        const { id } = c.var.user
+        try {
+            const deletedExpense = await deleteExpense({ expenseId, userId: id })
+            return c.json({ deletedExpense }, 200)
+        } catch (err) {
+            return c.json('Something went wrong', 400)
         }
-        fakeExpenses.splice(index, 1)
-        return c.json({ id })
     })

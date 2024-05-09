@@ -38,6 +38,8 @@ export const expenses = sqliteTable('expense', {
         .notNull(),
 })
 
+export type TExpenseInsert = typeof expenses.$inferInsert
+
 export const expensesRelations = relations(expenses, ({ one }) => ({
     user: one(users, {
         fields: [expenses.userId],
