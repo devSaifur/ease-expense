@@ -49,8 +49,9 @@ async function runSeed() {
 }
 
 async function seedExpenses() {
-    for (let i = 0; i < mokedExpenses.length; i++) {
-        await db.insert(expenses).values(mokedExpenses[i])
+    for (let i = 0; i < 20; i++) {
+        const random = Math.floor(Math.random() * 5)
+        await db.insert(expenses).values(mokedExpenses[random]).returning()
     }
 }
 

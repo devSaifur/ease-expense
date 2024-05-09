@@ -2,7 +2,7 @@ import { Link } from '@tanstack/react-router'
 
 export default function Navbar() {
   return (
-    <nav>
+    <nav className="sticky top-0 backdrop-blur-lg">
       <ul className="mx-auto flex justify-center gap-6 py-6 font-geist">
         <Link to="/" className="[&.active]:font-bold">
           Home

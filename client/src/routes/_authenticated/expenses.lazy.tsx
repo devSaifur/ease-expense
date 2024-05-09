@@ -37,7 +37,7 @@ function Expenses() {
   const { mutate: deleteExpense, isPending: isDeleting } = useMutation({
     mutationKey: ['expenses'],
     mutationFn: async (id: string) => {
-      const res = await api.expenses[':id{[0-9]+}'].$delete({ param: { id } })
+      const res = await api.expenses[':id'].$delete({ param: { id } })
       if (!res.ok) {
         throw new Error('Failed to fetch expenses')
       }
@@ -53,7 +53,7 @@ function Expenses() {
 
   if (isPending || isDeleting) {
     return (
-      <div className="flex h-screen items-center justify-center text-center">
+      <div className="flex items-center justify-center text-center">
         <ReloadIcon className="mr-2 size-6 animate-spin" /> Loading...
       </div>
     )
@@ -82,7 +82,7 @@ function Expenses() {
                   size="sm"
                   className="p-0 text-red-500"
                 >
-                  <Cross1Icon className="size-5" />
+                  <Cross1Icon className="size-4" />
                 </Button>
               </TableCell>
               <TableCell>{e.title}</TableCell>

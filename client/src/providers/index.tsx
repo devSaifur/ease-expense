@@ -1,4 +1,5 @@
 import { routeTree } from '../routeTree.gen'
+import { ThemeProvider } from './theme-provider'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { RouterProvider, createRouter } from '@tanstack/react-router'
 import { Toaster } from 'sonner'
@@ -16,8 +17,10 @@ declare module '@tanstack/react-router' {
 export default function Providers() {
   return (
     <QueryClientProvider client={queryClient}>
-      <RouterProvider router={router} />
-      <Toaster />
+      <ThemeProvider storageKey="vite-ui-theme">
+        <RouterProvider router={router} />
+        <Toaster />
+      </ThemeProvider>
     </QueryClientProvider>
   )
 }

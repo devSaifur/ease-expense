@@ -7,11 +7,7 @@ export const Route = createLazyFileRoute('/_authenticated/profile')({
 })
 
 function Profile() {
-  const { data: user, isPending, error } = useQuery(userQueryOptions)
-
-  if (error) {
-    return <p>{error.message}</p>
-  }
+  const { data: user, isPending } = useQuery(userQueryOptions)
 
   return (
     <div className="flex justify-center pt-14">

@@ -13,7 +13,7 @@ export const Route = createRootRouteWithContext<MyRouteContext>()({
 
 function Root() {
   return (
-    <div className="h-screen w-full bg-black text-white">
+    <div className="relative h-screen w-full">
       <Navbar />
       <hr />
       <Outlet />
