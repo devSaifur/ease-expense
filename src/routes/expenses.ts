@@ -1,7 +1,9 @@
 import { db } from '../db'
 import { expenseSchema } from '../lib/validators'
-import { app } from '../middleware'
 import { zValidator } from '@hono/zod-validator'
+import { Hono } from 'hono'
+
+const app = new Hono()
 
 type Expense = {
     id: number

@@ -1,6 +1,7 @@
 import { db } from '.'
 import { users, expenses } from './schema'
 import { faker } from '@faker-js/faker'
+import { generateId } from 'lucia'
 
 async function runSeed() {
     console.log('⏳ Running seed...')
@@ -23,6 +24,7 @@ async function seedUsers() {
         name: faker.person.fullName(),
         email: faker.internet.email(),
         password: faker.internet.password(),
+        id: generateId(15),
     })
 }
 

@@ -41,8 +41,6 @@ function Expenses() {
       if (!res.ok) {
         throw new Error('Failed to fetch expenses')
       }
-      const deletedExpense = await res.json()
-      console.log('deleted', deletedExpense)
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['expenses'] })

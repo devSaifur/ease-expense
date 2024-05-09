@@ -8,16 +8,34 @@ import {
   FormMessage,
 } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
+import { api } from '@/lib/api'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { TLoginSchema, loginSchema } from '@server/lib/validators'
+import { useMutation } from '@tanstack/react-query'
 import { createLazyFileRoute } from '@tanstack/react-router'
 import { useForm } from 'react-hook-form'
+import { toast } from 'sonner'
 
-export const Route = createLazyFileRoute('/login')({
-  component: Login,
+export const Route = createLazyFileRoute('/sign-in')({
+  component: SignIn,
 })
 
-function Login() {
+function SignIn() {
+  const { mutate: login, isPending } = useMutation({
+    mutationFn: async (values: TLoginSchema) => {
+      const res = await api.auth.login.$post({ json: values })
+      if (!res.ok) {
+        throw new Error('Failed to login')
+      }
+    },
+    onSuccess: () => {
+      toast.success('Logged in successfully')
+    },
+    onError: () => {
+      toast.error('Failed to login')
+    },
+  })
+
   const form = useForm<TLoginSchema>({
     resolver: zodResolver(loginSchema),
     defaultValues: {
@@ -27,10 +45,8 @@ function Login() {
   })
 
   function onSubmit(values: TLoginSchema) {
-    console.log(values)
+    login(values)
   }
-
-  const isPending = false
 
   return (
     <div className="mx-auto max-w-md pt-16">
@@ -43,7 +59,7 @@ function Login() {
               <FormItem>
                 <FormLabel>Email</FormLabel>
                 <FormControl>
-                  <Input placeholder="Email" {...field} />
+                  <Input placeholder="Email" {...field} type="email" />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -56,7 +72,7 @@ function Login() {
               <FormItem>
                 <FormLabel>Password</FormLabel>
                 <FormControl>
-                  <Input placeholder="********" {...field} />
+                  <Input placeholder="******" type="password" {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>

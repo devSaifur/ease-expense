@@ -12,7 +12,7 @@ import { api } from '@/lib/api'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { TRegisterSchema, registerSchema } from '@server/lib/validators'
 import { useMutation } from '@tanstack/react-query'
-import { createLazyFileRoute, useRouter } from '@tanstack/react-router'
+import { createLazyFileRoute } from '@tanstack/react-router'
 import { useForm } from 'react-hook-form'
 import { toast } from 'sonner'
 
@@ -21,7 +21,6 @@ export const Route = createLazyFileRoute('/sign-up')({
 })
 
 function Register() {
-  const router = useRouter()
   const { mutate: register, isPending } = useMutation({
     mutationFn: async (values: TRegisterSchema) => {
       const res = await api.auth.register.$post({ json: values })
@@ -31,7 +30,6 @@ function Register() {
     },
     onSuccess: () => {
       toast.success('User created successfully')
-      router.navigate({ to: '/login' })
     },
     onError: () => {
       toast.error('Failed to sign up user')
