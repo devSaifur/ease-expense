@@ -10,7 +10,7 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table'
-import { api } from '@/lib/api'
+import { api, getExpensesQueryOptions } from '@/lib/api'
 import { Cross1Icon, ReloadIcon } from '@radix-ui/react-icons'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { createLazyFileRoute } from '@tanstack/react-router'
@@ -23,17 +23,7 @@ export const Route = createLazyFileRoute('/_authenticated/expenses')({
 function Expenses() {
   const queryClient = useQueryClient()
 
-  const { data: expenses, isPending } = useQuery({
-    queryKey: ['expenses'],
-    queryFn: async () => {
-      const res = await api.expenses.$get()
-      if (!res.ok) {
-        throw new Error('Failed to fetch expenses')
-      }
-      const { expenses } = await res.json()
-      return expenses
-    },
-  })
+  const { data: expenses, isPending } = useQuery(getExpensesQueryOptions)
 
   const { mutate: deleteExpense, isPending: isDeleting } = useMutation({
     mutationKey: ['expenses'],
@@ -42,9 +32,14 @@ function Expenses() {
       if (!res.ok) {
         throw new Error('Failed to fetch expenses')
       }
+      const { deletedExpense } = await res.json()
+      return deletedExpense
     },
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['expenses'] })
+    onSuccess: (deletedExpense) => {
+      queryClient.setQueryData(getExpensesQueryOptions.queryKey, (oldData) => {
+        if (!oldData) return
+        return oldData.filter((e) => e.id !== deletedExpense.id)
+      })
       toast.success('Expense deleted successfully')
     },
     onError: () => {

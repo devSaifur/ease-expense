@@ -1,5 +1,6 @@
 import Navbar from '@/components/navbar'
 import type { QueryClient } from '@tanstack/react-query'
+import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
 import { createRootRouteWithContext, Outlet } from '@tanstack/react-router'
 import { TanStackRouterDevtools } from '@tanstack/router-devtools'
 
@@ -18,6 +19,7 @@ function Root() {
       <hr />
       <Outlet />
       <TanStackRouterDevtools />
+      <ReactQueryDevtools initialIsOpen={false} />
     </div>
   )
 }

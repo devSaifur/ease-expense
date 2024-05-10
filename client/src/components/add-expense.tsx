@@ -17,7 +17,7 @@ import {
   FormMessage,
 } from './ui/form'
 import { Input } from './ui/input'
-import { api } from '@/lib/api'
+import { api, getExpensesQueryOptions } from '@/lib/api'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { TExpenseSchema, expenseSchema } from '@server/lib/validators'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
@@ -43,12 +43,18 @@ export default function AddExpense() {
       if (!res.ok) {
         throw new Error('Failed to create expense')
       }
+      const { expense } = await res.json()
+      return expense
     },
-    onSuccess: () => {
+    onSuccess: async (newExpense) => {
       toast.success('Expense created successfully')
-      queryClient.invalidateQueries({ queryKey: ['expenses'] })
       setOpen(false)
       form.reset()
+      // on creating new expense add it to the beginning of the list without making api request
+      queryClient.setQueryData(getExpensesQueryOptions.queryKey, (oldData) => {
+        if (!oldData) return [newExpense]
+        return [newExpense, ...oldData]
+      })
     },
     onError: () => {
       toast.error('Failed to create expense')

@@ -11,7 +11,8 @@ export async function getExpensesByUserId(userId: string) {
 }
 
 export async function addExpense(values: TExpenseInsert) {
-    return db.insert(expenses).values(values).returning()
+    const [insertedExpense] = await db.insert(expenses).values(values).returning()
+    return insertedExpense
 }
 
 type ExpenseQuery = {
@@ -26,8 +27,9 @@ export async function getExpenseByUserId({ userId, expenseId }: ExpenseQuery) {
 }
 
 export async function deleteExpense({ userId, expenseId }: ExpenseQuery) {
-    return await db
+    const [deletedExpense] = await db
         .delete(expenses)
         .where(and(eq(expenses.id, expenseId), eq(expenses.userId, userId)))
         .returning()
+    return deletedExpense
 }
