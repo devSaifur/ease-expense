@@ -2,11 +2,11 @@ import { Link } from '@tanstack/react-router'
 
 export default function Navbar() {
   return (
-    <nav className="sticky top-0 backdrop-blur-lg">
-      <ul className="mx-auto flex justify-center gap-6 py-6 font-geist">
-        <Link to="/" className="[&.active]:font-bold">
-          Home
-        </Link>{' '}
+    <nav className="sticky top-0 flex items-center justify-between px-60 backdrop-blur-lg">
+      <Link to="/" className="text-2xl [&.active]:font-bold">
+        Expense Tracker
+      </Link>
+      <ul className="flex items-center gap-6 py-6 text-lg">
         <Link to="/expenses" className="[&.active]:font-bold">
           Expenses
         </Link>

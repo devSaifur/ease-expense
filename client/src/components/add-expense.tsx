@@ -7,7 +7,6 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-  DialogClose,
 } from './ui/dialog'
 import {
   Form,
@@ -22,11 +21,21 @@ import { api } from '@/lib/api'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { TExpenseSchema, expenseSchema } from '@server/lib/validators'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
+import { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { toast } from 'sonner'
 
 export default function AddExpense() {
+  const [open, setOpen] = useState(false)
   const queryClient = useQueryClient()
+
+  const form = useForm<TExpenseSchema>({
+    resolver: zodResolver(expenseSchema),
+    defaultValues: {
+      title: '',
+      amount: 0,
+    },
+  })
 
   const { mutate: createExpense, isPending } = useMutation({
     mutationFn: async (values: TExpenseSchema) => {
@@ -38,17 +47,11 @@ export default function AddExpense() {
     onSuccess: () => {
       toast.success('Expense created successfully')
       queryClient.invalidateQueries({ queryKey: ['expenses'] })
+      setOpen(false)
+      form.reset()
     },
     onError: () => {
       toast.error('Failed to create expense')
-    },
-  })
-
-  const form = useForm<TExpenseSchema>({
-    resolver: zodResolver(expenseSchema),
-    defaultValues: {
-      title: '',
-      amount: 0,
     },
   })
 
@@ -57,7 +60,7 @@ export default function AddExpense() {
   }
 
   return (
-    <Dialog>
+    <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
         <Button>Add Expense</Button>
       </DialogTrigger>
@@ -103,11 +106,9 @@ export default function AddExpense() {
               )}
             />
             <DialogFooter>
-              <DialogClose asChild>
-                <Button type="submit" disabled={isPending}>
-                  Submit
-                </Button>
-              </DialogClose>
+              <Button type="submit" disabled={isPending}>
+                Submit
+              </Button>
             </DialogFooter>
           </form>
         </Form>
