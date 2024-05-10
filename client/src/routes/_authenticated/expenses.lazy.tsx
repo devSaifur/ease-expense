@@ -11,7 +11,7 @@ import {
   TableRow,
 } from '@/components/ui/table'
 import { api, getExpensesQueryOptions } from '@/lib/api'
-import { Cross1Icon, ReloadIcon } from '@radix-ui/react-icons'
+import { ReloadIcon, TrashIcon } from '@radix-ui/react-icons'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { createLazyFileRoute } from '@tanstack/react-router'
 import { toast } from 'sonner'
@@ -67,26 +67,25 @@ function Expenses() {
         <TableCaption>A list of your recent expenses</TableCaption>
         <TableHeader>
           <TableRow>
-            <TableHead />
             <TableHead>Title</TableHead>
             <TableHead>Amount</TableHead>
+            <TableHead />
           </TableRow>
         </TableHeader>
         <TableBody>
           {expenses?.map((e) => (
             <TableRow key={e.id}>
+              <TableCell>{e.title}</TableCell>
+              <TableCell>{e.amount}</TableCell>
               <TableCell>
                 <Button
                   onClick={() => deleteExpense(e.id.toString())}
                   variant="ghost"
                   size="sm"
-                  className="p-0 text-red-500"
                 >
-                  <Cross1Icon className="size-4" />
+                  <TrashIcon className="size-4 text-red-400" />
                 </Button>
               </TableCell>
-              <TableCell>{e.title}</TableCell>
-              <TableCell>{e.amount}</TableCell>
             </TableRow>
           ))}
         </TableBody>
