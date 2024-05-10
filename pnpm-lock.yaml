@@ -10,7 +10,7 @@ importers:
     dependencies:
       '@hono/zod-validator':
         specifier: ^0.2.1
-        version: 0.2.1(hono@4.3.3)(zod@3.23.8)
+        version: 0.2.1(hono@4.3.4)(zod@3.23.8)
       '@lucia-auth/adapter-drizzle':
         specifier: ^1.0.7
         version: 1.0.7(lucia@3.2.0)
@@ -18,8 +18,8 @@ importers:
         specifier: ^0.30.10
         version: 0.30.10(@libsql/client@0.6.0)(bun-types@1.1.6)
       hono:
-        specifier: ^4.3.3
-        version: 4.3.3
+        specifier: ^4.3.4
+        version: 4.3.4
       lucia:
         specifier: ^3.2.0
         version: 3.2.0
@@ -885,8 +885,8 @@ packages:
   fs.realpath@1.0.0:
     resolution: {integrity: sha512-OO0pH2lK6a0hZnAdau5ItzHPI6pUlvI7jMVnxUQRtw4owF2wk8lOSabtGDCTP4Ggrg2MbGnWO9X8K1t4+fGMDw==}
 
-  get-tsconfig@4.7.4:
-    resolution: {integrity: sha512-ofbkKj+0pjXjhejr007J/fLf+sW+8H7K5GCm+msC8q3IpvgjobpyPqSRFemNyIMxklC0zeJpi7VDFna19FacvQ==}
+  get-tsconfig@4.7.5:
+    resolution: {integrity: sha512-ZCuZCnlqNzjb4QprAzXKdpp/gh6KTxSJuw3IBsPnV/7fV4NxC9ckB+vPTt8w7fJA0TaSD7c55BR47JD6MEDyDw==}
 
   glob@8.1.0:
     resolution: {integrity: sha512-r8hpEjiQEYlF2QU0df3dS+nxxSIreXQS1qRhMJM0Q5NDdR386C7jb7Hwwod8Fgiuex+k0GFjgft18yvxm5XoCQ==}
@@ -906,8 +906,8 @@ packages:
   heap@0.2.7:
     resolution: {integrity: sha512-2bsegYkkHO+h/9MGbn6KWcE45cHZgPANo5LXF7EvWdT0yT2EguSVO1nDgU5c8+ZOPwp2vMNa7YFsJhVcDR9Sdg==}
 
-  hono@4.3.3:
-    resolution: {integrity: sha512-LDa1n/aLYK4CsZQyjQpFiaQgxiXCZp0WfcfliinQOH1Lqt4mIOvyw4qjmHihpKXsuXhkQHfHU2Erysp6oEdnVA==}
+  hono@4.3.4:
+    resolution: {integrity: sha512-oh+PBwW8yElj3bUlY2dTXhuPt1MCZp6Nb04tejLwY+GXdphQH6uCpUP0dY5iLvFY5wM8fNHrMx1QeMKbhnzw9w==}
     engines: {node: '>=16.0.0'}
 
   inflight@1.0.6:
@@ -1007,8 +1007,8 @@ packages:
   resolve-pkg-maps@1.0.0:
     resolution: {integrity: sha512-seS2Tj26TBVOC2NIc2rOe2y2ZO7efxITtLZcGSOnHHNOQ7CkiUBfw0Iw2ck6xkIhPwLhKNLS8BO+hEpngQlqzw==}
 
-  semver@7.6.1:
-    resolution: {integrity: sha512-f/vbBsu+fOiYt+lmwZV0rVwJScl46HppnOA1ZvIuBWKOTlllpyJ3bfVax76/OrhCH38dyxoDIA8K7uB963IYgA==}
+  semver@7.6.2:
+    resolution: {integrity: sha512-FNAIBWCx9qcRhoHcgcJ0gvU7SN1lYU2ZXuSfl04bSC5OpvDHFyJCjdNHomPXxjQlCBU67YW64PzY7/VIEH7F2w==}
     engines: {node: '>=10'}
     hasBin: true
 
@@ -1175,7 +1175,7 @@ snapshots:
   '@esbuild-kit/esm-loader@2.6.5':
     dependencies:
       '@esbuild-kit/core-utils': 3.3.2
-      get-tsconfig: 4.7.4
+      get-tsconfig: 4.7.5
 
   '@esbuild/aix-ppc64@0.19.12':
     optional: true
@@ -1314,9 +1314,9 @@ snapshots:
 
   '@hono/node-server@1.11.1': {}
 
-  '@hono/zod-validator@0.2.1(hono@4.3.3)(zod@3.23.8)':
+  '@hono/zod-validator@0.2.1(hono@4.3.4)(zod@3.23.8)':
     dependencies:
-      hono: 4.3.3
+      hono: 4.3.4
       zod: 3.23.8
 
   '@jridgewell/gen-mapping@0.3.5':
@@ -1634,7 +1634,7 @@ snapshots:
     dependencies:
       '@esbuild-kit/esm-loader': 2.6.5
       '@hono/node-server': 1.11.1
-      '@hono/zod-validator': 0.2.1(hono@4.3.3)(zod@3.23.8)
+      '@hono/zod-validator': 0.2.1(hono@4.3.4)(zod@3.23.8)
       camelcase: 7.0.1
       chalk: 5.3.0
       commander: 9.5.0
@@ -1643,10 +1643,10 @@ snapshots:
       esbuild-register: 3.5.0(esbuild@0.19.12)
       glob: 8.1.0
       hanji: 0.0.5
-      hono: 4.3.3
+      hono: 4.3.4
       json-diff: 0.9.0
       minimatch: 7.4.6
-      semver: 7.6.1
+      semver: 7.6.2
       superjson: 2.2.1
       zod: 3.23.8
     transitivePeerDependencies:
@@ -1776,7 +1776,7 @@ snapshots:
 
   fs.realpath@1.0.0: {}
 
-  get-tsconfig@4.7.4:
+  get-tsconfig@4.7.5:
     dependencies:
       resolve-pkg-maps: 1.0.0
 
@@ -1799,7 +1799,7 @@ snapshots:
 
   heap@0.2.7: {}
 
-  hono@4.3.3: {}
+  hono@4.3.4: {}
 
   inflight@1.0.6:
     dependencies:
@@ -1911,7 +1911,7 @@ snapshots:
 
   resolve-pkg-maps@1.0.0: {}
 
-  semver@7.6.1: {}
+  semver@7.6.2: {}
 
   sisteransi@1.0.5: {}
 

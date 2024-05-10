@@ -1,3 +1,4 @@
+import AddExpense from '@/components/add-expense'
 import { Button } from '@/components/ui/button'
 import {
   Table,
@@ -62,8 +63,12 @@ function Expenses() {
   const totalExpense = expenses?.reduce((acc, e) => acc + e.amount, 0)
 
   return (
-    <main>
-      <Table className="mx-auto max-w-4xl">
+    <main className="mx-auto flex max-w-3xl flex-col">
+      <div className="ml-auto py-6">
+        <AddExpense />
+      </div>
+
+      <Table className="mx-auto">
         <TableCaption>A list of your recent expenses</TableCaption>
         <TableHeader>
           <TableRow>
