@@ -6,7 +6,7 @@ export async function getExpensesByUserId(userId: string) {
     return db.query.expenses.findMany({
         where: eq(expenses.userId, userId),
         orderBy: desc(expenses.createdAt),
-        limit: 50,
+        limit: 15,
     })
 }
 
