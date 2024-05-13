@@ -1,11 +1,12 @@
 import { relations, sql } from 'drizzle-orm'
-import { sqliteTable, text, integer } from 'drizzle-orm/sqlite-core'
+import { sqliteTable, text, integer, primaryKey } from 'drizzle-orm/sqlite-core'
 import { generateId } from 'lucia'
 
 export const users = sqliteTable('user', {
     id: text('id').primaryKey(),
     name: text('name').notNull(),
     email: text('email').notNull().unique(),
+    emailVerified: integer('email_verified', { mode: 'timestamp' }).notNull(),
     password: text('password').notNull(),
 })
 
@@ -22,6 +23,18 @@ export const sessions = sqliteTable('session', {
         .references(() => users.id),
     expiresAt: integer('expires_at').notNull(),
 })
+
+export const verifyEmail = sqliteTable(
+    'verify_email',
+    {
+        identifier: text('identifier').notNull(),
+        otp: integer('otp').notNull(),
+        expiresAt: integer('expires', { mode: 'timestamp' }).notNull(),
+    },
+    (vt) => ({
+        compoundKey: primaryKey({ columns: [vt.identifier, vt.expiresAt] }),
+    })
+)
 
 export const expenses = sqliteTable('expense', {
     id: text('id')
