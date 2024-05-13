@@ -10,16 +10,16 @@ importers:
     dependencies:
       '@hono/zod-validator':
         specifier: ^0.2.1
-        version: 0.2.1(hono@4.3.4)(zod@3.23.8)
+        version: 0.2.1(hono@4.3.6)(zod@3.23.8)
       '@lucia-auth/adapter-drizzle':
         specifier: ^1.0.7
         version: 1.0.7(lucia@3.2.0)
       drizzle-orm:
         specifier: ^0.30.10
-        version: 0.30.10(@libsql/client@0.6.0)(@types/react@18.3.2)(bun-types@1.1.6)(react@18.3.1)
+        version: 0.30.10(@libsql/client@0.6.0)(@types/react@18.3.2)(bun-types@1.1.8)(react@18.3.1)
       hono:
-        specifier: ^4.3.4
-        version: 4.3.4
+        specifier: ^4.3.6
+        version: 4.3.6
       lucia:
         specifier: ^3.2.0
         version: 3.2.0
@@ -35,7 +35,7 @@ importers:
         version: 4.3.0(prettier@3.2.5)
       '@types/bun':
         specifier: latest
-        version: 1.1.1
+        version: 1.1.2
       '@types/nodemailer':
         specifier: ^6.4.15
         version: 6.4.15
@@ -662,11 +662,11 @@ packages:
   '@tybys/wasm-util@0.8.3':
     resolution: {integrity: sha512-Z96T/L6dUFFxgFJ+pQtkPpne9q7i6kIPYCFnQBHSgSPV9idTsKfIhCss0h5iM9irweZCatkrdeP8yi5uM1eX6Q==}
 
-  '@types/bun@1.1.1':
-    resolution: {integrity: sha512-lUe9rLMhgDCViciZtgDj5CMl2u7uTq/IP149kSZH/Si6FWkCioximABFf+baRQgbm8QlH4bzT0qJRteQFNqeGA==}
+  '@types/bun@1.1.2':
+    resolution: {integrity: sha512-pRBDD3EDqPf83qe95i3EpYu5G2J8bbb78a3736vnCm2K8YWtEE5cvJUq2jkKvJhW07YTfQtbImywIwRhWL8z3Q==}
 
-  '@types/node@20.11.30':
-    resolution: {integrity: sha512-dHM6ZxwlmuZaRmUPfv1p+KrdD1Dci04FbdEm/9wEMouFqxYoFl5aMkt0VMAUtYRQDyYvD41WJLukhq/ha3YuTw==}
+  '@types/node@20.12.11':
+    resolution: {integrity: sha512-vDg9PZ/zi+Nqp6boSOT7plNuthRugEKixDv5sFTIpkE89MmNtEArAShI4mxuX2+UrLEe9pxC1vm2cjm9YlWbJw==}
 
   '@types/nodemailer@6.4.15':
     resolution: {integrity: sha512-0EBJxawVNjPkng1zm2vopRctuWVCxk34JcIlRuXSf54habUWdz1FB7wHDqOqvDa8Mtpt0Q3LTXQkAs2LNyK5jQ==}
@@ -693,8 +693,8 @@ packages:
   buffer-from@1.1.2:
     resolution: {integrity: sha512-E+XQCRwSbaaiChtv6k6Dwgc+bx+Bs6vuKJHHl5kox/BaKbhiXzqQOwK4cO22yElGp2OCmjwVhT3HmxgyPGnJfQ==}
 
-  bun-types@1.1.6:
-    resolution: {integrity: sha512-LK2aaJdBBTUkDyN+kRiJHLF3VGrAcdkEHrbBvbmTkccShPw6ZalxxKjWSBJwn4UkikhZdrdA87bZWmfUgkRUYg==}
+  bun-types@1.1.8:
+    resolution: {integrity: sha512-dwhfuUKSGK8hm5Llcvb5+ejRh+4mIt8ibObJVKhZBsi0ScpXmt+AlaS1eDW6uRXCHj084Qt0kIqAJ08/7ZGC9Q==}
 
   chalk@2.4.2:
     resolution: {integrity: sha512-Mti+f9lpJNcwF4tWV8/OrTTtF1gZi+f8FqlyAdouralcFWFQWF2+NgCHShjkCb+IFBLq9buZwE1xckQU4peSuQ==}
@@ -911,8 +911,8 @@ packages:
   heap@0.2.7:
     resolution: {integrity: sha512-2bsegYkkHO+h/9MGbn6KWcE45cHZgPANo5LXF7EvWdT0yT2EguSVO1nDgU5c8+ZOPwp2vMNa7YFsJhVcDR9Sdg==}
 
-  hono@4.3.4:
-    resolution: {integrity: sha512-oh+PBwW8yElj3bUlY2dTXhuPt1MCZp6Nb04tejLwY+GXdphQH6uCpUP0dY5iLvFY5wM8fNHrMx1QeMKbhnzw9w==}
+  hono@4.3.6:
+    resolution: {integrity: sha512-2IqXwrxWF4tG2AR7b5tMYn+KEnWK8UvdC/NUSbOKWj/Kj11OJqel58FxyiXLK5CcKLiL8aGtTe4lkBKXyaHMBQ==}
     engines: {node: '>=16.0.0'}
 
   inflight@1.0.6:
@@ -1312,9 +1312,9 @@ snapshots:
   '@esbuild/win32-x64@0.19.12':
     optional: true
 
-  '@hono/zod-validator@0.2.1(hono@4.3.4)(zod@3.23.8)':
+  '@hono/zod-validator@0.2.1(hono@4.3.6)(zod@3.23.8)':
     dependencies:
-      hono: 4.3.4
+      hono: 4.3.6
       zod: 3.23.8
 
   '@jridgewell/gen-mapping@0.3.5':
@@ -1546,17 +1546,17 @@ snapshots:
       tslib: 2.6.2
     optional: true
 
-  '@types/bun@1.1.1':
+  '@types/bun@1.1.2':
     dependencies:
-      bun-types: 1.1.6
+      bun-types: 1.1.8
 
-  '@types/node@20.11.30':
+  '@types/node@20.12.11':
     dependencies:
       undici-types: 5.26.5
 
   '@types/nodemailer@6.4.15':
     dependencies:
-      '@types/node': 20.11.30
+      '@types/node': 20.12.11
 
   '@types/prop-types@15.7.12': {}
 
@@ -1567,7 +1567,7 @@ snapshots:
 
   '@types/ws@8.5.10':
     dependencies:
-      '@types/node': 20.11.30
+      '@types/node': 20.12.11
 
   ansi-styles@3.2.1:
     dependencies:
@@ -1581,9 +1581,9 @@ snapshots:
 
   buffer-from@1.1.2: {}
 
-  bun-types@1.1.6:
+  bun-types@1.1.8:
     dependencies:
-      '@types/node': 20.11.30
+      '@types/node': 20.12.11
       '@types/ws': 8.5.10
 
   chalk@2.4.2:
@@ -1647,11 +1647,11 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  drizzle-orm@0.30.10(@libsql/client@0.6.0)(@types/react@18.3.2)(bun-types@1.1.6)(react@18.3.1):
+  drizzle-orm@0.30.10(@libsql/client@0.6.0)(@types/react@18.3.2)(bun-types@1.1.8)(react@18.3.1):
     optionalDependencies:
       '@libsql/client': 0.6.0
       '@types/react': 18.3.2
-      bun-types: 1.1.6
+      bun-types: 1.1.8
       react: 18.3.1
 
   env-paths@3.0.0: {}
@@ -1796,7 +1796,7 @@ snapshots:
 
   heap@0.2.7: {}
 
-  hono@4.3.4: {}
+  hono@4.3.6: {}
 
   inflight@1.0.6:
     dependencies:
