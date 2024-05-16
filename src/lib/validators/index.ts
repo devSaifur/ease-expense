@@ -5,6 +5,8 @@ export const expenseSchema = z.object({
         message: 'Title must be less than 100 characters',
     }),
     amount: z.coerce.number().int().positive().min(1, { message: 'Amount is required' }),
+    createdAt: z.coerce.date(),
+    updatedAt: z.coerce.date(),
 })
 
 export type TExpenseSchema = z.infer<typeof expenseSchema>

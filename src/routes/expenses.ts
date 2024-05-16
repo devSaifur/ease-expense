@@ -1,4 +1,10 @@
-import { addExpense, deleteExpense, getExpenseByUserId, getExpensesByUserId } from '../data/expense'
+import {
+    addExpense,
+    deleteExpense,
+    getExpenseByUserId,
+    getExpensesByUserId,
+    updateExpense,
+} from '../data/expense'
 import { expenseSchema } from '../lib/validators'
 import { getUser } from './auth'
 import { zValidator } from '@hono/zod-validator'
@@ -41,6 +47,17 @@ export const expensesRoute = app
         try {
             const deletedExpense = await deleteExpense({ expenseId, userId: id })
             return c.json({ deletedExpense }, 200)
+        } catch (err) {
+            return c.json('Something went wrong', 400)
+        }
+    })
+    .patch('/:id', getUser, zValidator('json', expenseSchema), async (c) => {
+        const expenseId = c.req.param('id')
+        const { id } = c.var.user
+        const expense = c.req.valid('json')
+        try {
+            const updatedExpense = await updateExpense({ userId: id, expenseId, ...expense })
+            return c.json({ expense: updatedExpense }, 200)
         } catch (err) {
             return c.json('Something went wrong', 400)
         }

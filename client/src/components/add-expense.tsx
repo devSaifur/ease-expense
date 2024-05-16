@@ -1,4 +1,5 @@
 import { Button } from './ui/button'
+import { Calendar } from './ui/calendar'
 import {
   Dialog,
   DialogContent,
@@ -34,6 +35,8 @@ export default function AddExpense() {
     defaultValues: {
       title: '',
       amount: 0,
+      createdAt: new Date(),
+      updatedAt: new Date(),
     },
   })
 
@@ -105,6 +108,27 @@ export default function AddExpense() {
                       onFocus={(e) => e.target.select()}
                       type="number"
                       {...field}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="createdAt"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Amount</FormLabel>
+                  <FormControl>
+                    <Calendar
+                      mode="single"
+                      selected={field.value}
+                      onSelect={field.onChange}
+                      className="flex justify-center rounded-md border"
+                      disabled={(date) =>
+                        date > new Date() || date < new Date('1900-01-01')
+                      }
                     />
                   </FormControl>
                   <FormMessage />

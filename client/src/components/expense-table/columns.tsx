@@ -1,7 +1,5 @@
-'use client'
-
+import { Checkbox } from '../ui/checkbox'
 import CellAction from './cell-action'
-import { BoxIcon } from '@radix-ui/react-icons'
 import { ColumnDef } from '@tanstack/react-table'
 
 // This type is used to define the shape of our data.
@@ -15,15 +13,24 @@ export type Expense = {
 
 export const columns: ColumnDef<Expense>[] = [
   {
-    accessorKey: 'id',
-    header: 'Task',
-    cell: () => {
-      return (
-        <div>
-          <BoxIcon />
-        </div>
-      )
-    },
+    id: 'select',
+    header: ({ table }) => (
+      <Checkbox
+        checked={
+          table.getIsAllPageRowsSelected() ||
+          (table.getIsSomePageRowsSelected() && 'indeterminate')
+        }
+        onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
+        aria-label="Select all"
+      />
+    ),
+    cell: ({ row }) => (
+      <Checkbox
+        checked={row.getIsSelected()}
+        onCheckedChange={(value) => row.toggleSelected(!!value)}
+        aria-label="Select row"
+      />
+    ),
   },
   {
     accessorKey: 'createdAt',
@@ -45,9 +52,7 @@ export const columns: ColumnDef<Expense>[] = [
   },
   {
     accessorKey: 'id',
-    header: '',
-    cell: ({ row }) => {
-      return <CellAction id={row.original.id} />
-    },
+    header: 'Actions',
+    cell: ({ row }) => <CellAction id={row.original.id} />,
   },
 ]

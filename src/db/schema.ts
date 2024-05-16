@@ -1,6 +1,6 @@
+import { createId } from '@paralleldrive/cuid2'
 import { relations, sql } from 'drizzle-orm'
 import { sqliteTable, text, integer } from 'drizzle-orm/sqlite-core'
-import { generateId } from 'lucia'
 
 export const users = sqliteTable('user', {
     id: text('id').primaryKey(),
@@ -34,18 +34,14 @@ export const verifyEmail = sqliteTable('verify_email', {
 export const expenses = sqliteTable('expense', {
     id: text('id')
         .primaryKey()
-        .$defaultFn(() => generateId(15)),
+        .$defaultFn(() => createId()),
     title: text('title').notNull(),
     amount: integer('amount').notNull(),
     userId: text('user_id')
         .notNull()
         .references(() => users.id),
-    createdAt: text('created_at')
-        .default(sql`(CURRENT_TIMESTAMP)`)
-        .notNull(),
-    updatedAt: text('updated_at')
-        .default(sql`(CURRENT_TIMESTAMP)`)
-        .notNull(),
+    createdAt: integer('created_at', { mode: 'timestamp' }).notNull(),
+    updatedAt: integer('updated_at', { mode: 'timestamp' }).notNull(),
 })
 
 export type TExpenseInsert = typeof expenses.$inferInsert

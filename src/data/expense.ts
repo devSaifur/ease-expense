@@ -33,3 +33,19 @@ export async function deleteExpense({ userId, expenseId }: ExpenseQuery) {
         .returning()
     return deletedExpense
 }
+
+type UpdateExpense = {
+    userId: string
+    expenseId: string
+    title?: string
+    amount?: number
+}
+
+export async function updateExpense({ userId, expenseId, ...values }: UpdateExpense) {
+    const [updatedExpense] = await db
+        .update(expenses)
+        .set(values)
+        .where(and(eq(expenses.id, expenseId), eq(expenses.userId, userId)))
+        .returning()
+    return updatedExpense
+}
