@@ -35,3 +35,11 @@ export const registerSchema = z
     })
 
 export type TRegisterSchema = z.infer<typeof registerSchema>
+
+export const otpSchema = z.object({
+    otp: z.string().min(6, { message: 'OTP must be at least 6 characters' }).max(6, {
+        message: 'OTP must be less than 6 characters',
+    }),
+})
+
+export type TOtpSchema = z.infer<typeof otpSchema>

@@ -20,6 +20,7 @@ import { Route as AuthenticatedImport } from './routes/_authenticated'
 const SignUpLazyImport = createFileRoute('/sign-up')()
 const SignInLazyImport = createFileRoute('/sign-in')()
 const IndexLazyImport = createFileRoute('/')()
+const SignUpVerifyLazyImport = createFileRoute('/sign-up/verify')()
 const AuthenticatedProfileLazyImport = createFileRoute(
   '/_authenticated/profile',
 )()
@@ -49,6 +50,13 @@ const IndexLazyRoute = IndexLazyImport.update({
   getParentRoute: () => rootRoute,
 } as any).lazy(() => import('./routes/index.lazy').then((d) => d.Route))
 
+const SignUpVerifyLazyRoute = SignUpVerifyLazyImport.update({
+  path: '/sign-up/verify',
+  getParentRoute: () => rootRoute,
+} as any).lazy(() =>
+  import('./routes/sign-up_.verify.lazy').then((d) => d.Route),
+)
+
 const AuthenticatedProfileLazyRoute = AuthenticatedProfileLazyImport.update({
   path: '/profile',
   getParentRoute: () => AuthenticatedRoute,
@@ -68,42 +76,68 @@ const AuthenticatedExpensesLazyRoute = AuthenticatedExpensesLazyImport.update({
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
     '/': {
+      id: '/'
+      path: '/'
+      fullPath: '/'
       preLoaderRoute: typeof IndexLazyImport
       parentRoute: typeof rootRoute
     }
     '/_authenticated': {
+      id: '/_authenticated'
+      path: ''
+      fullPath: ''
       preLoaderRoute: typeof AuthenticatedImport
       parentRoute: typeof rootRoute
     }
     '/sign-in': {
+      id: '/sign-in'
+      path: '/sign-in'
+      fullPath: '/sign-in'
       preLoaderRoute: typeof SignInLazyImport
       parentRoute: typeof rootRoute
     }
     '/sign-up': {
+      id: '/sign-up'
+      path: '/sign-up'
+      fullPath: '/sign-up'
       preLoaderRoute: typeof SignUpLazyImport
       parentRoute: typeof rootRoute
     }
     '/_authenticated/expenses': {
+      id: '/_authenticated/expenses'
+      path: '/expenses'
+      fullPath: '/expenses'
       preLoaderRoute: typeof AuthenticatedExpensesLazyImport
       parentRoute: typeof AuthenticatedImport
     }
     '/_authenticated/profile': {
+      id: '/_authenticated/profile'
+      path: '/profile'
+      fullPath: '/profile'
       preLoaderRoute: typeof AuthenticatedProfileLazyImport
       parentRoute: typeof AuthenticatedImport
+    }
+    '/sign-up/verify': {
+      id: '/sign-up/verify'
+      path: '/sign-up/verify'
+      fullPath: '/sign-up/verify'
+      preLoaderRoute: typeof SignUpVerifyLazyImport
+      parentRoute: typeof rootRoute
     }
   }
 }
 
 // Create and export the route tree
 
-export const routeTree = rootRoute.addChildren([
+export const routeTree = rootRoute.addChildren({
   IndexLazyRoute,
-  AuthenticatedRoute.addChildren([
+  AuthenticatedRoute: AuthenticatedRoute.addChildren({
     AuthenticatedExpensesLazyRoute,
     AuthenticatedProfileLazyRoute,
-  ]),
+  }),
   SignInLazyRoute,
   SignUpLazyRoute,
-])
+  SignUpVerifyLazyRoute,
+})
 
 /* prettier-ignore-end */

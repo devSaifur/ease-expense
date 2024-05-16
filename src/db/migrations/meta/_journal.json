@@ -1,12 +1,12 @@
 {
-  "version": "5",
+  "version": "6",
   "dialect": "sqlite",
   "entries": [
     {
       "idx": 0,
-      "version": "5",
-      "when": 1715080377125,
-      "tag": "0000_swift_beast",
+      "version": "6",
+      "when": 1715855174151,
+      "tag": "0000_military_arclight",
       "breakpoints": true
     }
   ]

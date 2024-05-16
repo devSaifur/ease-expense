@@ -10,16 +10,16 @@ importers:
     dependencies:
       '@hono/zod-validator':
         specifier: ^0.2.1
-        version: 0.2.1(hono@4.3.6)(zod@3.23.8)
+        version: 0.2.1(hono@4.3.7)(zod@3.23.8)
       '@lucia-auth/adapter-drizzle':
         specifier: ^1.0.7
         version: 1.0.7(lucia@3.2.0)
       drizzle-orm:
         specifier: ^0.30.10
-        version: 0.30.10(@libsql/client@0.6.0)(@types/react@18.3.2)(bun-types@1.1.8)(react@18.3.1)
+        version: 0.30.10(@libsql/client@0.6.0)(@types/react@18.3.2)(bun-types@1.1.8)
       hono:
-        specifier: ^4.3.6
-        version: 4.3.6
+        specifier: ^4.3.7
+        version: 4.3.7
       lucia:
         specifier: ^3.2.0
         version: 3.2.0
@@ -30,6 +30,9 @@ importers:
         specifier: ^3.23.8
         version: 3.23.8
     devDependencies:
+      '@libsql/client':
+        specifier: ^0.6.0
+        version: 0.6.0
       '@trivago/prettier-plugin-sort-imports':
         specifier: ^4.3.0
         version: 4.3.0(prettier@3.2.5)
@@ -43,8 +46,8 @@ importers:
         specifier: ^18.3.2
         version: 18.3.2
       drizzle-kit:
-        specifier: ^0.21.1
-        version: 0.21.1
+        specifier: ^0.21.2
+        version: 0.21.2
       prettier:
         specifier: ^3.2.5
         version: 3.2.5
@@ -665,8 +668,8 @@ packages:
   '@types/bun@1.1.2':
     resolution: {integrity: sha512-pRBDD3EDqPf83qe95i3EpYu5G2J8bbb78a3736vnCm2K8YWtEE5cvJUq2jkKvJhW07YTfQtbImywIwRhWL8z3Q==}
 
-  '@types/node@20.12.11':
-    resolution: {integrity: sha512-vDg9PZ/zi+Nqp6boSOT7plNuthRugEKixDv5sFTIpkE89MmNtEArAShI4mxuX2+UrLEe9pxC1vm2cjm9YlWbJw==}
+  '@types/node@20.12.12':
+    resolution: {integrity: sha512-eWLDGF/FOSPtAvEqeRAQ4C8LSA7M1I7i0ky1I8U7kD1J5ITyW3AsRhQrKVoWf5pFKZ2kILsEGJhsI9r93PYnOw==}
 
   '@types/nodemailer@6.4.15':
     resolution: {integrity: sha512-0EBJxawVNjPkng1zm2vopRctuWVCxk34JcIlRuXSf54habUWdz1FB7wHDqOqvDa8Mtpt0Q3LTXQkAs2LNyK5jQ==}
@@ -745,8 +748,8 @@ packages:
     resolution: {integrity: sha512-vyJTp8+mC+G+5dfgsY+r3ckxlz+QMX40VjPQsZc5gxVAxLmi64TBoVkP54A/pRAXMXsbu2GMMBrZPxNv23waMg==}
     engines: {node: '>=0.4.0'}
 
-  drizzle-kit@0.21.1:
-    resolution: {integrity: sha512-Sp7OnCdROiE2ebMuHsAfrnRoHVGYCvErQxUh7/0l6R1caHssZu9oZu/hW9rLU19xnTK4/y3iSe3sL0Cc530wCg==}
+  drizzle-kit@0.21.2:
+    resolution: {integrity: sha512-U87IhZyCt/9d0ZT/Na3KFJVY31tSxtTx/n9UMcWFpW/5c2Ede39xiCG5efNV/0iimsv97UIRtDI0ldLBW5lbcg==}
     hasBin: true
 
   drizzle-orm@0.30.10:
@@ -911,8 +914,8 @@ packages:
   heap@0.2.7:
     resolution: {integrity: sha512-2bsegYkkHO+h/9MGbn6KWcE45cHZgPANo5LXF7EvWdT0yT2EguSVO1nDgU5c8+ZOPwp2vMNa7YFsJhVcDR9Sdg==}
 
-  hono@4.3.6:
-    resolution: {integrity: sha512-2IqXwrxWF4tG2AR7b5tMYn+KEnWK8UvdC/NUSbOKWj/Kj11OJqel58FxyiXLK5CcKLiL8aGtTe4lkBKXyaHMBQ==}
+  hono@4.3.7:
+    resolution: {integrity: sha512-GXlsGnCAwGosu+COwYyYC8MwOY2L6Ihg9V1znYdMD8DHCJl+13Nk4o8dsBYJpae4oujjw24jBaITuYWVq2+V8Q==}
     engines: {node: '>=16.0.0'}
 
   inflight@1.0.6:
@@ -952,10 +955,6 @@ packages:
 
   lodash@4.17.21:
     resolution: {integrity: sha512-v2kDEe57lecTulaDIuNTPy3Ry4gLGJ6Z1O3vE1krgXZNrsQ+LFTGHVxVjcXPs17LhbZVGedAJv8XZ1tvj5FvSg==}
-
-  loose-envify@1.4.0:
-    resolution: {integrity: sha512-lyuxPGr/Wfhrlem2CL/UcnUc1zcqKAImBDzukY7Y5F/yQiNdko6+fRLevlw1HgMySw7f611UIY408EtxRSoK3Q==}
-    hasBin: true
 
   lru-queue@0.1.0:
     resolution: {integrity: sha512-BpdYkt9EvGl8OfWHDQPISVpcl5xZthb+XPsbELj5AQXxIC8IriDZIQYjBJPEm5rS420sjZ0TLEzRcq5KdBhYrQ==}
@@ -1001,17 +1000,13 @@ packages:
   oslo@1.2.0:
     resolution: {integrity: sha512-OoFX6rDsNcOQVAD2gQD/z03u4vEjWZLzJtwkmgfRF+KpQUXwdgEXErD7zNhyowmHwHefP+PM9Pw13pgpHMRlzw==}
 
-  picocolors@1.0.0:
-    resolution: {integrity: sha512-1fygroTLlHu66zi26VoTDv8yRgm0Fccecssto+MhsZ0D/DGW2sm8E8AjW7NU5VVTRt5GxbeZ5qBuJr+HyLYkjQ==}
+  picocolors@1.0.1:
+    resolution: {integrity: sha512-anP1Z8qwhkbmu7MFP5iTt+wQKXgwzf7zTyGlcdzabySa9vd0Xt392U0rVmz9poOaBj0uHJKyyo9/upk0HrEQew==}
 
   prettier@3.2.5:
     resolution: {integrity: sha512-3/GWa9aOC0YeD7LUfvOG2NiDyhOWRvt1k+rcKhOuYnMY24iiCphgneUfJDyFXd6rZCAnuLBv6UeAULtrhT/F4A==}
     engines: {node: '>=14'}
     hasBin: true
-
-  react@18.3.1:
-    resolution: {integrity: sha512-wS+hAgJShR0KhEvPJArfuPVN1+Hz1t0Y6n5jLrGQbkb4urgPE/0Rve+1kMB1v/oWgHgm4WIcV+i7F2pTVj+2iQ==}
-    engines: {node: '>=0.10.0'}
 
   resolve-pkg-maps@1.0.0:
     resolution: {integrity: sha512-seS2Tj26TBVOC2NIc2rOe2y2ZO7efxITtLZcGSOnHHNOQ7CkiUBfw0Iw2ck6xkIhPwLhKNLS8BO+hEpngQlqzw==}
@@ -1080,7 +1075,7 @@ snapshots:
   '@babel/code-frame@7.24.2':
     dependencies:
       '@babel/highlight': 7.24.5
-      picocolors: 1.0.0
+      picocolors: 1.0.1
 
   '@babel/generator@7.17.7':
     dependencies:
@@ -1119,7 +1114,7 @@ snapshots:
       '@babel/helper-validator-identifier': 7.24.5
       chalk: 2.4.2
       js-tokens: 4.0.0
-      picocolors: 1.0.0
+      picocolors: 1.0.1
 
   '@babel/parser@7.24.5':
     dependencies:
@@ -1312,9 +1307,9 @@ snapshots:
   '@esbuild/win32-x64@0.19.12':
     optional: true
 
-  '@hono/zod-validator@0.2.1(hono@4.3.6)(zod@3.23.8)':
+  '@hono/zod-validator@0.2.1(hono@4.3.7)(zod@3.23.8)':
     dependencies:
-      hono: 4.3.6
+      hono: 4.3.7
       zod: 3.23.8
 
   '@jridgewell/gen-mapping@0.3.5':
@@ -1343,12 +1338,10 @@ snapshots:
     transitivePeerDependencies:
       - bufferutil
       - utf-8-validate
-    optional: true
 
   '@libsql/core@0.6.0':
     dependencies:
       js-base64: 3.7.7
-    optional: true
 
   '@libsql/darwin-arm64@0.3.18':
     optional: true
@@ -1365,10 +1358,8 @@ snapshots:
     transitivePeerDependencies:
       - bufferutil
       - utf-8-validate
-    optional: true
 
-  '@libsql/isomorphic-fetch@0.2.1':
-    optional: true
+  '@libsql/isomorphic-fetch@0.2.1': {}
 
   '@libsql/isomorphic-ws@0.1.5':
     dependencies:
@@ -1377,7 +1368,6 @@ snapshots:
     transitivePeerDependencies:
       - bufferutil
       - utf-8-validate
-    optional: true
 
   '@libsql/linux-arm64-gnu@0.3.18':
     optional: true
@@ -1398,8 +1388,7 @@ snapshots:
     dependencies:
       lucia: 3.2.0
 
-  '@neon-rs/load@0.0.4':
-    optional: true
+  '@neon-rs/load@0.0.4': {}
 
   '@node-rs/argon2-android-arm-eabi@1.7.0':
     optional: true
@@ -1550,13 +1539,13 @@ snapshots:
     dependencies:
       bun-types: 1.1.8
 
-  '@types/node@20.12.11':
+  '@types/node@20.12.12':
     dependencies:
       undici-types: 5.26.5
 
   '@types/nodemailer@6.4.15':
     dependencies:
-      '@types/node': 20.12.11
+      '@types/node': 20.12.12
 
   '@types/prop-types@15.7.12': {}
 
@@ -1567,7 +1556,7 @@ snapshots:
 
   '@types/ws@8.5.10':
     dependencies:
-      '@types/node': 20.12.11
+      '@types/node': 20.12.12
 
   ansi-styles@3.2.1:
     dependencies:
@@ -1583,7 +1572,7 @@ snapshots:
 
   bun-types@1.1.8:
     dependencies:
-      '@types/node': 20.12.11
+      '@types/node': 20.12.12
       '@types/ws': 8.5.10
 
   chalk@2.4.2:
@@ -1615,15 +1604,13 @@ snapshots:
       es5-ext: 0.10.64
       type: 2.7.2
 
-  data-uri-to-buffer@4.0.1:
-    optional: true
+  data-uri-to-buffer@4.0.1: {}
 
   debug@4.3.4:
     dependencies:
       ms: 2.1.2
 
-  detect-libc@2.0.2:
-    optional: true
+  detect-libc@2.0.2: {}
 
   difflib@0.2.4:
     dependencies:
@@ -1633,7 +1620,7 @@ snapshots:
     dependencies:
       wordwrap: 1.0.0
 
-  drizzle-kit@0.21.1:
+  drizzle-kit@0.21.2:
     dependencies:
       '@esbuild-kit/esm-loader': 2.6.5
       commander: 9.5.0
@@ -1647,12 +1634,11 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  drizzle-orm@0.30.10(@libsql/client@0.6.0)(@types/react@18.3.2)(bun-types@1.1.8)(react@18.3.1):
+  drizzle-orm@0.30.10(@libsql/client@0.6.0)(@types/react@18.3.2)(bun-types@1.1.8):
     optionalDependencies:
       '@libsql/client': 0.6.0
       '@types/react': 18.3.2
       bun-types: 1.1.8
-      react: 18.3.1
 
   env-paths@3.0.0: {}
 
@@ -1761,12 +1747,10 @@ snapshots:
     dependencies:
       node-domexception: 1.0.0
       web-streams-polyfill: 3.3.3
-    optional: true
 
   formdata-polyfill@4.0.10:
     dependencies:
       fetch-blob: 3.2.0
-    optional: true
 
   fs-monkey@1.0.6:
     optional: true
@@ -1796,7 +1780,7 @@ snapshots:
 
   heap@0.2.7: {}
 
-  hono@4.3.6: {}
+  hono@4.3.7: {}
 
   inflight@1.0.6:
     dependencies:
@@ -1809,8 +1793,7 @@ snapshots:
 
   javascript-natural-sort@0.7.1: {}
 
-  js-base64@3.7.7:
-    optional: true
+  js-base64@3.7.7: {}
 
   js-tokens@4.0.0: {}
 
@@ -1834,16 +1817,10 @@ snapshots:
       '@libsql/linux-x64-gnu': 0.3.18
       '@libsql/linux-x64-musl': 0.3.18
       '@libsql/win32-x64-msvc': 0.3.18
-    optional: true
 
   lodash.throttle@4.1.1: {}
 
   lodash@4.17.21: {}
-
-  loose-envify@1.4.0:
-    dependencies:
-      js-tokens: 4.0.0
-    optional: true
 
   lru-queue@0.1.0:
     dependencies:
@@ -1882,15 +1859,13 @@ snapshots:
 
   next-tick@1.1.0: {}
 
-  node-domexception@1.0.0:
-    optional: true
+  node-domexception@1.0.0: {}
 
   node-fetch@3.3.2:
     dependencies:
       data-uri-to-buffer: 4.0.1
       fetch-blob: 3.2.0
       formdata-polyfill: 4.0.10
-    optional: true
 
   nodemailer@6.9.13: {}
 
@@ -1903,14 +1878,9 @@ snapshots:
       '@node-rs/argon2': 1.7.0
       '@node-rs/bcrypt': 1.9.0
 
-  picocolors@1.0.0: {}
+  picocolors@1.0.1: {}
 
   prettier@3.2.5: {}
-
-  react@18.3.1:
-    dependencies:
-      loose-envify: 1.4.0
-    optional: true
 
   resolve-pkg-maps@1.0.0: {}
 
@@ -1943,14 +1913,12 @@ snapshots:
 
   undici-types@5.26.5: {}
 
-  web-streams-polyfill@3.3.3:
-    optional: true
+  web-streams-polyfill@3.3.3: {}
 
   wordwrap@1.0.0: {}
 
   wrappy@1.0.2: {}
 
-  ws@8.17.0:
-    optional: true
+  ws@8.17.0: {}
 
   zod@3.23.8: {}

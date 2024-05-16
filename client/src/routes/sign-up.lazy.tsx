@@ -31,8 +31,7 @@ function Register() {
       }
     },
     onSuccess: () => {
-      router.navigate({ to: '/sign-in' })
-      toast.success('User created successfully')
+      router.navigate({ to: '/sign-up/verify', replace: true })
     },
     onError: () => {
       toast.error('Failed to sign up user')

@@ -11,13 +11,15 @@ export default function Navbar() {
         Expense Tracker
       </Link>
       <ul className="flex items-center gap-6 py-6 text-lg">
-        <Link to="/expenses" className="[&.active]:font-bold">
-          Expenses
-        </Link>
         {user ? (
-          <Link to="/profile" className="[&.active]:font-bold">
-            Profile
-          </Link>
+          <>
+            <Link to="/expenses" className="[&.active]:font-bold">
+              Expenses
+            </Link>
+            <Link to="/profile" className="[&.active]:font-bold">
+              Profile
+            </Link>
+          </>
         ) : (
           <>
             <Link to="/sign-in" className="[&.active]:font-bold">

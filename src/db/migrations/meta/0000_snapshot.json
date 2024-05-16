@@ -1,7 +1,7 @@
 {
-  "version": "5",
+  "version": "6",
   "dialect": "sqlite",
-  "id": "55b3d081-fa54-4165-85cb-e1a142f2d4bd",
+  "id": "b9dd68b3-d91a-4517-9e29-54da947e5c2e",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "tables": {
     "expense": {
@@ -139,6 +139,13 @@
           "notNull": true,
           "autoincrement": false
         },
+        "email_verified": {
+          "name": "email_verified",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
         "password": {
           "name": "password",
           "type": "text",
@@ -152,6 +159,51 @@
           "name": "user_email_unique",
           "columns": [
             "email"
+          ],
+          "isUnique": true
+        }
+      },
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {}
+    },
+    "verify_email": {
+      "name": "verify_email",
+      "columns": {
+        "user_id": {
+          "name": "user_id",
+          "type": "text",
+          "primaryKey": true,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "email": {
+          "name": "email",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "otp": {
+          "name": "otp",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "expires": {
+          "name": "expires",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        }
+      },
+      "indexes": {
+        "verify_email_user_id_unique": {
+          "name": "verify_email_user_id_unique",
+          "columns": [
+            "user_id"
           ],
           "isUnique": true
         }

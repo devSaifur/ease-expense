@@ -1,12 +1,12 @@
 import { relations, sql } from 'drizzle-orm'
-import { sqliteTable, text, integer, primaryKey } from 'drizzle-orm/sqlite-core'
+import { sqliteTable, text, integer } from 'drizzle-orm/sqlite-core'
 import { generateId } from 'lucia'
 
 export const users = sqliteTable('user', {
     id: text('id').primaryKey(),
     name: text('name').notNull(),
     email: text('email').notNull().unique(),
-    emailVerified: integer('email_verified', { mode: 'timestamp' }).notNull(),
+    emailVerified: integer('email_verified', { mode: 'boolean' }).notNull(),
     password: text('password').notNull(),
 })
 
@@ -17,24 +17,19 @@ export const usersRelations = relations(users, ({ many }) => ({
 }))
 
 export const sessions = sqliteTable('session', {
-    id: text('id').notNull().primaryKey(),
+    id: text('id').primaryKey(),
     userId: text('user_id')
         .notNull()
         .references(() => users.id),
     expiresAt: integer('expires_at').notNull(),
 })
 
-export const verifyEmail = sqliteTable(
-    'verify_email',
-    {
-        identifier: text('identifier').notNull(),
-        otp: integer('otp').notNull(),
-        expiresAt: integer('expires', { mode: 'timestamp' }).notNull(),
-    },
-    (vt) => ({
-        compoundKey: primaryKey({ columns: [vt.identifier, vt.expiresAt] }),
-    })
-)
+export const verifyEmail = sqliteTable('verify_email', {
+    userId: text('user_id').unique().primaryKey(),
+    email: text('email').notNull(),
+    otp: integer('otp').notNull(),
+    expiresAt: integer('expires', { mode: 'timestamp' }).notNull(),
+})
 
 export const expenses = sqliteTable('expense', {
     id: text('id')
