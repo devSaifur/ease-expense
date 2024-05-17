@@ -1,5 +1,5 @@
 import ConfirmDelete from '../confirm-delete'
-import { Button } from '../ui/button'
+import { Button, buttonVariants } from '../ui/button'
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -8,9 +8,10 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '../ui/dropdown-menu'
-import UpdateExpense from '../update-expense'
 import { Expense } from './columns'
-import { DotsHorizontalIcon } from '@radix-ui/react-icons'
+import { cn } from '@/lib/utils'
+import { DotsHorizontalIcon, Pencil2Icon } from '@radix-ui/react-icons'
+import { Link } from '@tanstack/react-router'
 
 export default function CellAction({ expense }: { expense: Expense }) {
   return (
@@ -29,9 +30,18 @@ export default function CellAction({ expense }: { expense: Expense }) {
           </div>
         </DropdownMenuItem>
         <DropdownMenuSeparator />
-        <DropdownMenuItem onSelect={(e) => e.preventDefault()}>
+        <DropdownMenuItem>
           <div className="flex w-full justify-between">
-            <UpdateExpense expense={expense} />
+            <Link
+              to={`/expenses/${expense.id}`}
+              className={cn(
+                buttonVariants({ variant: 'ghost' }),
+                'w-full justify-between p-0'
+              )}
+            >
+              Edit
+              <Pencil2Icon className="size-4" />
+            </Link>
           </div>
         </DropdownMenuItem>
       </DropdownMenuContent>

@@ -14,6 +14,7 @@ import { createFileRoute } from '@tanstack/react-router'
 
 import { Route as rootRoute } from './routes/__root'
 import { Route as AuthenticatedImport } from './routes/_authenticated'
+import { Route as AuthenticatedExpensesExpenseIdImport } from './routes/_authenticated/expenses_.$expenseId'
 
 // Create Virtual Routes
 
@@ -71,6 +72,12 @@ const AuthenticatedExpensesLazyRoute = AuthenticatedExpensesLazyImport.update({
   import('./routes/_authenticated/expenses.lazy').then((d) => d.Route),
 )
 
+const AuthenticatedExpensesExpenseIdRoute =
+  AuthenticatedExpensesExpenseIdImport.update({
+    path: '/expenses/$expenseId',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
+
 // Populate the FileRoutesByPath interface
 
 declare module '@tanstack/react-router' {
@@ -124,6 +131,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof SignUpVerifyLazyImport
       parentRoute: typeof rootRoute
     }
+    '/_authenticated/expenses/$expenseId': {
+      id: '/_authenticated/expenses/$expenseId'
+      path: '/expenses/$expenseId'
+      fullPath: '/expenses/$expenseId'
+      preLoaderRoute: typeof AuthenticatedExpensesExpenseIdImport
+      parentRoute: typeof AuthenticatedImport
+    }
   }
 }
 
@@ -134,6 +148,7 @@ export const routeTree = rootRoute.addChildren({
   AuthenticatedRoute: AuthenticatedRoute.addChildren({
     AuthenticatedExpensesLazyRoute,
     AuthenticatedProfileLazyRoute,
+    AuthenticatedExpensesExpenseIdRoute,
   }),
   SignInLazyRoute,
   SignUpLazyRoute,

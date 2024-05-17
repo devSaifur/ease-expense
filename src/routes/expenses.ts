@@ -37,7 +37,7 @@ export const expensesRoute = app
         const { id } = c.var.user
         const expense = await getExpenseByUserId({ expenseId, userId: id })
         if (!expense) {
-            return c.notFound()
+            return c.json('Expense not found', 400)
         }
         return c.json({ expense }, 200)
     })

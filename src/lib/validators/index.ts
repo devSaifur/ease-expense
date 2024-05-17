@@ -4,7 +4,11 @@ export const expenseSchema = z.object({
     title: z.string().min(3, { message: 'Title must be at least 3 characters' }).max(100, {
         message: 'Title must be less than 100 characters',
     }),
-    amount: z.coerce.number().int().positive().min(1, { message: 'Amount is required' }),
+    amount: z.coerce
+        .number({ message: 'Amount must be a monetary value' })
+        .int()
+        .positive()
+        .min(1, { message: 'Amount is required' }),
     date: z.coerce.date(),
 })
 

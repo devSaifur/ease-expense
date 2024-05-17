@@ -11,7 +11,7 @@ import { Input } from '@/components/ui/input'
 import { api } from '@/lib/api'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { TLoginSchema, loginSchema } from '@server/lib/validators'
-import { useMutation } from '@tanstack/react-query'
+import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { createLazyFileRoute, useRouter } from '@tanstack/react-router'
 import { useForm } from 'react-hook-form'
 import { toast } from 'sonner'
@@ -21,15 +21,13 @@ export const Route = createLazyFileRoute('/sign-in')({
 })
 
 function SignIn() {
+  const queryClient = useQueryClient()
   const router = useRouter()
   const { mutate: login, isPending } = useMutation({
-    mutationFn: async (values: TLoginSchema) => {
-      const res = await api.auth.login.$post({ json: values })
-      if (res.status === 200) {
-        throw new Error('Failed to login')
-      }
-    },
-    onSuccess: () => {
+    mutationFn: async (values: TLoginSchema) =>
+      await api.auth.login.$post({ json: values }),
+    onSuccess: async () => {
+      await queryClient.invalidateQueries({ queryKey: ['user'] })
       router.navigate({ to: '/' })
       toast.success('Logged in successfully')
     },
