@@ -1,3 +1,4 @@
+import { Expense } from './expense-table/columns'
 import { Button } from './ui/button'
 import { Calendar } from './ui/calendar'
 import {
@@ -20,6 +21,7 @@ import {
 import { Input } from './ui/input'
 import { api, getExpensesQueryOptions } from '@/lib/api'
 import { zodResolver } from '@hookform/resolvers/zod'
+import { Pencil2Icon } from '@radix-ui/react-icons'
 import {
   TExpenseUpdateSchema,
   expenseUpdateSchema,
@@ -29,15 +31,16 @@ import { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { toast } from 'sonner'
 
-export default function UpdateExpense() {
+export default function UpdateExpense({ expense }: { expense: Expense }) {
   const [open, setOpen] = useState(false)
   const queryClient = useQueryClient()
 
   const form = useForm<TExpenseUpdateSchema>({
     resolver: zodResolver(expenseUpdateSchema),
     defaultValues: {
-      title: '',
-      amount: 0,
+      id: expense.id,
+      title: expense.title,
+      amount: expense.amount,
       date: new Date(),
     },
   })
@@ -52,16 +55,17 @@ export default function UpdateExpense() {
       return expense
     },
     onSuccess: async (updatedExpense) => {
-      toast.success('Expense created successfully')
+      toast.success('Expense updated successfully')
       setOpen(false)
       form.reset()
       queryClient.setQueryData(getExpensesQueryOptions.queryKey, (oldData) => {
         if (!oldData) return [updatedExpense]
-        return [updatedExpense, ...oldData]
+        const expenses = oldData.filter((e) => e.id !== updatedExpense.id)
+        return [updatedExpense, ...expenses]
       })
     },
     onError: () => {
-      toast.error('Failed to create expense')
+      toast.error('Failed to update expense')
     },
   })
 
@@ -72,14 +76,15 @@ export default function UpdateExpense() {
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button>Add Expense</Button>
+        <Button variant="ghost" className="w-full justify-between p-0">
+          Edit
+          <Pencil2Icon className="size-4" />
+        </Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
-          <DialogTitle>Add Expense</DialogTitle>
-          <DialogDescription>
-            Add a new expense to your account
-          </DialogDescription>
+          <DialogTitle>Update Expense</DialogTitle>
+          <DialogDescription>Update an existing expense</DialogDescription>
         </DialogHeader>
 
         <Form {...form}>

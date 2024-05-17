@@ -6,7 +6,7 @@ export type Expense = {
   id: string
   title: string
   amount: number
-  date: string
+  date: Date
 }
 
 export const columns: ColumnDef<Expense>[] = [
@@ -51,6 +51,6 @@ export const columns: ColumnDef<Expense>[] = [
   {
     accessorKey: 'id',
     header: 'Actions',
-    cell: ({ row }) => <CellAction id={row.original.id} />,
+    cell: ({ row }) => <CellAction expense={row.original} />,
   },
 ]

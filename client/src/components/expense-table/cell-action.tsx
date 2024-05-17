@@ -8,14 +8,13 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '../ui/dropdown-menu'
-import { DotsHorizontalIcon, Pencil2Icon } from '@radix-ui/react-icons'
-import { useState } from 'react'
+import UpdateExpense from '../update-expense'
+import { Expense } from './columns'
+import { DotsHorizontalIcon } from '@radix-ui/react-icons'
 
-export default function CellAction({ id }: { id: string }) {
-  const [open, setOpen] = useState(false)
-
+export default function CellAction({ expense }: { expense: Expense }) {
   return (
-    <DropdownMenu open={open} onOpenChange={setOpen}>
+    <DropdownMenu>
       <DropdownMenuTrigger asChild>
         <Button variant="ghost" className="size-8 p-0">
           <span className="sr-only">Open menu</span>
@@ -26,16 +25,13 @@ export default function CellAction({ id }: { id: string }) {
         <DropdownMenuLabel>Actions</DropdownMenuLabel>
         <DropdownMenuItem onSelect={(e) => e.preventDefault()}>
           <div className="flex w-full justify-between">
-            <ConfirmDelete expenseId={id} />
+            <ConfirmDelete expenseId={expense.id} />
           </div>
         </DropdownMenuItem>
         <DropdownMenuSeparator />
-        <DropdownMenuItem>
+        <DropdownMenuItem onSelect={(e) => e.preventDefault()}>
           <div className="flex w-full justify-between">
-            <span>Edit</span>
-            <span>
-              <Pencil2Icon className="size-4" />
-            </span>
+            <UpdateExpense expense={expense} />
           </div>
         </DropdownMenuItem>
       </DropdownMenuContent>

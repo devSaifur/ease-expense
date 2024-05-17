@@ -12,9 +12,11 @@ import { api, getExpensesQueryOptions } from '@/lib/api'
 import { DialogClose } from '@radix-ui/react-dialog'
 import { TrashIcon } from '@radix-ui/react-icons'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
+import { useState } from 'react'
 import { toast } from 'sonner'
 
 export default function ConfirmDelete({ expenseId }: { expenseId: string }) {
+  const [open, setOpen] = useState(false)
   const queryClient = useQueryClient()
 
   const { mutate: deleteExpense, isPending: isDeleting } = useMutation({
@@ -32,6 +34,7 @@ export default function ConfirmDelete({ expenseId }: { expenseId: string }) {
         if (!oldData) return
         return oldData.filter((e) => e.id !== deletedExpense.id)
       })
+      setOpen(false)
       toast.success('Expense deleted successfully')
     },
     onError: () => {
@@ -44,7 +47,7 @@ export default function ConfirmDelete({ expenseId }: { expenseId: string }) {
   }
 
   return (
-    <Dialog>
+    <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
         <Button variant="ghost" className="w-full justify-between p-0">
           Delete
