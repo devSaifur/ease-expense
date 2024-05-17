@@ -2,13 +2,11 @@ import { Checkbox } from '../ui/checkbox'
 import CellAction from './cell-action'
 import { ColumnDef } from '@tanstack/react-table'
 
-// This type is used to define the shape of our data.
-// You can use a Zod schema here if you want.
 export type Expense = {
   id: string
   title: string
   amount: number
-  createdAt: string
+  date: string
 }
 
 export const columns: ColumnDef<Expense>[] = [
@@ -36,7 +34,7 @@ export const columns: ColumnDef<Expense>[] = [
     accessorKey: 'createdAt',
     header: 'Date',
     cell: ({ row }) => {
-      return new Date(row.original.createdAt).toLocaleDateString()
+      return new Date(row.original.date).toLocaleDateString()
     },
   },
   {

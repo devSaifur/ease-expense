@@ -40,8 +40,7 @@ export const expenses = sqliteTable('expense', {
     userId: text('user_id')
         .notNull()
         .references(() => users.id),
-    createdAt: integer('created_at', { mode: 'timestamp' }).notNull(),
-    updatedAt: integer('updated_at', { mode: 'timestamp' }).notNull(),
+    date: integer('date', { mode: 'timestamp' }).notNull(),
 })
 
 export type TExpenseInsert = typeof expenses.$inferInsert

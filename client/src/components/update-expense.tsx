@@ -20,18 +20,21 @@ import {
 import { Input } from './ui/input'
 import { api, getExpensesQueryOptions } from '@/lib/api'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { TExpenseSchema, expenseSchema } from '@server/lib/validators'
+import {
+  TExpenseUpdateSchema,
+  expenseUpdateSchema,
+} from '@server/lib/validators'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { toast } from 'sonner'
 
-export default function AddExpense() {
+export default function UpdateExpense() {
   const [open, setOpen] = useState(false)
   const queryClient = useQueryClient()
 
-  const form = useForm<TExpenseSchema>({
-    resolver: zodResolver(expenseSchema),
+  const form = useForm<TExpenseUpdateSchema>({
+    resolver: zodResolver(expenseUpdateSchema),
     defaultValues: {
       title: '',
       amount: 0,
@@ -39,23 +42,22 @@ export default function AddExpense() {
     },
   })
 
-  const { mutate: createExpense, isPending } = useMutation({
-    mutationFn: async (values: TExpenseSchema) => {
-      const res = await api.expenses.$post({ json: values })
+  const { mutate: updateExpense, isPending } = useMutation({
+    mutationFn: async (values: TExpenseUpdateSchema) => {
+      const res = await api.expenses.$patch({ json: values })
       if (!res.ok) {
-        throw new Error('Failed to create expense')
+        throw new Error('Failed to update expense')
       }
       const { expense } = await res.json()
       return expense
     },
-    onSuccess: async (newExpense) => {
+    onSuccess: async (updatedExpense) => {
       toast.success('Expense created successfully')
       setOpen(false)
       form.reset()
-      // on creating new expense add it to the beginning of the list without making api request
       queryClient.setQueryData(getExpensesQueryOptions.queryKey, (oldData) => {
-        if (!oldData) return [newExpense]
-        return [newExpense, ...oldData]
+        if (!oldData) return [updatedExpense]
+        return [updatedExpense, ...oldData]
       })
     },
     onError: () => {
@@ -63,8 +65,8 @@ export default function AddExpense() {
     },
   })
 
-  function onSubmit(values: TExpenseSchema) {
-    createExpense(values)
+  function onSubmit(values: TExpenseUpdateSchema) {
+    updateExpense(values)
   }
 
   return (

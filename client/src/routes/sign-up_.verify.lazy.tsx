@@ -17,7 +17,7 @@ import {
 import { api } from '@/lib/api'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { TOtpSchema, otpSchema } from '@server/lib/validators'
-import { useMutation } from '@tanstack/react-query'
+import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { createLazyFileRoute, useRouter } from '@tanstack/react-router'
 import { useForm } from 'react-hook-form'
 import { toast } from 'sonner'
@@ -27,16 +27,14 @@ export const Route = createLazyFileRoute('/sign-up/verify')({
 })
 
 function Verify() {
+  const queryClient = useQueryClient()
   const router = useRouter()
 
   const { mutate: verify, isPending } = useMutation({
-    mutationFn: async (data: TOtpSchema) => {
-      const res = await api.auth.register.verify.$post({ json: data })
-      if (!res.ok) {
-        throw new Error('Failed to verify OTP')
-      }
-    },
-    onSuccess: () => {
+    mutationFn: async (data: TOtpSchema) =>
+      await api.auth.register.verify.$post({ json: data }),
+    onSuccess: async () => {
+      await queryClient.invalidateQueries({ queryKey: ['user'] })
       router.navigate({ to: '/' })
       toast.success('Email verified successfully')
     },

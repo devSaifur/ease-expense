@@ -5,7 +5,7 @@ import { and, desc, eq } from 'drizzle-orm'
 export async function getExpensesByUserId(userId: string) {
     return db.query.expenses.findMany({
         where: eq(expenses.userId, userId),
-        orderBy: desc(expenses.createdAt),
+        orderBy: desc(expenses.date),
         limit: 15,
     })
 }
@@ -36,16 +36,17 @@ export async function deleteExpense({ userId, expenseId }: ExpenseQuery) {
 
 type UpdateExpense = {
     userId: string
-    expenseId: string
+    id: string
     title?: string
     amount?: number
+    date?: Date
 }
 
-export async function updateExpense({ userId, expenseId, ...values }: UpdateExpense) {
+export async function updateExpense({ userId, id, ...values }: UpdateExpense) {
     const [updatedExpense] = await db
         .update(expenses)
         .set(values)
-        .where(and(eq(expenses.id, expenseId), eq(expenses.userId, userId)))
+        .where(and(eq(expenses.id, id), eq(expenses.userId, userId)))
         .returning()
     return updatedExpense
 }

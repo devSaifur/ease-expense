@@ -25,7 +25,7 @@ function SignIn() {
   const { mutate: login, isPending } = useMutation({
     mutationFn: async (values: TLoginSchema) => {
       const res = await api.auth.login.$post({ json: values })
-      if (!res.ok) {
+      if (res.status === 200) {
         throw new Error('Failed to login')
       }
     },

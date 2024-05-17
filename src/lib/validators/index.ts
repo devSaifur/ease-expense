@@ -5,11 +5,16 @@ export const expenseSchema = z.object({
         message: 'Title must be less than 100 characters',
     }),
     amount: z.coerce.number().int().positive().min(1, { message: 'Amount is required' }),
-    createdAt: z.coerce.date(),
-    updatedAt: z.coerce.date(),
+    date: z.coerce.date(),
 })
 
 export type TExpenseSchema = z.infer<typeof expenseSchema>
+
+export const expenseUpdateSchema = expenseSchema.extend({
+    id: z.string().cuid2(),
+})
+
+export type TExpenseUpdateSchema = z.infer<typeof expenseUpdateSchema>
 
 export const loginSchema = z.object({
     email: z.string().email({ message: 'Invalid email' }),
