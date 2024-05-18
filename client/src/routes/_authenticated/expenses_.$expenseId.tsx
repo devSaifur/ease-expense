@@ -41,7 +41,7 @@ export const Route = createFileRoute('/_authenticated/expenses/$expenseId')({
 
 function Expenses() {
   const queryClient = useQueryClient()
-  const { id, title, amount } = Route.useLoaderData()
+  const { id, title, amount, date } = Route.useLoaderData()
   const router = useRouter()
 
   const { mutate: updateExpense, isPending: isUpdating } = useMutation({
@@ -74,7 +74,7 @@ function Expenses() {
       id,
       title,
       amount,
-      date: new Date(),
+      date: new Date(date),
     },
   })
 
@@ -127,6 +127,7 @@ function Expenses() {
                     mode="single"
                     selected={field.value}
                     onSelect={field.onChange}
+                    defaultMonth={field.value}
                     className="flex justify-center"
                     disabled={(date) =>
                       date > new Date() || date < new Date('1900-01-01')

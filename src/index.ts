@@ -4,9 +4,12 @@ import { expensesRoute } from './routes/expenses'
 import { Hono } from 'hono'
 import { serveStatic } from 'hono/bun'
 import { csrf } from 'hono/csrf'
+import { logger } from 'hono/logger'
 import type { Session, User } from 'lucia'
 
 const app = new Hono<{ Variables: { user: User | null; session: Session | null } }>()
+
+app.use(logger())
 
 const apiRoutes = app.basePath('/api').route('/expenses', expensesRoute).route('/auth', authRoute)
 
