@@ -1,25 +1,11 @@
 import { TanStackRouterVite } from '@tanstack/router-vite-plugin'
 import react from '@vitejs/plugin-react'
 import path from 'node:path'
-import Unfonts from 'unplugin-fonts/vite'
 import { defineConfig } from 'vite'
 
 // https://vitejs.dev/config/
 export default defineConfig({
-  plugins: [
-    react(),
-    TanStackRouterVite(),
-    Unfonts({
-      custom: {
-        families: [
-          {
-            name: 'Geist',
-            src: './src/assets/fonts/geist/*.woff2',
-          },
-        ],
-      },
-    }),
-  ],
+  plugins: [react(), TanStackRouterVite()],
   resolve: {
     alias: {
       '@server': path.resolve(import.meta.dirname, '../src'),
