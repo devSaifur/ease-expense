@@ -1,5 +1,6 @@
+import SignIn from './sign-in.lazy'
 import { userQueryOptions } from '@/lib/api'
-import { Outlet, createFileRoute, useRouter } from '@tanstack/react-router'
+import { Outlet, createFileRoute } from '@tanstack/react-router'
 
 export const Route = createFileRoute('/_authenticated')({
   beforeLoad: async ({ context }) => {
@@ -12,10 +13,9 @@ export const Route = createFileRoute('/_authenticated')({
 
 function Component() {
   const { user } = Route.useRouteContext()
-  const router = useRouter()
 
   if (!user) {
-    router.navigate({ to: '/sign-in' })
+    return <SignIn />
   }
 
   return <Outlet />

@@ -20,7 +20,7 @@ export const Route = createLazyFileRoute('/sign-in')({
   component: SignIn,
 })
 
-function SignIn() {
+export default function SignIn() {
   const queryClient = useQueryClient()
   const router = useRouter()
   const { mutate: login, isPending } = useMutation({
