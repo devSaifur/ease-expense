@@ -1,6 +1,7 @@
+import { and, desc, eq } from 'drizzle-orm'
+
 import { db } from '../db'
 import { TExpenseInsert, expenses } from '../db/schema'
-import { and, desc, eq } from 'drizzle-orm'
 
 export async function getExpensesByUserId(userId: string) {
     return db.query.expenses.findMany({

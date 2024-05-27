@@ -1,3 +1,6 @@
+import { zValidator } from '@hono/zod-validator'
+import { Hono } from 'hono'
+
 import {
     addExpense,
     deleteExpense,
@@ -7,8 +10,6 @@ import {
 } from '../data/expense'
 import { expenseSchema, expenseUpdateSchema } from '../lib/validators'
 import { getUser } from './auth'
-import { zValidator } from '@hono/zod-validator'
-import { Hono } from 'hono'
 
 const app = new Hono()
 

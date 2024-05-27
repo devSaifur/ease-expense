@@ -1,6 +1,7 @@
-import { lucia } from './lib/auth'
 import type { Context, Next } from 'hono'
 import { getCookie } from 'hono/cookie'
+
+import { lucia } from './lib/auth'
 
 export async function authMiddleware(c: Context, next: Next) {
     const sessionId = getCookie(c, lucia.sessionCookieName) ?? null

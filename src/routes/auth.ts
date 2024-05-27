@@ -1,3 +1,9 @@
+import { zValidator } from '@hono/zod-validator'
+import { Hono } from 'hono'
+import { getCookie } from 'hono/cookie'
+import { createMiddleware } from 'hono/factory'
+import { type User, generateId } from 'lucia'
+
 import {
     createUser,
     generateEmailVerificationCode,
@@ -7,11 +13,6 @@ import {
 import { lucia } from '../lib/auth'
 import { sendEmail } from '../lib/nodemailer'
 import { loginSchema, otpSchema, registerSchema } from '../lib/validators'
-import { zValidator } from '@hono/zod-validator'
-import { Hono } from 'hono'
-import { getCookie } from 'hono/cookie'
-import { createMiddleware } from 'hono/factory'
-import { generateId, type User } from 'lucia'
 
 type Env = {
     Variables: {

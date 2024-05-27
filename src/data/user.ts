@@ -1,7 +1,8 @@
-import { db } from '../db'
-import { TUserInsert, users, verifyEmail } from '../db/schema'
 import { eq } from 'drizzle-orm'
 import type { User } from 'lucia'
+
+import { db } from '../db'
+import { TUserInsert, users, verifyEmail } from '../db/schema'
 
 export async function getUserByEmail(email: string) {
     return await db.query.users.findFirst({ where: eq(users.email, email) })
