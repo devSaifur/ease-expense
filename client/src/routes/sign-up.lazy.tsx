@@ -24,8 +24,12 @@ export const Route = createLazyFileRoute('/sign-up')({
 function Register() {
   const router = useRouter()
   const { mutate: register, isPending } = useMutation({
-    mutationFn: async (values: TRegisterSchema) =>
-      await api.auth.register.$post({ json: values }),
+    mutationFn: async (values: TRegisterSchema) => {
+      const res = await api.auth.register.$post({ json: values })
+      if (!res.ok) {
+        throw new Error('Failed to register')
+      }
+    },
     onSuccess: () => {
       router.navigate({ to: '/sign-up/verify', replace: true })
       toast.success(

@@ -24,15 +24,19 @@ export default function SignIn() {
   const queryClient = useQueryClient()
   const router = useRouter()
   const { mutate: login, isPending } = useMutation({
-    mutationFn: async (values: TLoginSchema) =>
-      await api.auth.login.$post({ json: values }),
+    mutationFn: async (values: TLoginSchema) => {
+      const res = await api.auth.login.$post({ json: values })
+      if (!res.ok) {
+        throw new Error('Failed to login')
+      }
+    },
     onSuccess: async () => {
       await queryClient.invalidateQueries({ queryKey: ['user'] })
       router.navigate({ to: '/' })
       toast.success('Logged in successfully')
     },
     onError: () => {
-      toast.error('Failed to login')
+      toast.error('Something went wrong, Failed to login')
     },
   })
 

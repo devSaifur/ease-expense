@@ -15,12 +15,18 @@ function Profile() {
 
   const { mutate: logout, isPending: isLoggingOut } = useMutation({
     mutationFn: async () => {
-      await api.auth.logout.$post()
+      const res = await api.auth.logout.$post()
+      if (!res.ok) {
+        throw new Error('Failed to logout')
+      }
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['user'] })
       router.navigate({ to: '/sign-in' })
       toast.success('Logged out successfully')
+    },
+    onError: () => {
+      toast.error('Something went wrong, Failed to logout')
     },
   })
 

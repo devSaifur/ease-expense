@@ -31,8 +31,12 @@ function Verify() {
   const router = useRouter()
 
   const { mutate: verify, isPending } = useMutation({
-    mutationFn: async (data: TOtpSchema) =>
-      await api.auth.register.verify.$post({ json: data }),
+    mutationFn: async (data: TOtpSchema) => {
+      const res = await api.auth.register.verify.$post({ json: data })
+      if (!res.ok) {
+        throw new Error('Failed to verify OTP')
+      }
+    },
     onSuccess: async () => {
       await queryClient.invalidateQueries({ queryKey: ['user'] })
       router.navigate({ to: '/' })
