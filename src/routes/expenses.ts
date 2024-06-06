@@ -11,9 +11,7 @@ import {
 import { expenseSchema, expenseUpdateSchema } from '../lib/validators'
 import { getUser } from './auth'
 
-const app = new Hono()
-
-export const expensesRoute = app
+export const expensesRoute = new Hono()
     .get('/', getUser, async (c) => {
         const { id } = c.var.user
         try {

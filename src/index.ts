@@ -17,8 +17,8 @@ const apiRoutes = app.basePath('/api').route('/expenses', expensesRoute).route('
 app.use(csrf())
 app.use('*', authMiddleware)
 
-app.get('*', serveStatic({ root: './client/dist/index.html' }))
-app.use('*', serveStatic({ root: './client/dist' }))
+app.get('*', serveStatic({ root: './client/dist' }))
+app.get('*', serveStatic({ path: './client/dist/index.html' }))
 
 export type ApiRoute = typeof apiRoutes
 

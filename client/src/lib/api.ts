@@ -1,4 +1,4 @@
-import { type ApiRoute } from '@server/index'
+import type { ApiRoute } from '@server/index'
 import { queryOptions } from '@tanstack/react-query'
 import { hc } from 'hono/client'
 

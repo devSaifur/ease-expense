@@ -156,3 +156,52 @@ export const routeTree = rootRoute.addChildren({
 })
 
 /* prettier-ignore-end */
+
+/* ROUTE_MANIFEST_START
+{
+  "routes": {
+    "__root__": {
+      "filePath": "__root.tsx",
+      "children": [
+        "/",
+        "/_authenticated",
+        "/sign-in",
+        "/sign-up",
+        "/sign-up/verify"
+      ]
+    },
+    "/": {
+      "filePath": "index.lazy.tsx"
+    },
+    "/_authenticated": {
+      "filePath": "_authenticated.tsx",
+      "children": [
+        "/_authenticated/expenses",
+        "/_authenticated/profile",
+        "/_authenticated/expenses/$expenseId"
+      ]
+    },
+    "/sign-in": {
+      "filePath": "sign-in.lazy.tsx"
+    },
+    "/sign-up": {
+      "filePath": "sign-up.lazy.tsx"
+    },
+    "/_authenticated/expenses": {
+      "filePath": "_authenticated/expenses.lazy.tsx",
+      "parent": "/_authenticated"
+    },
+    "/_authenticated/profile": {
+      "filePath": "_authenticated/profile.lazy.tsx",
+      "parent": "/_authenticated"
+    },
+    "/sign-up/verify": {
+      "filePath": "sign-up_.verify.lazy.tsx"
+    },
+    "/_authenticated/expenses/$expenseId": {
+      "filePath": "_authenticated/expenses_.$expenseId.tsx",
+      "parent": "/_authenticated"
+    }
+  }
+}
+ROUTE_MANIFEST_END */
