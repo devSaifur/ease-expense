@@ -12,7 +12,10 @@ export async function getExpensesByUserId(userId: string) {
 }
 
 export async function addExpense(values: TExpenseInsert) {
-    const [insertedExpense] = await db.insert(expenses).values(values).returning()
+    const [insertedExpense] = await db
+        .insert(expenses)
+        .values(values)
+        .returning()
     return insertedExpense
 }
 

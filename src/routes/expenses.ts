@@ -62,8 +62,8 @@ export const expensesRoute = new Hono()
     })
     .patch('/', getUser, zValidator('json', expenseUpdateSchema), async (c) => {
         const user = c.var.user
-
         const expense = c.req.valid('json')
+
         try {
             const updatedExpense = await updateExpense({
                 userId: user.id,

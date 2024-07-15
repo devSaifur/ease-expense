@@ -11,7 +11,7 @@ const transporter = createTransport({
     },
 })
 
-export async function sendEmail({ to, otp }: { to: string; otp: number }) {
+export async function sendEmail(to: string, otp: number) {
     const options = {
         from: process.env.EMAIL_APP_USER,
         to: to,

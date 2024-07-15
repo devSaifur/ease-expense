@@ -11,15 +11,16 @@ import {
 import { Input } from '@/components/ui/input'
 import { api, getExpensesQueryOptions } from '@/lib/api'
 import { zodResolver } from '@hookform/resolvers/zod'
-import {
-  TExpenseUpdateSchema,
-  expenseUpdateSchema,
-} from '@server/lib/validators'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { useRouter } from '@tanstack/react-router'
 import { createFileRoute, notFound } from '@tanstack/react-router'
 import { useForm } from 'react-hook-form'
 import { toast } from 'sonner'
+
+import {
+  TExpenseUpdateSchema,
+  expenseUpdateSchema,
+} from '@server/lib/validators'
 
 export const Route = createFileRoute('/_authenticated/expenses/$expenseId')({
   component: () => <ExpensesPage />,

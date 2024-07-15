@@ -1,6 +1,6 @@
 import { createId } from '@paralleldrive/cuid2'
 import { relations } from 'drizzle-orm'
-import { integer, sqliteTable, text } from 'drizzle-orm/sqlite-core'
+import { integer, real, sqliteTable, text } from 'drizzle-orm/sqlite-core'
 
 export const users = sqliteTable('user', {
     id: text('id').primaryKey(),
@@ -13,6 +13,8 @@ export const users = sqliteTable('user', {
 export type TUserInsert = typeof users.$inferInsert
 
 export const usersRelations = relations(users, ({ many }) => ({
+    accounts: many(accounts),
+    incomes: many(incomes),
     expenses: many(expenses),
 }))
 
@@ -25,21 +27,100 @@ export const sessions = sqliteTable('session', {
 })
 
 export const verifyEmail = sqliteTable('verify_email', {
-    userId: text('user_id').unique().primaryKey(),
+    userId: text('user_id').primaryKey(),
     email: text('email').notNull(),
     otp: integer('otp').notNull(),
     expiresAt: integer('expires', { mode: 'timestamp' }).notNull(),
 })
 
-export const expenses = sqliteTable('expense', {
-    id: text('id')
+export const accounts = sqliteTable('account', {
+    id: text('id', { length: 50 })
         .primaryKey()
         .$defaultFn(() => createId()),
-    title: text('title').notNull(),
-    amount: integer('amount').notNull(),
+    balance: real('balance'),
     userId: text('user_id')
         .notNull()
         .references(() => users.id),
+    categoryId: text('category_id')
+        .notNull()
+        .references(() => accountsCategories.id),
+})
+
+export const accountsRelations = relations(accounts, ({ one, many }) => ({
+    user: one(users, {
+        fields: [accounts.userId],
+        references: [users.id],
+    }),
+    category: one(accountsCategories, {
+        fields: [accounts.categoryId],
+        references: [accountsCategories.id],
+    }),
+    income: many(incomes),
+    expenses: many(expenses),
+}))
+
+export const accountsCategories = sqliteTable('account_category', {
+    id: text('id', { length: 50 })
+        .primaryKey()
+        .$defaultFn(() => createId()),
+    name: text('name', { length: 50 }).notNull(),
+})
+
+export const incomes = sqliteTable('income', {
+    id: text('id', { length: 50 })
+        .primaryKey()
+        .$defaultFn(() => createId()),
+    amount: real('amount').notNull(),
+    userId: text('user_id')
+        .notNull()
+        .references(() => users.id),
+    accountId: text('account_id')
+        .notNull()
+        .references(() => accounts.id),
+    categoryId: text('category_id')
+        .notNull()
+        .references(() => incomeCategories.id),
+    date: integer('date', { mode: 'timestamp' }).notNull(),
+})
+
+export type TIncomeInsert = typeof incomes.$inferInsert
+
+export const incomesRelations = relations(incomes, ({ one }) => ({
+    user: one(users, {
+        fields: [incomes.userId],
+        references: [users.id],
+    }),
+    account: one(accounts, {
+        fields: [incomes.accountId],
+        references: [accounts.id],
+    }),
+    category: one(incomeCategories, {
+        fields: [incomes.categoryId],
+        references: [incomeCategories.id],
+    }),
+}))
+
+export const incomeCategories = sqliteTable('income_category', {
+    id: text('id', { length: 50 })
+        .primaryKey()
+        .$defaultFn(() => createId()),
+    name: text('name', { length: 50 }).notNull(),
+})
+
+export const expenses = sqliteTable('expense', {
+    id: text('id', { length: 50 })
+        .primaryKey()
+        .$defaultFn(() => createId()),
+    amount: real('amount').notNull(),
+    userId: text('user_id')
+        .notNull()
+        .references(() => users.id),
+    accountId: text('account_id')
+        .notNull()
+        .references(() => accounts.id),
+    categoryId: text('category_id')
+        .notNull()
+        .references(() => expenseCategories.id),
     date: integer('date', { mode: 'timestamp' }).notNull(),
 })
 
@@ -50,4 +131,19 @@ export const expensesRelations = relations(expenses, ({ one }) => ({
         fields: [expenses.userId],
         references: [users.id],
     }),
+    account: one(accounts, {
+        fields: [expenses.accountId],
+        references: [accounts.id],
+    }),
+    category: one(expenseCategories, {
+        fields: [expenses.categoryId],
+        references: [expenseCategories.id],
+    }),
 }))
+
+export const expenseCategories = sqliteTable('expense_category', {
+    id: text('id', { length: 50 })
+        .primaryKey()
+        .$defaultFn(() => createId()),
+    name: text('name', { length: 50 }).notNull(),
+})

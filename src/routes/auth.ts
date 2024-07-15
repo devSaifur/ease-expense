@@ -1,5 +1,4 @@
 import { zValidator } from '@hono/zod-validator'
-import { hash, verify } from '@node-rs/argon2'
 import { Hono } from 'hono'
 import { getCookie } from 'hono/cookie'
 import { generateId } from 'lucia'
@@ -19,7 +18,7 @@ export const authRoute = new Hono<Context>()
     .post('/register', zValidator('json', registerSchema), async (c) => {
         const { name, email, password } = c.req.valid('json')
         try {
-            const hashedPassword = await hash(password)
+            const hashedPassword = await Bun.password.hash(password)
 
             const existingUser = await getUserByEmail(email)
             if (existingUser) {
@@ -39,17 +38,16 @@ export const authRoute = new Hono<Context>()
                 email
             )
 
-            await sendEmail({ to: email, otp: verificationCode })
+            await sendEmail(email, verificationCode)
 
             const session = await lucia.createSession(userId, {})
-            const sessionCookie = lucia.createSessionCookie(session.id)
+            c.header(
+                'Set-Cookie',
+                lucia.createSessionCookie(session.id).serialize(),
+                { append: true }
+            )
 
-            return c.body('Verification email sent', {
-                headers: {
-                    'Set-Cookie': sessionCookie.serialize(),
-                },
-                status: 302,
-            })
+            return c.body('Verification email sent', 200)
         } catch (err) {
             console.error(err)
             return c.body('Something went wrong', 400)
@@ -72,15 +70,16 @@ export const authRoute = new Hono<Context>()
                 return c.body('Invalid OTP', 400)
             }
 
-            const session = await lucia.createSession(user.id, {})
-            const sessionCookie = lucia.createSessionCookie(session.id)
+            await lucia.invalidateUserSessions(user.id) // invalidating the temporary session
 
-            return c.body('Registration successful', {
-                headers: {
-                    'Set-Cookie': sessionCookie.serialize(),
-                },
-                status: 302,
-            })
+            const session = await lucia.createSession(user.id, {})
+            c.header(
+                'Set-Cookie',
+                lucia.createSessionCookie(session.id).serialize(),
+                { append: true }
+            )
+
+            return c.body('Registration successful', 200)
         } catch (err) {
             console.error(err)
             return c.body('Something went wrong', 400)
@@ -94,16 +93,17 @@ export const authRoute = new Hono<Context>()
             return c.body('User not found', 404)
         }
 
-        const valid = await verify(user.password, password)
+        const valid = await Bun.password.verify(password, user.password)
         if (!valid) {
             return c.body('Invalid password', 400)
         }
 
         const session = await lucia.createSession(user.id, {})
-        const sessionCookie = lucia.createSessionCookie(session.id)
-        c.header('Set-Cookie', sessionCookie.serialize(), {
-            append: true,
-        })
+        c.header(
+            'Set-Cookie',
+            lucia.createSessionCookie(session.id).serialize(),
+            { append: true }
+        )
 
         return c.body('Login successful', 200)
     })
