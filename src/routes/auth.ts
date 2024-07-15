@@ -151,5 +151,11 @@ export const authRoute = new Hono<Context>()
     })
     .get('/me', getUser, (c) => {
         const user = c.var.user
-        return c.json(user, 200)
+        return c.json(
+            {
+                name: user.name,
+                email: user.email,
+            },
+            200
+        )
     })
