@@ -110,6 +110,7 @@ export const incomeCategories = sqliteTable('income_category', {
 export const expenses = sqliteTable('expense', {
     id: text('id', { length: 50 })
         .primaryKey()
+        .notNull()
         .$defaultFn(() => createId()),
     amount: real('amount').notNull(),
     userId: text('user_id')

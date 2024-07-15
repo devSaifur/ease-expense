@@ -17,10 +17,7 @@ import { createFileRoute, notFound } from '@tanstack/react-router'
 import { useForm } from 'react-hook-form'
 import { toast } from 'sonner'
 
-import {
-  TExpenseUpdateSchema,
-  expenseUpdateSchema,
-} from '@server/lib/validators'
+import { TExpenseSchema, expenseSchema } from '@server/lib/validators'
 
 export const Route = createFileRoute('/_authenticated/expenses/$expenseId')({
   component: () => <ExpensesPage />,
@@ -38,14 +35,14 @@ export const Route = createFileRoute('/_authenticated/expenses/$expenseId')({
 
 function ExpensesPage() {
   const queryClient = useQueryClient()
-  const { id, title, amount, date } = Route.useLoaderData()
+  const { id, amount, date, accountId, categoryId } = Route.useLoaderData()
   const router = useRouter()
 
   const { mutate: updateExpense, isPending: isUpdating } = useMutation({
-    mutationFn: async (values: TExpenseUpdateSchema) => {
+    mutationFn: async (values: TExpenseSchema) => {
       const res = await api.expenses.$patch({ json: values })
       if (!res.ok) {
-        throw new Error('Failed to update expense')
+        throw new Error(res.statusText)
       }
       const expense = await res.json()
       return expense
@@ -54,28 +51,29 @@ function ExpensesPage() {
       toast.success('Expense updated successfully')
       queryClient.setQueryData(getExpensesQueryOptions.queryKey, (oldData) => {
         if (!oldData) return [updatedExpense]
+
         const expenses = oldData.filter((e) => e.id !== updatedExpense.id)
         return [updatedExpense, ...expenses]
       })
       router.invalidate()
       router.navigate({ to: '/expenses' })
     },
-    onError: () => {
-      toast.error('Failed to update expense')
+    onError: (error) => {
+      toast.error(error.message)
     },
   })
 
-  const form = useForm<TExpenseUpdateSchema>({
-    resolver: zodResolver(expenseUpdateSchema),
+  const form = useForm<TExpenseSchema>({
+    resolver: zodResolver(expenseSchema),
     defaultValues: {
+      accountId,
       id,
-      title,
       amount,
       date: new Date(date),
     },
   })
 
-  function onSubmit(values: TExpenseUpdateSchema) {
+  function onSubmit(values: TExpenseSchema) {
     updateExpense(values)
   }
 
@@ -85,7 +83,7 @@ function ExpensesPage() {
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
           <FormField
             control={form.control}
-            name="title"
+            name="accountId"
             render={({ field }) => (
               <FormItem>
                 <FormLabel>Title</FormLabel>
