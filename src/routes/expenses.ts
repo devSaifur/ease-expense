@@ -8,54 +8,86 @@ import {
     getExpensesByUserId,
     updateExpense,
 } from '../data/expense'
+import type { Context } from '../lib/context'
 import { expenseSchema, expenseUpdateSchema } from '../lib/validators'
-import { getUser } from './auth'
 
-export const expensesRoute = new Hono()
-    .get('/', getUser, async (c) => {
-        const { id } = c.var.user
+export const expensesRoute = new Hono<Context>()
+    .get('/', async (c) => {
+        const user = c.get('user')
+
+        if (!user) {
+            return c.json('Unauthorized', 401)
+        }
+
         try {
-            const usersExpenses = await getExpensesByUserId(id)
-            return c.json({ expenses: usersExpenses }, 200)
+            const usersExpenses = await getExpensesByUserId(user.id)
+            return c.json(usersExpenses, 200)
         } catch (err) {
             return c.json('Something went wrong', 400)
         }
     })
-    .post('/', getUser, zValidator('json', expenseSchema), async (c) => {
+    .post('/', zValidator('json', expenseSchema), async (c) => {
+        const user = c.get('user')
+
+        if (!user) {
+            return c.json('Unauthorized', 401)
+        }
+
         const expense = c.req.valid('json')
-        const { id } = c.var.user
         try {
-            const insertedExpense = await addExpense({ ...expense, userId: id })
-            return c.json({ expense: insertedExpense }, 200)
+            const insertedExpense = await addExpense({
+                ...expense,
+                userId: user.id,
+            })
+            return c.json(insertedExpense, 200)
         } catch (err) {
             return c.json('Something went wrong', 400)
         }
     })
-    .get('/:id', getUser, async (c) => {
+    .get('/:id', async (c) => {
         const expenseId = c.req.param('id')
-        const { id } = c.var.user
-        const expense = await getExpenseByUserId({ expenseId, userId: id })
+        const user = c.get('user')
+
+        if (!user) {
+            return c.json('Unauthorized', 401)
+        }
+
+        const expense = await getExpenseByUserId({ expenseId, userId: user.id })
         if (!expense) {
             return c.json('Expense not found', 400)
         }
-        return c.json({ expense }, 200)
+        return c.json(expense, 200)
     })
-    .delete('/:id', getUser, async (c) => {
+    .delete('/:id', async (c) => {
         const expenseId = c.req.param('id')
-        const { id } = c.var.user
+        const user = c.get('user')
+
+        if (!user) {
+            return c.json('Unauthorized', 401)
+        }
         try {
-            const deletedExpense = await deleteExpense({ expenseId, userId: id })
-            return c.json({ deletedExpense }, 200)
+            const deletedExpense = await deleteExpense({
+                expenseId,
+                userId: user.id,
+            })
+            return c.json(deletedExpense, 200)
         } catch (err) {
             return c.json('Something went wrong', 400)
         }
     })
-    .patch('/', getUser, zValidator('json', expenseUpdateSchema), async (c) => {
-        const { id } = c.var.user
+    .patch('/', zValidator('json', expenseUpdateSchema), async (c) => {
+        const user = c.get('user')
+
+        if (!user) {
+            return c.json('Unauthorized', 401)
+        }
         const expense = c.req.valid('json')
         try {
-            const updatedExpense = await updateExpense({ userId: id, ...expense })
-            return c.json({ expense: updatedExpense }, 200)
+            const updatedExpense = await updateExpense({
+                userId: user.id,
+                ...expense,
+            })
+            return c.json(updatedExpense, 200)
         } catch (err) {
             return c.json('Something went wrong', 400)
         }

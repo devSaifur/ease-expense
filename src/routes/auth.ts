@@ -1,8 +1,7 @@
 import { zValidator } from '@hono/zod-validator'
 import { Hono } from 'hono'
 import { getCookie } from 'hono/cookie'
-import { createMiddleware } from 'hono/factory'
-import { type User, generateId } from 'lucia'
+import { generateId } from 'lucia'
 
 import {
     createUser,
@@ -11,37 +10,11 @@ import {
     verifyVerificationCode,
 } from '../data/user'
 import { lucia } from '../lib/auth'
+import type { Context } from '../lib/context'
 import { sendEmail } from '../lib/nodemailer'
 import { loginSchema, otpSchema, registerSchema } from '../lib/validators'
 
-type Env = {
-    Variables: {
-        user: User
-    }
-}
-
-export const getUser = createMiddleware<Env>(async (c, next) => {
-    const sessionId = getCookie(c, lucia.sessionCookieName) ?? null
-    if (!sessionId) {
-        return c.json({ error: 'Unauthorized' }, 401)
-    }
-    const { session, user } = await lucia.validateSession(sessionId)
-    if (session && session.fresh) {
-        c.header('Set-Cookie', lucia.createSessionCookie(session.id).serialize(), {
-            append: true,
-        })
-    }
-    if (!session) {
-        return c.json({ error: 'Unauthorized' }, 401)
-    }
-    if (!user.email_verified) {
-        return c.json({ error: 'Email not verified' }, 400)
-    }
-    c.set('user', user)
-    await next()
-})
-
-export const authRoute = new Hono()
+export const authRoute = new Hono<Context>()
     .post('/register', zValidator('json', registerSchema), async (c) => {
         const { name, email, password } = c.req.valid('json')
         try {
@@ -58,7 +31,10 @@ export const authRoute = new Hono()
                 password: hashedPassword,
                 emailVerified: false,
             })
-            const verificationCode = await generateEmailVerificationCode(userId, email)
+            const verificationCode = await generateEmailVerificationCode(
+                userId,
+                email
+            )
 
             await sendEmail({ to: email, otp: verificationCode })
 
@@ -133,7 +109,7 @@ export const authRoute = new Hono()
         })
         return c.body('Logout successful', 200)
     })
-    .get('/me', getUser, (c) => {
+    .get('/me', (c) => {
         const user = c.var.user
-        return c.json({ user }, 200)
+        return c.json(user, 200)
     })

@@ -26,7 +26,7 @@ export default function ConfirmDelete({ expenseId }: { expenseId: string }) {
       if (!res.ok) {
         throw new Error('Failed to fetch expenses')
       }
-      const { deletedExpense } = await res.json()
+      const deletedExpense = await res.json()
       return deletedExpense
     },
     onSuccess: (deletedExpense) => {

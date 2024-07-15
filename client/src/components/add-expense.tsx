@@ -45,7 +45,7 @@ export default function AddExpense() {
       if (!res.ok) {
         throw new Error('Failed to create expense')
       }
-      const { expense } = await res.json()
+      const expense = await res.json()
       return expense
     },
     onSuccess: async (newExpense) => {

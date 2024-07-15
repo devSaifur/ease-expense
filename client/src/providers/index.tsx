@@ -1,5 +1,5 @@
 import { routeTree } from '../routeTree.gen'
-import { ThemeProvider } from './theme-provider'
+import { ThemeProvider } from './theme/theme-provider'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { RouterProvider, createRouter } from '@tanstack/react-router'
 import { Toaster } from 'sonner'
