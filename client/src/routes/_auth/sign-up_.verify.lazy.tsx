@@ -22,11 +22,11 @@ import { createLazyFileRoute, useRouter } from '@tanstack/react-router'
 import { useForm } from 'react-hook-form'
 import { toast } from 'sonner'
 
-export const Route = createLazyFileRoute('/sign-up/verify')({
-  component: Verify,
+export const Route = createLazyFileRoute('/_auth/sign-up/verify')({
+  component: () => <VerifyPage />,
 })
 
-function Verify() {
+function VerifyPage() {
   const queryClient = useQueryClient()
   const router = useRouter()
 

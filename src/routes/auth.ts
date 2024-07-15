@@ -1,4 +1,5 @@
 import { zValidator } from '@hono/zod-validator'
+import { hash, verify } from '@node-rs/argon2'
 import { Hono } from 'hono'
 import { getCookie } from 'hono/cookie'
 import { generateId } from 'lucia'
@@ -18,11 +19,13 @@ export const authRoute = new Hono<Context>()
     .post('/register', zValidator('json', registerSchema), async (c) => {
         const { name, email, password } = c.req.valid('json')
         try {
-            const hashedPassword = await Bun.password.hash(password)
+            const hashedPassword = await hash(password)
+
             const existingUser = await getUserByEmail(email)
             if (existingUser) {
                 return c.body('User already exists', 400)
             }
+
             const userId = generateId(15)
             await createUser({
                 id: userId,
@@ -63,10 +66,12 @@ export const authRoute = new Hono<Context>()
             if (!user) {
                 return c.body('Invalid session', 400)
             }
+
             const verified = await verifyVerificationCode(user, Number(otp))
             if (!verified) {
                 return c.body('Invalid OTP', 400)
             }
+
             const session = await lucia.createSession(user.id, {})
             const sessionCookie = lucia.createSessionCookie(session.id)
 
@@ -83,19 +88,23 @@ export const authRoute = new Hono<Context>()
     })
     .post('/login', zValidator('json', loginSchema), async (c) => {
         const { email, password } = c.req.valid('json')
+
         const user = await getUserByEmail(email)
         if (!user) {
             return c.body('User not found', 404)
         }
-        const valid = await Bun.password.verify(password, user.password)
+
+        const valid = await verify(user.password, password)
         if (!valid) {
             return c.body('Invalid password', 400)
         }
+
         const session = await lucia.createSession(user.id, {})
         const sessionCookie = lucia.createSessionCookie(session.id)
         c.header('Set-Cookie', sessionCookie.serialize(), {
             append: true,
         })
+
         return c.body('Login successful', 200)
     })
     .post('/logout', async (c) => {
@@ -103,10 +112,12 @@ export const authRoute = new Hono<Context>()
         if (!sessionId) {
             return c.body('No session found', 400)
         }
+
         const sessionCookie = lucia.createBlankSessionCookie()
         c.header('Set-Cookie', sessionCookie.serialize(), {
             append: true,
         })
+
         return c.body('Logout successful', 200)
     })
     .get('/me', (c) => {

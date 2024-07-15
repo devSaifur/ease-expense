@@ -10,48 +10,46 @@ import {
 import { Input } from '@/components/ui/input'
 import { api } from '@/lib/api'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { TRegisterSchema, registerSchema } from '@server/lib/validators'
-import { useMutation } from '@tanstack/react-query'
-import { useRouter } from '@tanstack/react-router'
-import { createLazyFileRoute } from '@tanstack/react-router'
+import { TLoginSchema, loginSchema } from '@server/lib/validators'
+import { useMutation, useQueryClient } from '@tanstack/react-query'
+import { createLazyFileRoute, useRouter } from '@tanstack/react-router'
 import { useForm } from 'react-hook-form'
 import { toast } from 'sonner'
 
-export const Route = createLazyFileRoute('/sign-up')({
-  component: Register,
+export const Route = createLazyFileRoute('/_auth/sign-in')({
+  component: () => <SignInPage />,
 })
 
-function Register() {
+export default function SignInPage() {
+  const queryClient = useQueryClient()
   const router = useRouter()
-  const { mutate: register, isPending } = useMutation({
-    mutationFn: async (values: TRegisterSchema) => {
-      const res = await api.auth.register.$post({ json: values })
+  const { mutate: login, isPending } = useMutation({
+    mutationFn: async (values: TLoginSchema) => {
+      const res = await api.auth.login.$post({ json: values })
       if (!res.ok) {
-        throw new Error('Failed to register')
+        throw new Error('Failed to login')
       }
     },
-    onSuccess: () => {
-      router.navigate({ to: '/sign-up/verify', replace: true })
-      toast.success(
-        'An email has been sent to your email address with a verification code'
-      )
+    onSuccess: async () => {
+      await queryClient.invalidateQueries({ queryKey: ['user'] })
+      router.navigate({ to: '/' })
+      toast.success('Logged in successfully')
     },
     onError: () => {
-      toast.error('Failed to sign up user')
+      toast.error('Something went wrong, Failed to login')
     },
   })
 
-  const form = useForm<TRegisterSchema>({
-    resolver: zodResolver(registerSchema),
+  const form = useForm<TLoginSchema>({
+    resolver: zodResolver(loginSchema),
     defaultValues: {
-      name: '',
       email: '',
       password: '',
     },
   })
 
-  function onSubmit(values: TRegisterSchema) {
-    register(values)
+  function onSubmit(values: TLoginSchema) {
+    login(values)
   }
 
   return (
@@ -60,25 +58,12 @@ function Register() {
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
           <FormField
             control={form.control}
-            name="name"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Name</FormLabel>
-                <FormControl>
-                  <Input placeholder="Name" {...field} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <FormField
-            control={form.control}
             name="email"
             render={({ field }) => (
               <FormItem>
                 <FormLabel>Email</FormLabel>
                 <FormControl>
-                  <Input placeholder="Email" {...field} />
+                  <Input placeholder="Email" {...field} type="email" />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -91,7 +76,7 @@ function Register() {
               <FormItem>
                 <FormLabel>Password</FormLabel>
                 <FormControl>
-                  <Input placeholder="********" type="password" {...field} />
+                  <Input placeholder="******" type="password" {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>

@@ -22,24 +22,20 @@ import { useForm } from 'react-hook-form'
 import { toast } from 'sonner'
 
 export const Route = createFileRoute('/_authenticated/expenses/$expenseId')({
-  component: Expenses,
+  component: () => <ExpensesPage />,
   loader: async ({ params }) => {
     const res = await api.expenses[':id'].$get({
       param: { id: params.expenseId },
     })
     if (!res.ok) {
-      throw new Error('Failed to fetch expense')
+      throw notFound()
     }
-    const { expense } = await res.json()
+    const expense = await res.json()
     return expense
-  },
-  staleTime: Infinity,
-  onError: () => {
-    throw notFound()
   },
 })
 
-function Expenses() {
+function ExpensesPage() {
   const queryClient = useQueryClient()
   const { id, title, amount, date } = Route.useLoaderData()
   const router = useRouter()
@@ -50,7 +46,7 @@ function Expenses() {
       if (!res.ok) {
         throw new Error('Failed to update expense')
       }
-      const { expense } = await res.json()
+      const expense = await res.json()
       return expense
     },
     onSuccess: async (updatedExpense) => {

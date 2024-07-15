@@ -16,8 +16,8 @@ app.use('*', authMiddleware)
 
 const apiRoutes = app
     .basePath('/api')
-    .route('/expenses', expensesRoute)
     .route('/auth', authRoute)
+    .route('/expenses', expensesRoute)
 
 app.use('*', serveStatic({ root: './client/dist' }))
 

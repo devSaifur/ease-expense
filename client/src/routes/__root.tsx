@@ -7,7 +7,7 @@ interface MyRouteContext {
 }
 
 export const Route = createRootRouteWithContext<MyRouteContext>()({
-  component: Root,
+  component: () => <Root />,
 })
 
 function Root() {

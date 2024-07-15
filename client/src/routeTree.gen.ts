@@ -14,35 +14,31 @@ import { createFileRoute } from '@tanstack/react-router'
 
 import { Route as rootRoute } from './routes/__root'
 import { Route as AuthenticatedImport } from './routes/_authenticated'
+import { Route as AuthImport } from './routes/_auth'
 import { Route as AuthenticatedExpensesExpenseIdImport } from './routes/_authenticated/expenses_.$expenseId'
 
 // Create Virtual Routes
 
-const SignUpLazyImport = createFileRoute('/sign-up')()
-const SignInLazyImport = createFileRoute('/sign-in')()
 const IndexLazyImport = createFileRoute('/')()
-const SignUpVerifyLazyImport = createFileRoute('/sign-up/verify')()
 const AuthenticatedProfileLazyImport = createFileRoute(
   '/_authenticated/profile',
 )()
 const AuthenticatedExpensesLazyImport = createFileRoute(
   '/_authenticated/expenses',
 )()
+const AuthSignUpLazyImport = createFileRoute('/_auth/sign-up')()
+const AuthSignInLazyImport = createFileRoute('/_auth/sign-in')()
+const AuthSignUpVerifyLazyImport = createFileRoute('/_auth/sign-up/verify')()
 
 // Create/Update Routes
 
-const SignUpLazyRoute = SignUpLazyImport.update({
-  path: '/sign-up',
-  getParentRoute: () => rootRoute,
-} as any).lazy(() => import('./routes/sign-up.lazy').then((d) => d.Route))
-
-const SignInLazyRoute = SignInLazyImport.update({
-  path: '/sign-in',
-  getParentRoute: () => rootRoute,
-} as any).lazy(() => import('./routes/sign-in.lazy').then((d) => d.Route))
-
 const AuthenticatedRoute = AuthenticatedImport.update({
   id: '/_authenticated',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const AuthRoute = AuthImport.update({
+  id: '/_auth',
   getParentRoute: () => rootRoute,
 } as any)
 
@@ -50,13 +46,6 @@ const IndexLazyRoute = IndexLazyImport.update({
   path: '/',
   getParentRoute: () => rootRoute,
 } as any).lazy(() => import('./routes/index.lazy').then((d) => d.Route))
-
-const SignUpVerifyLazyRoute = SignUpVerifyLazyImport.update({
-  path: '/sign-up/verify',
-  getParentRoute: () => rootRoute,
-} as any).lazy(() =>
-  import('./routes/sign-up_.verify.lazy').then((d) => d.Route),
-)
 
 const AuthenticatedProfileLazyRoute = AuthenticatedProfileLazyImport.update({
   path: '/profile',
@@ -70,6 +59,23 @@ const AuthenticatedExpensesLazyRoute = AuthenticatedExpensesLazyImport.update({
   getParentRoute: () => AuthenticatedRoute,
 } as any).lazy(() =>
   import('./routes/_authenticated/expenses.lazy').then((d) => d.Route),
+)
+
+const AuthSignUpLazyRoute = AuthSignUpLazyImport.update({
+  path: '/sign-up',
+  getParentRoute: () => AuthRoute,
+} as any).lazy(() => import('./routes/_auth/sign-up.lazy').then((d) => d.Route))
+
+const AuthSignInLazyRoute = AuthSignInLazyImport.update({
+  path: '/sign-in',
+  getParentRoute: () => AuthRoute,
+} as any).lazy(() => import('./routes/_auth/sign-in.lazy').then((d) => d.Route))
+
+const AuthSignUpVerifyLazyRoute = AuthSignUpVerifyLazyImport.update({
+  path: '/sign-up/verify',
+  getParentRoute: () => AuthRoute,
+} as any).lazy(() =>
+  import('./routes/_auth/sign-up_.verify.lazy').then((d) => d.Route),
 )
 
 const AuthenticatedExpensesExpenseIdRoute =
@@ -89,6 +95,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexLazyImport
       parentRoute: typeof rootRoute
     }
+    '/_auth': {
+      id: '/_auth'
+      path: ''
+      fullPath: ''
+      preLoaderRoute: typeof AuthImport
+      parentRoute: typeof rootRoute
+    }
     '/_authenticated': {
       id: '/_authenticated'
       path: ''
@@ -96,19 +109,19 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedImport
       parentRoute: typeof rootRoute
     }
-    '/sign-in': {
-      id: '/sign-in'
+    '/_auth/sign-in': {
+      id: '/_auth/sign-in'
       path: '/sign-in'
       fullPath: '/sign-in'
-      preLoaderRoute: typeof SignInLazyImport
-      parentRoute: typeof rootRoute
+      preLoaderRoute: typeof AuthSignInLazyImport
+      parentRoute: typeof AuthImport
     }
-    '/sign-up': {
-      id: '/sign-up'
+    '/_auth/sign-up': {
+      id: '/_auth/sign-up'
       path: '/sign-up'
       fullPath: '/sign-up'
-      preLoaderRoute: typeof SignUpLazyImport
-      parentRoute: typeof rootRoute
+      preLoaderRoute: typeof AuthSignUpLazyImport
+      parentRoute: typeof AuthImport
     }
     '/_authenticated/expenses': {
       id: '/_authenticated/expenses'
@@ -124,19 +137,19 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedProfileLazyImport
       parentRoute: typeof AuthenticatedImport
     }
-    '/sign-up/verify': {
-      id: '/sign-up/verify'
-      path: '/sign-up/verify'
-      fullPath: '/sign-up/verify'
-      preLoaderRoute: typeof SignUpVerifyLazyImport
-      parentRoute: typeof rootRoute
-    }
     '/_authenticated/expenses/$expenseId': {
       id: '/_authenticated/expenses/$expenseId'
       path: '/expenses/$expenseId'
       fullPath: '/expenses/$expenseId'
       preLoaderRoute: typeof AuthenticatedExpensesExpenseIdImport
       parentRoute: typeof AuthenticatedImport
+    }
+    '/_auth/sign-up/verify': {
+      id: '/_auth/sign-up/verify'
+      path: '/sign-up/verify'
+      fullPath: '/sign-up/verify'
+      preLoaderRoute: typeof AuthSignUpVerifyLazyImport
+      parentRoute: typeof AuthImport
     }
   }
 }
@@ -145,14 +158,16 @@ declare module '@tanstack/react-router' {
 
 export const routeTree = rootRoute.addChildren({
   IndexLazyRoute,
+  AuthRoute: AuthRoute.addChildren({
+    AuthSignInLazyRoute,
+    AuthSignUpLazyRoute,
+    AuthSignUpVerifyLazyRoute,
+  }),
   AuthenticatedRoute: AuthenticatedRoute.addChildren({
     AuthenticatedExpensesLazyRoute,
     AuthenticatedProfileLazyRoute,
     AuthenticatedExpensesExpenseIdRoute,
   }),
-  SignInLazyRoute,
-  SignUpLazyRoute,
-  SignUpVerifyLazyRoute,
 })
 
 /* prettier-ignore-end */
@@ -164,14 +179,20 @@ export const routeTree = rootRoute.addChildren({
       "filePath": "__root.tsx",
       "children": [
         "/",
-        "/_authenticated",
-        "/sign-in",
-        "/sign-up",
-        "/sign-up/verify"
+        "/_auth",
+        "/_authenticated"
       ]
     },
     "/": {
       "filePath": "index.lazy.tsx"
+    },
+    "/_auth": {
+      "filePath": "_auth.tsx",
+      "children": [
+        "/_auth/sign-in",
+        "/_auth/sign-up",
+        "/_auth/sign-up/verify"
+      ]
     },
     "/_authenticated": {
       "filePath": "_authenticated.tsx",
@@ -181,11 +202,13 @@ export const routeTree = rootRoute.addChildren({
         "/_authenticated/expenses/$expenseId"
       ]
     },
-    "/sign-in": {
-      "filePath": "sign-in.lazy.tsx"
+    "/_auth/sign-in": {
+      "filePath": "_auth/sign-in.lazy.tsx",
+      "parent": "/_auth"
     },
-    "/sign-up": {
-      "filePath": "sign-up.lazy.tsx"
+    "/_auth/sign-up": {
+      "filePath": "_auth/sign-up.lazy.tsx",
+      "parent": "/_auth"
     },
     "/_authenticated/expenses": {
       "filePath": "_authenticated/expenses.lazy.tsx",
@@ -195,12 +218,13 @@ export const routeTree = rootRoute.addChildren({
       "filePath": "_authenticated/profile.lazy.tsx",
       "parent": "/_authenticated"
     },
-    "/sign-up/verify": {
-      "filePath": "sign-up_.verify.lazy.tsx"
-    },
     "/_authenticated/expenses/$expenseId": {
       "filePath": "_authenticated/expenses_.$expenseId.tsx",
       "parent": "/_authenticated"
+    },
+    "/_auth/sign-up/verify": {
+      "filePath": "_auth/sign-up_.verify.lazy.tsx",
+      "parent": "/_auth"
     }
   }
 }
