@@ -16,11 +16,12 @@ import {
 } from '@/components/ui/input-otp'
 import { api } from '@/lib/api'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { TOtpSchema, otpSchema } from '@server/lib/validators'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { createLazyFileRoute, useRouter } from '@tanstack/react-router'
 import { useForm } from 'react-hook-form'
 import { toast } from 'sonner'
+
+import { TOtpSchema, otpSchema } from '@server/lib/validators'
 
 export const Route = createLazyFileRoute('/_auth/sign-up/verify')({
   component: () => <VerifyPage />,
@@ -32,7 +33,7 @@ function VerifyPage() {
 
   const { mutate: verify, isPending } = useMutation({
     mutationFn: async (data: TOtpSchema) => {
-      const res = await api.auth.register.verify.$post({ json: data })
+      const res = await api.auth.register.verify.$post({ form: data })
       if (!res.ok) {
         throw new Error('Failed to verify OTP')
       }

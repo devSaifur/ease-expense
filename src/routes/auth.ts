@@ -15,8 +15,8 @@ import { loginSchema, otpSchema, registerSchema } from '../lib/validators'
 import { getUser } from '../middleware'
 
 export const authRoute = new Hono<Context>()
-    .post('/register', zValidator('json', registerSchema), async (c) => {
-        const { email, name, password } = c.req.valid('json')
+    .post('/register', zValidator('form', registerSchema), async (c) => {
+        const { email, name, password } = c.req.valid('form')
         try {
             const hashedPassword = await Bun.password.hash(password)
 
@@ -61,8 +61,8 @@ export const authRoute = new Hono<Context>()
             return c.body('Something went wrong', 400)
         }
     })
-    .post('/register/verify', zValidator('json', otpSchema), async (c) => {
-        const { otp } = c.req.valid('json')
+    .post('/register/verify', zValidator('form', otpSchema), async (c) => {
+        const { otp } = c.req.valid('form')
         const sessionId = getCookie(c, lucia.sessionCookieName) ?? null
         if (!sessionId) {
             return c.body('Invalid OTP', 400)
@@ -129,8 +129,8 @@ export const authRoute = new Hono<Context>()
             return c.body('Something went wrong', 400)
         }
     })
-    .post('/login', zValidator('json', loginSchema), async (c) => {
-        const { email, password } = c.req.valid('json')
+    .post('/login', zValidator('form', loginSchema), async (c) => {
+        const { email, password } = c.req.valid('form')
 
         const user = await db.query.users.findFirst({
             where: eq(users.email, email),

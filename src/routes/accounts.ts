@@ -22,7 +22,6 @@ export const accountsRoute = new Hono()
                 },
             })
             if (!usersAccounts || usersAccounts.length === 0) {
-                // creating a default account for the user
                 await db.transaction(async (trx) => {
                     const [accountCategory] = await trx
                         .insert(accountsCategories)
@@ -38,7 +37,7 @@ export const accountsRoute = new Hono()
                     })
                 })
                 const usersAccounts = await db.query.accounts.findMany({
-                    where: eq(accounts, user.id),
+                    where: eq(accounts.userId, user.id),
                     with: {
                         category: true,
                     },
@@ -54,9 +53,9 @@ export const accountsRoute = new Hono()
             return c.json('Something went wrong', 500)
         }
     })
-    .post('/', zValidator('form', accountCreateSchema), getUser, async (c) => {
+    .post('/', zValidator('json', accountCreateSchema), getUser, async (c) => {
         const user = c.var.user
-        const { name, balance } = c.req.valid('form')
+        const { name, balance } = c.req.valid('json')
 
         try {
             const [newAccount] = await db.transaction(async (trx) => {
@@ -79,18 +78,18 @@ export const accountsRoute = new Hono()
                     .returning({ ...rest })
             })
 
-            return c.json(newAccount, 200)
+            return c.json(newAccount, 201)
         } catch (err) {
             return c.json('Something went wrong', 500)
         }
     })
     .patch(
         '/:id',
-        zValidator('form', accountUpdateSchema),
+        zValidator('json', accountUpdateSchema),
         getUser,
         async (c) => {
             const user = c.var.user
-            const { name, ...account } = c.req.valid('form')
+            const { name, ...account } = c.req.valid('json')
             const accountId = c.req.param('id')
 
             try {

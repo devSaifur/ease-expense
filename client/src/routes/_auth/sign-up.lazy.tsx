@@ -10,12 +10,13 @@ import {
 import { Input } from '@/components/ui/input'
 import { api } from '@/lib/api'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { TRegisterSchema, registerSchema } from '@server/lib/validators'
 import { useMutation } from '@tanstack/react-query'
 import { useRouter } from '@tanstack/react-router'
 import { createLazyFileRoute } from '@tanstack/react-router'
 import { useForm } from 'react-hook-form'
 import { toast } from 'sonner'
+
+import { TRegisterSchema, registerSchema } from '@server/lib/validators'
 
 export const Route = createLazyFileRoute('/_auth/sign-up')({
   component: () => <RegisterPage />,
@@ -25,7 +26,7 @@ function RegisterPage() {
   const router = useRouter()
   const { mutate: register, isPending } = useMutation({
     mutationFn: async (values: TRegisterSchema) => {
-      const res = await api.auth.register.$post({ json: values })
+      const res = await api.auth.register.$post({ form: values })
       if (!res.ok) {
         throw new Error('Failed to register')
       }

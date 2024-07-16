@@ -10,11 +10,12 @@ import {
 import { Input } from '@/components/ui/input'
 import { api } from '@/lib/api'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { TLoginSchema, loginSchema } from '@server/lib/validators'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { createLazyFileRoute, useRouter } from '@tanstack/react-router'
 import { useForm } from 'react-hook-form'
 import { toast } from 'sonner'
+
+import { TLoginSchema, loginSchema } from '@server/lib/validators'
 
 export const Route = createLazyFileRoute('/_auth/sign-in')({
   component: () => <SignInPage />,
@@ -25,7 +26,7 @@ export default function SignInPage() {
   const router = useRouter()
   const { mutate: login, isPending } = useMutation({
     mutationFn: async (values: TLoginSchema) => {
-      const res = await api.auth.login.$post({ json: values })
+      const res = await api.auth.login.$post({ form: values })
       if (!res.ok) {
         throw new Error('Failed to login')
       }
