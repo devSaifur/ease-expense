@@ -7,7 +7,7 @@ import { TimeSpan, createDate, isWithinExpirationDate } from 'oslo'
 import { alphabet, generateRandomString } from 'oslo/crypto'
 
 import { db } from '../db'
-import { users, verifyEmail } from '../db/schema'
+import { accounts, accountsCategories, users, verifyEmail } from '../db/schema'
 import { lucia } from '../lib/auth'
 import type { Context } from '../lib/context'
 import { sendEmail } from '../lib/nodemailer'
@@ -97,7 +97,24 @@ export const authRoute = new Hono<Context>()
                 .set({ emailVerified: true })
                 .where(eq(users.id, user.id))
 
-            await lucia.invalidateUserSessions(user.id) // invalidating the temporary session
+            // creating a default account for the user
+            await db.transaction(async (trx) => {
+                const [accountCategory] = await trx
+                    .insert(accountsCategories)
+                    .values({
+                        name: 'Cash',
+                    })
+                    .returning({ id: accountsCategories.id })
+
+                await trx.insert(accounts).values({
+                    userId: user.id,
+                    categoryId: accountCategory.id,
+                    balance: 0,
+                })
+            })
+
+            // invalidating the temporary session
+            await lucia.invalidateUserSessions(user.id)
 
             const session = await lucia.createSession(user.id, {})
             c.header(

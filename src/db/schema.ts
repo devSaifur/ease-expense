@@ -62,8 +62,8 @@ export const accountsRelations = relations(accounts, ({ one, many }) => ({
 export const accountsCategories = sqliteTable('account_category', {
     id: text('id', { length: 50 })
         .primaryKey()
-        .$defaultFn(() => createId()),
-    name: text('name', { length: 50 }).notNull(),
+        .$defaultFn(() => createId()), // TODO: make this auto-increment
+    name: text('name', { length: 50 }).notNull(), // TODO: make this unique
 })
 
 export const incomes = sqliteTable('income', {
@@ -103,8 +103,8 @@ export const incomesRelations = relations(incomes, ({ one }) => ({
 export const incomeCategories = sqliteTable('income_category', {
     id: text('id', { length: 50 })
         .primaryKey()
-        .$defaultFn(() => createId()),
-    name: text('name', { length: 50 }).notNull(),
+        .$defaultFn(() => createId()), // TODO: make this auto-increment
+    name: text('name', { length: 50 }).notNull(), // TODO: make this unique
 })
 
 export const expenses = sqliteTable('expense', {
@@ -145,6 +145,6 @@ export const expensesRelations = relations(expenses, ({ one }) => ({
 export const expenseCategories = sqliteTable('expense_category', {
     id: text('id', { length: 50 })
         .primaryKey()
-        .$defaultFn(() => createId()),
-    name: text('name', { length: 50 }).notNull(),
+        .$defaultFn(() => createId()), // TODO: make this auto-increment
+    name: text('name', { length: 50 }).notNull(), // TODO: make this unique
 })

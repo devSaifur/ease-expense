@@ -4,6 +4,7 @@ import { csrf } from 'hono/csrf'
 import { logger } from 'hono/logger'
 
 import { authMiddleware } from './middleware'
+import { accountsRoute } from './routes/accounts'
 import { authRoute } from './routes/auth'
 import { expensesRoute } from './routes/expenses'
 
@@ -18,6 +19,7 @@ const apiRoutes = app
     .basePath('/api')
     .route('/auth', authRoute)
     .route('/expenses', expensesRoute)
+    .route('/accounts', accountsRoute)
 
 app.use('*', serveStatic({ root: './client/dist' }))
 

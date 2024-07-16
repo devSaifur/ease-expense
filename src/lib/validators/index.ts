@@ -1,7 +1,4 @@
-import { createInsertSchema } from 'drizzle-zod'
 import { z } from 'zod'
-
-import { expenses } from '../../db/schema'
 
 export const loginSchema = z.object({
     email: z.string().email({ message: 'Invalid email' }),
@@ -42,12 +39,40 @@ export const otpSchema = z.object({
 
 export type TOtpSchema = z.infer<typeof otpSchema>
 
-export const expenseSchema = createInsertSchema(expenses)
-    .omit({
-        userId: true,
-    })
-    .extend({
-        id: z.string().cuid2(),
-    })
+export const expenseSchema = z.object({
+    id: z.string().cuid2(),
+    name: z.string().min(3, { message: 'Name must be at least 3 characters' }),
+    amount: z.number().min(1, { message: 'Amount must be at least 1 dollar' }),
+    date: z.date(),
+    accountId: z.string().cuid2().min(1, { message: 'Account is required' }),
+    categoryId: z.string().cuid2().min(1, { message: 'Category is required' }),
+})
 
 export type TExpenseSchema = z.infer<typeof expenseSchema>
+
+export const incomeSchema = z.object({
+    id: z.string().cuid2(),
+    amount: z.number().min(1, { message: 'Amount must be at least 1 dollar' }),
+    date: z.date(),
+    accountId: z.string().cuid2().min(1, { message: 'Account is required' }),
+    categoryId: z.string().cuid2().min(1, { message: 'Category is required' }),
+})
+
+export type TIncomeSchema = z.infer<typeof incomeSchema>
+
+export const accountUpdateSchema = z.object({
+    balance: z
+        .number()
+        .min(0, { message: 'Balance must be at least 0 dollar' }),
+    categoryId: z.string().cuid2().min(1, { message: 'Category is required' }),
+    name: z.string().min(1, { message: 'Name is required' }),
+})
+
+export type TAccountSchema = z.infer<typeof accountUpdateSchema>
+
+export const accountCreateSchema = accountUpdateSchema.pick({
+    name: true,
+    balance: true,
+})
+
+export type TCreateAccountSchema = z.infer<typeof accountCreateSchema>
