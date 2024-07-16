@@ -54,7 +54,7 @@ export const accountsRoute = new Hono()
             return c.json('Something went wrong', 500)
         }
     })
-    .post('/', getUser, zValidator('form', accountCreateSchema), async (c) => {
+    .post('/', zValidator('form', accountCreateSchema), getUser, async (c) => {
         const user = c.var.user
         const { name, balance } = c.req.valid('form')
 
@@ -84,10 +84,10 @@ export const accountsRoute = new Hono()
             return c.json('Something went wrong', 500)
         }
     })
-    .put(
+    .patch(
         '/:id',
-        getUser,
         zValidator('form', accountUpdateSchema),
+        getUser,
         async (c) => {
             const user = c.var.user
             const { name, ...account } = c.req.valid('form')

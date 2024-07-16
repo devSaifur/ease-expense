@@ -7,6 +7,7 @@ import { authMiddleware } from './middleware'
 import { accountsRoute } from './routes/accounts'
 import { authRoute } from './routes/auth'
 import { expensesRoute } from './routes/expenses'
+import { incomesRoute } from './routes/incomes'
 
 const app = new Hono()
 
@@ -18,8 +19,9 @@ app.use('*', authMiddleware)
 const apiRoutes = app
     .basePath('/api')
     .route('/auth', authRoute)
-    .route('/expenses', expensesRoute)
     .route('/accounts', accountsRoute)
+    .route('/incomes', incomesRoute)
+    .route('/expenses', expensesRoute)
 
 app.use('*', serveStatic({ root: './client/dist' }))
 
