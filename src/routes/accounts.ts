@@ -118,7 +118,7 @@ export const accountsRoute = new Hono()
                         })
                 })
 
-                return c.json(updatedAccount, 200)
+                return c.json(updatedAccount, 202)
             } catch (err) {
                 return c.json('Something went wrong', 500)
             }

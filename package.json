@@ -9,6 +9,7 @@
         "db:seed": "bun run src/db/seed.ts",
         "db:studio": "bun drizzle-kit studio",
         "test": "bun test --watch",
+        "build": "bun build src/index.ts --outdir src/build --target bun",
         "start": "bun run src/index.ts"
     },
     "dependencies": {
