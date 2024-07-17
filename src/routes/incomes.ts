@@ -24,6 +24,7 @@ export const incomesRoute = new Hono()
 
             return c.json(usersIncomes, 200)
         } catch (err) {
+            console.error(err)
             return c.json('Something went wrong', 500)
         }
     })
@@ -61,6 +62,7 @@ export const incomesRoute = new Hono()
 
             return c.json(newIncome, 200)
         } catch (err) {
+            console.error(err)
             return c.json('Something went wrong', 500)
         }
     })
@@ -116,6 +118,7 @@ export const incomesRoute = new Hono()
 
             return c.json(updatedIncome, 200)
         } catch (err) {
+            console.error(err)
             return c.json('Something went wrong', 500)
         }
     })

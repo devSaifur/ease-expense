@@ -16,12 +16,17 @@ export const expensesRoute = new Hono()
                 where: eq(expenses.userId, user.id),
                 orderBy: desc(expenses.date),
                 limit: 15,
+                with: {
+                    category: true,
+                },
                 columns: {
                     userId: false,
+                    categoryId: false,
                 },
             })
             return c.json(usersExpenses, 200)
         } catch (err) {
+            console.error(err)
             return c.json('Something went wrong', 400)
         }
     })
@@ -39,6 +44,7 @@ export const expensesRoute = new Hono()
 
             return c.json(insertedExpense, 200)
         } catch (err) {
+            console.error(err)
             return c.json('Something went wrong', 400)
         }
     })
@@ -65,7 +71,7 @@ export const expensesRoute = new Hono()
         const user = c.var.user
 
         try {
-            const { userId: deletedUserId, ...rest } = getTableColumns(expenses)
+            const { userId, ...rest } = getTableColumns(expenses)
 
             const [deletedExpense] = await db
                 .delete(expenses)
@@ -79,6 +85,7 @@ export const expensesRoute = new Hono()
 
             return c.json(deletedExpense, 200)
         } catch (err) {
+            console.error(err)
             return c.json('Something went wrong', 400)
         }
     })
@@ -102,6 +109,7 @@ export const expensesRoute = new Hono()
 
             return c.json(updatedExpense, 200)
         } catch (err) {
+            console.error(err)
             return c.json('Something went wrong', 400)
         }
     })
