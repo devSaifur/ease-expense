@@ -18,6 +18,10 @@ export async function sendEmail(to: string, otp: number) {
         subject: 'Email verification | Ease Expense',
         html: `<b>Your one time password is ${otp}</b>`,
     }
-
-    await transporter.sendMail(options)
+    try {
+        await transporter.sendMail(options)
+    } catch (err) {
+        console.error(err)
+        throw err
+    }
 }
