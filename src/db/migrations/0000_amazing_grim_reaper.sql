@@ -3,6 +3,7 @@ CREATE TABLE `account` (
 	`balance` real,
 	`user_id` text NOT NULL,
 	`category_id` text NOT NULL,
+	`created_at` text DEFAULT (CURRENT_TIMESTAMP) NOT NULL,
 	FOREIGN KEY (`user_id`) REFERENCES `user`(`id`) ON UPDATE no action ON DELETE no action,
 	FOREIGN KEY (`category_id`) REFERENCES `account_category`(`id`) ON UPDATE no action ON DELETE no action
 );
@@ -23,7 +24,7 @@ CREATE TABLE `expense` (
 	`user_id` text NOT NULL,
 	`account_id` text NOT NULL,
 	`category_id` text NOT NULL,
-	`date` integer NOT NULL,
+	`created_at` text DEFAULT (CURRENT_TIMESTAMP) NOT NULL,
 	FOREIGN KEY (`user_id`) REFERENCES `user`(`id`) ON UPDATE no action ON DELETE no action,
 	FOREIGN KEY (`account_id`) REFERENCES `account`(`id`) ON UPDATE no action ON DELETE no action,
 	FOREIGN KEY (`category_id`) REFERENCES `expense_category`(`id`) ON UPDATE no action ON DELETE no action
@@ -40,7 +41,7 @@ CREATE TABLE `income` (
 	`user_id` text NOT NULL,
 	`account_id` text NOT NULL,
 	`category_id` text NOT NULL,
-	`date` integer NOT NULL,
+	`created_at` text DEFAULT (CURRENT_TIMESTAMP) NOT NULL,
 	FOREIGN KEY (`user_id`) REFERENCES `user`(`id`) ON UPDATE no action ON DELETE no action,
 	FOREIGN KEY (`account_id`) REFERENCES `account`(`id`) ON UPDATE no action ON DELETE no action,
 	FOREIGN KEY (`category_id`) REFERENCES `income_category`(`id`) ON UPDATE no action ON DELETE no action
@@ -68,4 +69,7 @@ CREATE TABLE `verify_email` (
 	`expires` integer NOT NULL
 );
 --> statement-breakpoint
+CREATE UNIQUE INDEX `account_category_name_unique` ON `account_category` (`name`);--> statement-breakpoint
+CREATE UNIQUE INDEX `expense_category_name_unique` ON `expense_category` (`name`);--> statement-breakpoint
+CREATE UNIQUE INDEX `income_category_name_unique` ON `income_category` (`name`);--> statement-breakpoint
 CREATE UNIQUE INDEX `user_email_unique` ON `user` (`email`);

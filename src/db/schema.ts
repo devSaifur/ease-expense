@@ -1,5 +1,5 @@
 import { createId } from '@paralleldrive/cuid2'
-import { relations } from 'drizzle-orm'
+import { relations, sql } from 'drizzle-orm'
 import { integer, real, sqliteTable, text } from 'drizzle-orm/sqlite-core'
 
 export const users = sqliteTable('user', {
@@ -44,6 +44,9 @@ export const accounts = sqliteTable('account', {
     categoryId: text('category_id')
         .notNull()
         .references(() => accountsCategories.id),
+    createdAt: text('created_at')
+        .default(sql`(CURRENT_TIMESTAMP)`)
+        .notNull(),
 })
 
 export const accountsRelations = relations(accounts, ({ one, many }) => ({
@@ -62,8 +65,8 @@ export const accountsRelations = relations(accounts, ({ one, many }) => ({
 export const accountsCategories = sqliteTable('account_category', {
     id: text('id', { length: 50 })
         .primaryKey()
-        .$defaultFn(() => createId()), // TODO: make this auto-increment
-    name: text('name', { length: 50 }).notNull(), // TODO: make this unique
+        .$defaultFn(() => createId()),
+    name: text('name', { length: 50 }).unique().notNull(),
 })
 
 export const incomes = sqliteTable('income', {
@@ -80,7 +83,9 @@ export const incomes = sqliteTable('income', {
     categoryId: text('category_id')
         .notNull()
         .references(() => incomeCategories.id),
-    date: integer('date', { mode: 'timestamp' }).notNull(),
+    createdAt: text('created_at')
+        .default(sql`(CURRENT_TIMESTAMP)`)
+        .notNull(),
 })
 
 export type TIncomeInsert = typeof incomes.$inferInsert
@@ -103,8 +108,8 @@ export const incomesRelations = relations(incomes, ({ one }) => ({
 export const incomeCategories = sqliteTable('income_category', {
     id: text('id', { length: 50 })
         .primaryKey()
-        .$defaultFn(() => createId()), // TODO: make this auto-increment
-    name: text('name', { length: 50 }).notNull(), // TODO: make this unique
+        .$defaultFn(() => createId()),
+    name: text('name', { length: 50 }).notNull().unique(),
 })
 
 export const expenses = sqliteTable('expense', {
@@ -122,7 +127,9 @@ export const expenses = sqliteTable('expense', {
     categoryId: text('category_id')
         .notNull()
         .references(() => expenseCategories.id),
-    date: integer('date', { mode: 'timestamp' }).notNull(),
+    createdAt: text('created_at')
+        .default(sql`(CURRENT_TIMESTAMP)`)
+        .notNull(),
 })
 
 export type TExpenseInsert = typeof expenses.$inferInsert
@@ -145,6 +152,6 @@ export const expensesRelations = relations(expenses, ({ one }) => ({
 export const expenseCategories = sqliteTable('expense_category', {
     id: text('id', { length: 50 })
         .primaryKey()
-        .$defaultFn(() => createId()), // TODO: make this auto-increment
-    name: text('name', { length: 50 }).notNull(), // TODO: make this unique
+        .$defaultFn(() => createId()),
+    name: text('name', { length: 50 }).notNull().unique(),
 })

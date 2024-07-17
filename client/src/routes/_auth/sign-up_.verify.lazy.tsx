@@ -14,7 +14,7 @@ import {
   InputOTPSeparator,
   InputOTPSlot,
 } from '@/components/ui/input-otp'
-import { api } from '@/lib/api'
+import { api, userQueryOptions } from '@/lib/api'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { createLazyFileRoute, useRouter } from '@tanstack/react-router'
@@ -39,9 +39,11 @@ function VerifyPage() {
       }
     },
     onSuccess: async () => {
-      await queryClient.invalidateQueries({ queryKey: ['user'] })
-      router.navigate({ to: '/' })
+      await queryClient.invalidateQueries({
+        queryKey: userQueryOptions.queryKey,
+      })
       toast.success('Email verified successfully')
+      return router.navigate({ to: '/' })
     },
     onError: () => {
       toast.error('Failed to verify OTP')

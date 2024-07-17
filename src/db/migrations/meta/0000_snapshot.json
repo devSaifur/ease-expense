@@ -1,7 +1,7 @@
 {
   "version": "6",
   "dialect": "sqlite",
-  "id": "9b340465-c034-4785-b369-28a14e360ba8",
+  "id": "08860323-6c2b-4f38-b4e0-78941e7c6a11",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "tables": {
     "account": {
@@ -34,6 +34,14 @@
           "primaryKey": false,
           "notNull": true,
           "autoincrement": false
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false,
+          "default": "(CURRENT_TIMESTAMP)"
         }
       },
       "indexes": {},
@@ -86,7 +94,15 @@
           "autoincrement": false
         }
       },
-      "indexes": {},
+      "indexes": {
+        "account_category_name_unique": {
+          "name": "account_category_name_unique",
+          "columns": [
+            "name"
+          ],
+          "isUnique": true
+        }
+      },
       "foreignKeys": {},
       "compositePrimaryKeys": {},
       "uniqueConstraints": {}
@@ -109,7 +125,15 @@
           "autoincrement": false
         }
       },
-      "indexes": {},
+      "indexes": {
+        "expense_category_name_unique": {
+          "name": "expense_category_name_unique",
+          "columns": [
+            "name"
+          ],
+          "isUnique": true
+        }
+      },
       "foreignKeys": {},
       "compositePrimaryKeys": {},
       "uniqueConstraints": {}
@@ -152,12 +176,13 @@
           "notNull": true,
           "autoincrement": false
         },
-        "date": {
-          "name": "date",
-          "type": "integer",
+        "created_at": {
+          "name": "created_at",
+          "type": "text",
           "primaryKey": false,
           "notNull": true,
-          "autoincrement": false
+          "autoincrement": false,
+          "default": "(CURRENT_TIMESTAMP)"
         }
       },
       "indexes": {},
@@ -223,7 +248,15 @@
           "autoincrement": false
         }
       },
-      "indexes": {},
+      "indexes": {
+        "income_category_name_unique": {
+          "name": "income_category_name_unique",
+          "columns": [
+            "name"
+          ],
+          "isUnique": true
+        }
+      },
       "foreignKeys": {},
       "compositePrimaryKeys": {},
       "uniqueConstraints": {}
@@ -266,12 +299,13 @@
           "notNull": true,
           "autoincrement": false
         },
-        "date": {
-          "name": "date",
-          "type": "integer",
+        "created_at": {
+          "name": "created_at",
+          "type": "text",
           "primaryKey": false,
           "notNull": true,
-          "autoincrement": false
+          "autoincrement": false,
+          "default": "(CURRENT_TIMESTAMP)"
         }
       },
       "indexes": {},

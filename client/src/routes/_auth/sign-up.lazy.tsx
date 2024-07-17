@@ -32,10 +32,10 @@ function RegisterPage() {
       }
     },
     onSuccess: () => {
-      router.navigate({ to: '/sign-up/verify', replace: true })
       toast.success(
         'An email has been sent to your email address with a verification code'
       )
+      return router.navigate({ to: '/sign-up/verify', replace: true })
     },
     onError: () => {
       toast.error('Failed to sign up user')

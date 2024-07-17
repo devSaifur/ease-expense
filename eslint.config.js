@@ -27,6 +27,7 @@ export default [
                 project: './tsconfig.json',
             },
         },
+        ignores: ['./client/*'],
     },
     eslintConfigPrettier,
 ]

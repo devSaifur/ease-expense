@@ -8,7 +8,7 @@ import {
   FormMessage,
 } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
-import { api } from '@/lib/api'
+import { api, userQueryOptions } from '@/lib/api'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { createLazyFileRoute, useRouter } from '@tanstack/react-router'
@@ -32,9 +32,11 @@ export default function SignInPage() {
       }
     },
     onSuccess: async () => {
-      await queryClient.invalidateQueries({ queryKey: ['user'] })
-      router.navigate({ to: '/' })
+      await queryClient.invalidateQueries({
+        queryKey: userQueryOptions.queryKey,
+      })
       toast.success('Logged in successfully')
+      return router.navigate({ to: '/' })
     },
     onError: () => {
       toast.error('Something went wrong, Failed to login')
