@@ -16,11 +16,8 @@ export async function sendEmail(to: string, otp: number) {
         from: process.env.EMAIL_APP_USER,
         to: to,
         subject: 'Email verification | Ease Expense',
-        html: `<b>Your OTP is ${otp}</b>`,
+        html: `<b>Your one time password is ${otp}</b>`,
     }
-    try {
-        await transporter.sendMail(options)
-    } catch (err) {
-        throw err
-    }
+
+    await transporter.sendMail(options)
 }
