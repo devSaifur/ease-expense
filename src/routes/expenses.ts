@@ -24,13 +24,14 @@ export const expensesRoute = new Hono()
                     categoryId: false,
                 },
             })
+
             return c.json(usersExpenses, 200)
         } catch (err) {
             console.error(err)
             return c.json('Something went wrong', 400)
         }
     })
-    .post('/', getUser, zValidator('json', expenseSchema), async (c) => {
+    .post('/', zValidator('json', expenseSchema), getUser, async (c) => {
         const user = c.var.user
         const expense = c.req.valid('json')
 
@@ -66,30 +67,7 @@ export const expensesRoute = new Hono()
         }
         return c.json(expense, 200)
     })
-    .delete('/:id', getUser, async (c) => {
-        const expenseId = c.req.param('id')
-        const user = c.var.user
-
-        try {
-            const { userId, ...rest } = getTableColumns(expenses)
-
-            const [deletedExpense] = await db
-                .delete(expenses)
-                .where(
-                    and(
-                        eq(expenses.id, expenseId),
-                        eq(expenses.userId, user.id)
-                    )
-                )
-                .returning({ ...rest })
-
-            return c.json(deletedExpense, 200)
-        } catch (err) {
-            console.error(err)
-            return c.json('Something went wrong', 400)
-        }
-    })
-    .patch('/', getUser, zValidator('json', expenseSchema), async (c) => {
+    .patch('/', zValidator('json', expenseSchema), getUser, async (c) => {
         const user = c.var.user
         const expense = c.req.valid('json')
 
@@ -108,6 +86,29 @@ export const expensesRoute = new Hono()
                 .returning({ ...rest })
 
             return c.json(updatedExpense, 200)
+        } catch (err) {
+            console.error(err)
+            return c.json('Something went wrong', 400)
+        }
+    })
+    .delete('/:id', getUser, async (c) => {
+        const expenseId = c.req.param('id')
+        const user = c.var.user
+
+        try {
+            const { userId, ...rest } = getTableColumns(expenses)
+
+            const [deletedExpense] = await db
+                .delete(expenses)
+                .where(
+                    and(
+                        eq(expenses.id, expenseId),
+                        eq(expenses.userId, user.id)
+                    )
+                )
+                .returning({ ...rest })
+
+            return c.json(deletedExpense, 200)
         } catch (err) {
             console.error(err)
             return c.json('Something went wrong', 400)
