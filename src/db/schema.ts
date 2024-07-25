@@ -66,7 +66,7 @@ export const accountsCategories = sqliteTable('account_category', {
     id: text('id', { length: 50 })
         .primaryKey()
         .$defaultFn(() => createId()),
-    name: text('name', { length: 50 }).unique().notNull(),
+    name: text('name', { length: 50 }).notNull().unique(),
 })
 
 export const incomes = sqliteTable('income', {

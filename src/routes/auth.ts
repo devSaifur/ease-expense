@@ -1,4 +1,5 @@
 import { zValidator } from '@hono/zod-validator'
+import * as Bun from 'bun'
 import { eq } from 'drizzle-orm'
 import { Hono } from 'hono'
 import { getCookie } from 'hono/cookie'
@@ -49,11 +50,7 @@ export const authRoute = new Hono<Context>()
             await sendEmail(email, otp)
 
             const session = await lucia.createSession(userId, {})
-            c.header(
-                'Set-Cookie',
-                lucia.createSessionCookie(session.id).serialize(),
-                { append: true }
-            )
+            c.header('Set-Cookie', lucia.createSessionCookie(session.id).serialize(), { append: true })
 
             return c.body('Verification email sent', 200)
         } catch (err) {
@@ -92,10 +89,7 @@ export const authRoute = new Hono<Context>()
             }
 
             await db.delete(verifyEmail).where(eq(verifyEmail.userId, user.id))
-            await db
-                .update(users)
-                .set({ emailVerified: true })
-                .where(eq(users.id, user.id))
+            await db.update(users).set({ emailVerified: true }).where(eq(users.id, user.id))
 
             // creating a default account for the user
             await db.transaction(async (trx) => {
@@ -117,11 +111,7 @@ export const authRoute = new Hono<Context>()
             await lucia.invalidateUserSessions(user.id)
 
             const session = await lucia.createSession(user.id, {})
-            c.header(
-                'Set-Cookie',
-                lucia.createSessionCookie(session.id).serialize(),
-                { append: true }
-            )
+            c.header('Set-Cookie', lucia.createSessionCookie(session.id).serialize(), { append: true })
 
             return c.body('Registration successful', 200)
         } catch (err) {
@@ -145,11 +135,7 @@ export const authRoute = new Hono<Context>()
         }
 
         const session = await lucia.createSession(user.id, {})
-        c.header(
-            'Set-Cookie',
-            lucia.createSessionCookie(session.id).serialize(),
-            { append: true }
-        )
+        c.header('Set-Cookie', lucia.createSessionCookie(session.id).serialize(), { append: true })
 
         return c.body('Login successful', 200)
     })

@@ -40,12 +40,7 @@ export const incomesRoute = new Hono()
                         categoryId,
                         balance: sql`${accounts.balance} + ${income.amount}`,
                     })
-                    .where(
-                        and(
-                            eq(accounts.id, accountId),
-                            eq(accounts.userId, user.id)
-                        )
-                    )
+                    .where(and(eq(accounts.id, accountId), eq(accounts.userId, user.id)))
 
                 const { userId, ...rest } = getTableColumns(incomes)
 
@@ -74,10 +69,7 @@ export const incomesRoute = new Hono()
         try {
             const [updatedIncome] = await db.transaction(async (trx) => {
                 const oldIncome = await trx.query.incomes.findFirst({
-                    where: and(
-                        eq(incomes.id, incomeId),
-                        eq(incomes.userId, user.id)
-                    ),
+                    where: and(eq(incomes.id, incomeId), eq(incomes.userId, user.id)),
                     columns: {
                         amount: true,
                     },
@@ -91,12 +83,7 @@ export const incomesRoute = new Hono()
                     .set({
                         balance: sql`${accounts.balance} - ${oldIncome.amount} + ${income.amount}`,
                     })
-                    .where(
-                        and(
-                            eq(accounts.id, accountId),
-                            eq(accounts.userId, user.id)
-                        )
-                    )
+                    .where(and(eq(accounts.id, accountId), eq(accounts.userId, user.id)))
 
                 const { userId, ...rest } = getTableColumns(incomes)
                 return await trx
@@ -106,13 +93,7 @@ export const incomesRoute = new Hono()
                         categoryId,
                         accountId,
                     })
-                    .where(
-                        and(
-                            eq(incomes.id, incomeId),
-                            eq(incomes.userId, user.id),
-                            eq(incomes.accountId, accountId)
-                        )
-                    )
+                    .where(and(eq(incomes.id, incomeId), eq(incomes.userId, user.id), eq(incomes.accountId, accountId)))
                     .returning({ ...rest })
             })
 

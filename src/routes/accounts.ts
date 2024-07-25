@@ -21,7 +21,9 @@ export const accountsRoute = new Hono()
                     categoryId: false,
                 },
             })
+
             if (!usersAccounts || usersAccounts.length === 0) {
+                // this'll only be true for new users
                 await db.transaction(async (trx) => {
                     const [accountCategory] = await trx
                         .insert(accountsCategories)
@@ -85,45 +87,32 @@ export const accountsRoute = new Hono()
             return c.json('Something went wrong', 500)
         }
     })
-    .patch(
-        '/:id',
-        zValidator('json', accountUpdateSchema),
-        getUser,
-        async (c) => {
-            const user = c.var.user
-            const { name, ...account } = c.req.valid('json')
-            const accountId = c.req.param('id')
+    .patch('/:id', zValidator('json', accountUpdateSchema), getUser, async (c) => {
+        const user = c.var.user
+        const { name, ...account } = c.req.valid('json')
+        const accountId = c.req.param('id')
 
-            try {
-                const [updatedAccount] = await db.transaction(async (trx) => {
-                    await trx
-                        .update(accountsCategories)
-                        .set({ name })
-                        .where(eq(accountsCategories.id, account.categoryId))
+        try {
+            const [updatedAccount] = await db.transaction(async (trx) => {
+                await trx.update(accountsCategories).set({ name }).where(eq(accountsCategories.id, account.categoryId))
 
-                    const { userId, ...rest } = getTableColumns(accounts)
+                const { userId, ...rest } = getTableColumns(accounts)
 
-                    return await trx
-                        .update(accounts)
-                        .set({
-                            ...account,
-                            userId: user.id,
-                        })
-                        .where(
-                            and(
-                                eq(accounts.id, accountId),
-                                eq(accounts.userId, user.id)
-                            )
-                        )
-                        .returning({
-                            ...rest,
-                        })
-                })
+                return await trx
+                    .update(accounts)
+                    .set({
+                        ...account,
+                        userId: user.id,
+                    })
+                    .where(and(eq(accounts.id, accountId), eq(accounts.userId, user.id)))
+                    .returning({
+                        ...rest,
+                    })
+            })
 
-                return c.json(updatedAccount, 202)
-            } catch (err) {
-                console.error(err)
-                return c.json('Something went wrong', 500)
-            }
+            return c.json(updatedAccount, 202)
+        } catch (err) {
+            console.error(err)
+            return c.json('Something went wrong', 500)
         }
-    )
+    })

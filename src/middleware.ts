@@ -15,13 +15,9 @@ export async function authMiddleware(c: Context, next: Next) {
 
     const { session, user } = await lucia.validateSession(sessionId)
     if (session && session.fresh) {
-        c.header(
-            'Set-Cookie',
-            lucia.createSessionCookie(session.id).serialize(),
-            {
-                append: true,
-            }
-        )
+        c.header('Set-Cookie', lucia.createSessionCookie(session.id).serialize(), {
+            append: true,
+        })
     }
     if (!session) {
         c.header('Set-Cookie', lucia.createBlankSessionCookie().serialize(), {
@@ -47,13 +43,9 @@ export const getUser = createMiddleware<Env>(async (c, next) => {
     }
     const { session, user } = await lucia.validateSession(sessionId)
     if (session && session.fresh) {
-        c.header(
-            'Set-Cookie',
-            lucia.createSessionCookie(session.id).serialize(),
-            {
-                append: true,
-            }
-        )
+        c.header('Set-Cookie', lucia.createSessionCookie(session.id).serialize(), {
+            append: true,
+        })
     }
     if (!session) {
         return c.json({ error: 'Unauthorized' }, 401)

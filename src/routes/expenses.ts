@@ -54,10 +54,7 @@ export const expensesRoute = new Hono()
         const user = c.var.user
 
         const expense = await db.query.expenses.findFirst({
-            where: and(
-                eq(expenses.id, expenseId),
-                eq(expenses.userId, user.id)
-            ),
+            where: and(eq(expenses.id, expenseId), eq(expenses.userId, user.id)),
             columns: {
                 userId: false,
             },
@@ -77,12 +74,7 @@ export const expensesRoute = new Hono()
             const [updatedExpense] = await db
                 .update(expenses)
                 .set(expense)
-                .where(
-                    and(
-                        eq(expenses.id, expense.id),
-                        eq(expenses.userId, user.id)
-                    )
-                )
+                .where(and(eq(expenses.id, expense.id), eq(expenses.userId, user.id)))
                 .returning({ ...rest })
 
             return c.json(updatedExpense, 200)
@@ -100,12 +92,7 @@ export const expensesRoute = new Hono()
 
             const [deletedExpense] = await db
                 .delete(expenses)
-                .where(
-                    and(
-                        eq(expenses.id, expenseId),
-                        eq(expenses.userId, user.id)
-                    )
-                )
+                .where(and(eq(expenses.id, expenseId), eq(expenses.userId, user.id)))
                 .returning({ ...rest })
 
             return c.json(deletedExpense, 200)
