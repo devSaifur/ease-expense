@@ -14,7 +14,7 @@ export const expensesRoute = new Hono()
         try {
             const usersExpenses = await db.query.expenses.findMany({
                 where: eq(expenses.userId, user.id),
-                orderBy: desc(expenses.date),
+                orderBy: desc(expenses.createdAt),
                 limit: 15,
                 with: {
                     category: true,
