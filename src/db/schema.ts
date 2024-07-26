@@ -41,9 +41,7 @@ export const accounts = sqliteTable('account', {
     userId: text('user_id')
         .notNull()
         .references(() => users.id),
-    categoryId: text('category_id')
-        .notNull()
-        .references(() => accountsCategories.id),
+    category: text('category', { length: 50 }).notNull(),
     createdAt: text('created_at')
         .default(sql`(CURRENT_TIMESTAMP)`)
         .notNull(),
@@ -54,20 +52,9 @@ export const accountsRelations = relations(accounts, ({ one, many }) => ({
         fields: [accounts.userId],
         references: [users.id],
     }),
-    category: one(accountsCategories, {
-        fields: [accounts.categoryId],
-        references: [accountsCategories.id],
-    }),
     income: many(incomes),
     expenses: many(expenses),
 }))
-
-export const accountsCategories = sqliteTable('account_category', {
-    id: text('id', { length: 50 })
-        .primaryKey()
-        .$defaultFn(() => createId()),
-    name: text('name', { length: 50 }).notNull().unique(),
-})
 
 export const incomes = sqliteTable('income', {
     id: text('id', { length: 50 })
@@ -80,9 +67,7 @@ export const incomes = sqliteTable('income', {
     accountId: text('account_id')
         .notNull()
         .references(() => accounts.id),
-    categoryId: text('category_id')
-        .notNull()
-        .references(() => incomeCategories.id),
+    category: text('category', { length: 50 }).notNull(),
     createdAt: text('created_at')
         .default(sql`(CURRENT_TIMESTAMP)`)
         .notNull(),
@@ -99,18 +84,7 @@ export const incomesRelations = relations(incomes, ({ one }) => ({
         fields: [incomes.accountId],
         references: [accounts.id],
     }),
-    category: one(incomeCategories, {
-        fields: [incomes.categoryId],
-        references: [incomeCategories.id],
-    }),
 }))
-
-export const incomeCategories = sqliteTable('income_category', {
-    id: text('id', { length: 50 })
-        .primaryKey()
-        .$defaultFn(() => createId()),
-    name: text('name', { length: 50 }).notNull().unique(),
-})
 
 export const expenses = sqliteTable('expense', {
     id: text('id', { length: 50 })
@@ -124,9 +98,7 @@ export const expenses = sqliteTable('expense', {
     accountId: text('account_id')
         .notNull()
         .references(() => accounts.id),
-    categoryId: text('category_id')
-        .notNull()
-        .references(() => expenseCategories.id),
+    category: text('category', { length: 50 }).notNull(),
     createdAt: text('created_at')
         .default(sql`(CURRENT_TIMESTAMP)`)
         .notNull(),
@@ -143,15 +115,4 @@ export const expensesRelations = relations(expenses, ({ one }) => ({
         fields: [expenses.accountId],
         references: [accounts.id],
     }),
-    category: one(expenseCategories, {
-        fields: [expenses.categoryId],
-        references: [expenseCategories.id],
-    }),
 }))
-
-export const expenseCategories = sqliteTable('expense_category', {
-    id: text('id', { length: 50 })
-        .primaryKey()
-        .$defaultFn(() => createId()),
-    name: text('name', { length: 50 }).notNull().unique(),
-})

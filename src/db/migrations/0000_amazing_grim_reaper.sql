@@ -1,4 +1,4 @@
-CREATE TABLE `account` (
+CREATE TABLE IF NOT EXISTS `account` (
 	`id` text(50) PRIMARY KEY NOT NULL,
 	`balance` real,
 	`user_id` text NOT NULL,
@@ -8,17 +8,17 @@ CREATE TABLE `account` (
 	FOREIGN KEY (`category_id`) REFERENCES `account_category`(`id`) ON UPDATE no action ON DELETE no action
 );
 --> statement-breakpoint
-CREATE TABLE `account_category` (
+CREATE TABLE IF NOT EXISTS `account_category` (
 	`id` text(50) PRIMARY KEY NOT NULL,
 	`name` text(50) NOT NULL
 );
 --> statement-breakpoint
-CREATE TABLE `expense_category` (
+CREATE TABLE IF NOT EXISTS `expense_category` (
 	`id` text(50) PRIMARY KEY NOT NULL,
 	`name` text(50) NOT NULL
 );
 --> statement-breakpoint
-CREATE TABLE `expense` (
+CREATE TABLE IF NOT EXISTS `expense` (
 	`id` text(50) PRIMARY KEY NOT NULL,
 	`amount` real NOT NULL,
 	`user_id` text NOT NULL,
@@ -30,7 +30,7 @@ CREATE TABLE `expense` (
 	FOREIGN KEY (`category_id`) REFERENCES `expense_category`(`id`) ON UPDATE no action ON DELETE no action
 );
 --> statement-breakpoint
-CREATE TABLE `income_category` (
+CREATE TABLE IF NOT EXISTS `income_category` (
 	`id` text(50) PRIMARY KEY NOT NULL,
 	`name` text(50) NOT NULL
 );
@@ -47,14 +47,14 @@ CREATE TABLE `income` (
 	FOREIGN KEY (`category_id`) REFERENCES `income_category`(`id`) ON UPDATE no action ON DELETE no action
 );
 --> statement-breakpoint
-CREATE TABLE `session` (
+CREATE TABLE IF NOT EXISTS `session` (
 	`id` text PRIMARY KEY NOT NULL,
 	`user_id` text NOT NULL,
 	`expires_at` integer NOT NULL,
 	FOREIGN KEY (`user_id`) REFERENCES `user`(`id`) ON UPDATE no action ON DELETE no action
 );
 --> statement-breakpoint
-CREATE TABLE `user` (
+CREATE TABLE IF NOT EXISTS `user` (
 	`id` text PRIMARY KEY NOT NULL,
 	`name` text NOT NULL,
 	`email` text NOT NULL,
@@ -62,7 +62,7 @@ CREATE TABLE `user` (
 	`password` text NOT NULL
 );
 --> statement-breakpoint
-CREATE TABLE `verify_email` (
+CREATE TABLE IF NOT EXISTS `verify_email` (
 	`user_id` text PRIMARY KEY NOT NULL,
 	`email` text NOT NULL,
 	`otp` integer NOT NULL,

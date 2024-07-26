@@ -23,4 +23,5 @@ const main = async () => {
     }
 }
 
+// eslint-disable-next-line
 main()
