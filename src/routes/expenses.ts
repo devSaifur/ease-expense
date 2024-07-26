@@ -16,12 +16,8 @@ export const expensesRoute = new Hono()
                 where: eq(expenses.userId, user.id),
                 orderBy: desc(expenses.createdAt),
                 limit: 15,
-                with: {
-                    category: true,
-                },
                 columns: {
                     userId: false,
-                    categoryId: false,
                 },
             })
 
@@ -31,16 +27,38 @@ export const expensesRoute = new Hono()
             return c.json('Something went wrong', 400)
         }
     })
-    .post('/', zValidator('json', expenseSchema), getUser, async (c) => {
+    .get('/:id', getUser, async (c) => {
+        const expenseId = c.req.param('id')
         const user = c.var.user
-        const expense = c.req.valid('json')
+
+        try {
+            const expense = await db.query.expenses.findFirst({
+                where: and(eq(expenses.id, expenseId), eq(expenses.userId, user.id)),
+                columns: {
+                    userId: false,
+                },
+            })
+
+            if (!expense) {
+                return c.json('Expense not found', 400)
+            }
+
+            return c.json(expense, 200)
+        } catch (err) {
+            console.error(err)
+            return c.json('Something went wrong', 400)
+        }
+    })
+    .post('/', zValidator('json', expenseSchema), getUser, async (c) => {
+        const values = c.req.valid('json')
+        const user = c.var.user
 
         try {
             const { userId, ...rest } = getTableColumns(expenses)
 
             const [insertedExpense] = await db
                 .insert(expenses)
-                .values({ ...expense, userId: user.id })
+                .values({ ...values, userId: user.id })
                 .returning({ ...rest })
 
             return c.json(insertedExpense, 200)
@@ -49,24 +67,10 @@ export const expensesRoute = new Hono()
             return c.json('Something went wrong', 400)
         }
     })
-    .get('/:id', getUser, async (c) => {
+    .patch('/:id', zValidator('json', expenseSchema), getUser, async (c) => {
         const expenseId = c.req.param('id')
-        const user = c.var.user
-
-        const expense = await db.query.expenses.findFirst({
-            where: and(eq(expenses.id, expenseId), eq(expenses.userId, user.id)),
-            columns: {
-                userId: false,
-            },
-        })
-        if (!expense) {
-            return c.json('Expense not found', 400)
-        }
-        return c.json(expense, 200)
-    })
-    .patch('/', zValidator('json', expenseSchema), getUser, async (c) => {
-        const user = c.var.user
         const expense = c.req.valid('json')
+        const user = c.var.user
 
         try {
             const { userId, ...rest } = getTableColumns(expenses)
@@ -74,7 +78,7 @@ export const expensesRoute = new Hono()
             const [updatedExpense] = await db
                 .update(expenses)
                 .set(expense)
-                .where(and(eq(expenses.id, expense.id), eq(expenses.userId, user.id)))
+                .where(and(eq(expenses.id, expenseId), eq(expenses.userId, user.id)))
                 .returning({ ...rest })
 
             return c.json(updatedExpense, 200)

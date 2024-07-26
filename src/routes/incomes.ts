@@ -13,12 +13,8 @@ export const incomesRoute = new Hono()
         try {
             const usersIncomes = await db.query.incomes.findMany({
                 where: eq(incomes.userId, user.id),
-                with: {
-                    category: true,
-                },
                 columns: {
                     userId: false,
-                    categoryId: false,
                 },
             })
 
@@ -28,16 +24,38 @@ export const incomesRoute = new Hono()
             return c.json('Something went wrong', 500)
         }
     })
-    .post('/', zValidator('form', incomeSchema), getUser, async (c) => {
+    .get('/:id', getUser, async (c) => {
+        const incomeId = c.req.param('id')
         const user = c.var.user
-        const { accountId, categoryId, ...income } = c.req.valid('form')
+
+        try {
+            const income = await db.query.incomes.findFirst({
+                where: and(eq(incomes.id, incomeId), eq(incomes.userId, user.id)),
+                columns: {
+                    userId: false,
+                },
+            })
+
+            if (!income) {
+                return c.json('Income not found', 400)
+            }
+
+            return c.json(income, 200)
+        } catch (err) {
+            console.error(err)
+            return c.json('Something went wrong', 500)
+        }
+    })
+    .post('/', zValidator('json', incomeSchema), getUser, async (c) => {
+        const { accountId, category, ...income } = c.req.valid('json')
+        const user = c.var.user
 
         try {
             const [newIncome] = await db.transaction(async (trx) => {
                 await trx
                     .update(accounts)
                     .set({
-                        categoryId,
+                        category,
                         balance: sql`${accounts.balance} + ${income.amount}`,
                     })
                     .where(and(eq(accounts.id, accountId), eq(accounts.userId, user.id)))
@@ -50,7 +68,7 @@ export const incomesRoute = new Hono()
                         ...income,
                         userId: user.id,
                         accountId,
-                        categoryId,
+                        category,
                     })
                     .returning({ ...rest })
             })
@@ -61,10 +79,10 @@ export const incomesRoute = new Hono()
             return c.json('Something went wrong', 500)
         }
     })
-    .patch('/:id', zValidator('form', incomeSchema), getUser, async (c) => {
-        const user = c.var.user
+    .patch('/:id', zValidator('json', incomeSchema), getUser, async (c) => {
         const incomeId = c.req.param('id')
-        const { accountId, categoryId, ...income } = c.req.valid('form')
+        const { accountId, category, ...income } = c.req.valid('json')
+        const user = c.var.user
 
         try {
             const [updatedIncome] = await db.transaction(async (trx) => {
@@ -90,7 +108,7 @@ export const incomesRoute = new Hono()
                     .update(incomes)
                     .set({
                         ...income,
-                        categoryId,
+                        category,
                         accountId,
                     })
                     .where(and(eq(incomes.id, incomeId), eq(incomes.userId, user.id), eq(incomes.accountId, accountId)))
@@ -98,6 +116,24 @@ export const incomesRoute = new Hono()
             })
 
             return c.json(updatedIncome, 200)
+        } catch (err) {
+            console.error(err)
+            return c.json('Something went wrong', 500)
+        }
+    })
+    .delete('/:id', getUser, async (c) => {
+        const incomeId = c.req.param('id')
+        const user = c.var.user
+
+        try {
+            const { userId, ...rest } = getTableColumns(incomes)
+
+            const [deletedIncome] = await db
+                .delete(incomes)
+                .where(and(eq(incomes.id, incomeId), eq(incomes.userId, user.id)))
+                .returning({ ...rest })
+
+            return c.json(deletedIncome, 200)
         } catch (err) {
             console.error(err)
             return c.json('Something went wrong', 500)
