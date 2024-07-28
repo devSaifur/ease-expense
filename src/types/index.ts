@@ -5,3 +5,11 @@ export type Env = {
         user: User
     }
 }
+
+declare global {
+    namespace NodeJS {
+        interface ProcessEnv {
+            DATABASE_URL: string
+        }
+    }
+}
