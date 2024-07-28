@@ -1,5 +1,6 @@
+import { serve } from '@hono/node-server'
+import { serveStatic } from '@hono/node-server/serve-static'
 import { Hono } from 'hono'
-import { serveStatic } from 'hono/bun'
 import { logger } from 'hono/logger'
 
 import { authMiddleware } from './middleware'
@@ -27,4 +28,11 @@ app.use('*', serveStatic({ root: './client/dist' }))
 
 export type ApiRoute = typeof apiRoutes
 
-export default app
+console.log('Listening on port 3000')
+
+const server = serve({
+    fetch: app.fetch,
+    port: 3000,
+})
+
+export default server

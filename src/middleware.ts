@@ -1,9 +1,9 @@
 import type { Context, Next } from 'hono'
 import { getCookie } from 'hono/cookie'
 import { createMiddleware } from 'hono/factory'
-import type { User } from 'lucia'
 
 import { lucia } from './lib/auth'
+import type { Env } from './types'
 
 export async function authMiddleware(c: Context, next: Next) {
     const sessionId = getCookie(c, lucia.sessionCookieName) ?? null
@@ -28,12 +28,6 @@ export async function authMiddleware(c: Context, next: Next) {
     c.set('user', user)
     c.set('session', session)
     return next()
-}
-
-type Env = {
-    Variables: {
-        user: User
-    }
 }
 
 export const getUser = createMiddleware<Env>(async (c, next) => {

@@ -1,6 +1,6 @@
-import { createTransport } from 'nodemailer'
+import * as nodemailer from 'nodemailer'
 
-const transporter = createTransport({
+const transporter = nodemailer.createTransport({
     service: 'gmail',
     host: 'smtp.gmail.com',
     port: 465,
