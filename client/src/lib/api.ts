@@ -1,6 +1,7 @@
-import type { ApiRoute } from '@server/index'
 import { queryOptions } from '@tanstack/react-query'
 import { hc } from 'hono/client'
+
+import type { ApiRoute } from '@server/index'
 
 const client = hc<ApiRoute>('/')
 
