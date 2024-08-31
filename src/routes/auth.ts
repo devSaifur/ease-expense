@@ -1,5 +1,5 @@
 import { zValidator } from '@hono/zod-validator'
-import { hash, verify } from '@node-rs/argon2'
+import * as Bun from 'bun'
 import { eq } from 'drizzle-orm'
 import { Hono } from 'hono'
 import { getCookie } from 'hono/cookie'
@@ -10,15 +10,16 @@ import { alphabet, generateRandomString } from 'oslo/crypto'
 import { db } from '../db'
 import { users, verifyEmail } from '../db/schema'
 import { lucia } from '../lib/auth'
+import type { Context } from '../lib/context'
 import { sendEmail } from '../lib/nodemailer'
 import { loginSchema, otpSchema, registerSchema } from '../lib/validators'
 import { getUser } from '../middleware'
 
-export const authRoute = new Hono()
+export const authRoute = new Hono<Context>()
     .post('/register', zValidator('form', registerSchema), async (c) => {
         const { email, name, password } = c.req.valid('form')
         try {
-            const hashedPassword = await hash(password)
+            const hashedPassword = await Bun.password.hash(password)
 
             const existingUser = await db.query.users.findFirst({
                 where: eq(users.email, email),
@@ -112,7 +113,7 @@ export const authRoute = new Hono()
             return c.body('User not found', 404)
         }
 
-        const valid = await verify(user.password, password)
+        const valid = await Bun.password.verify(password, user.password)
         if (!valid) {
             return c.body('Invalid password', 400)
         }
