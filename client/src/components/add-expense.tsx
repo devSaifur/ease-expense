@@ -1,3 +1,12 @@
+import { api, getExpensesQueryOptions } from '@/lib/api'
+import { zodResolver } from '@hookform/resolvers/zod'
+import { useMutation, useQueryClient } from '@tanstack/react-query'
+import { useState } from 'react'
+import { useForm } from 'react-hook-form'
+import { toast } from 'sonner'
+
+import { TExpenseSchema, expenseSchema } from '@server/lib/validators'
+
 import { Button } from './ui/button'
 import { Calendar } from './ui/calendar'
 import {
@@ -18,13 +27,6 @@ import {
   FormMessage,
 } from './ui/form'
 import { Input } from './ui/input'
-import { api, getExpensesQueryOptions } from '@/lib/api'
-import { zodResolver } from '@hookform/resolvers/zod'
-import { TExpenseSchema, expenseSchema } from '@server/lib/validators'
-import { useMutation, useQueryClient } from '@tanstack/react-query'
-import { useState } from 'react'
-import { useForm } from 'react-hook-form'
-import { toast } from 'sonner'
 
 export default function AddExpense() {
   const [open, setOpen] = useState(false)
@@ -33,7 +35,7 @@ export default function AddExpense() {
   const form = useForm<TExpenseSchema>({
     resolver: zodResolver(expenseSchema),
     defaultValues: {
-      title: '',
+      name: '',
       amount: 0,
       date: new Date(),
     },
@@ -84,7 +86,7 @@ export default function AddExpense() {
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
             <FormField
               control={form.control}
-              name="title"
+              name="name"
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Title</FormLabel>
