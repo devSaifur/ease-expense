@@ -33,7 +33,7 @@ function VerifyPage() {
 
   const { mutate: verify, isPending } = useMutation({
     mutationFn: async (data: TOtpSchema) => {
-      const res = await api.auth.register.verify.$post({ form: data })
+      const res = await api.auth['verify-email'].$post({ form: data })
       if (!res.ok) {
         throw new Error('Failed to verify OTP')
       }

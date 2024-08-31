@@ -57,7 +57,7 @@ export const authRoute = new Hono()
             return c.body('Something went wrong', 400)
         }
     })
-    .post('/register/verify', zValidator('form', otpSchema), async (c) => {
+    .post('/verify-email', zValidator('form', otpSchema), async (c) => {
         const { otp } = c.req.valid('form')
         const sessionId = getCookie(c, lucia.sessionCookieName) ?? null
         if (!sessionId) {
