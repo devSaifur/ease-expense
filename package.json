@@ -3,116 +3,45 @@
     "description": "Ease Expense | A simple expense management app",
     "type": "module",
     "scripts": {
-<<<<<<< HEAD
-<<<<<<< HEAD
-        "dev": "concurrently \"pnpm dev:server\" \"pnpm dev:client\"",
-        "dev:server": "tsx watch --env-file=.env src/index.ts",
-        "dev:client": "pnpm --dir ./client dev",
-        "install:client": "pnpm --dir ./client install",
-        "build": "pnpm --dir ./client build",
-        "db:push": "drizzle-kit push",
-        "db:generate": "drizzle-kit generate",
-        "db:migrate": "tsx src/db/migrate.ts",
-        "db:studio": "pnpm drizzle-kit studio",
-        "test": "vitest",
-        "start": "tsx src/index.ts"
-=======
         "dev": "concurrently \"bun run --hot src/index.ts\" \"bun run --cwd ./client dev\"",
         "install:client": "cd ./client && bun install",
         "build:client": "cd ./client && bun run build",
         "db:push": "drizzle-kit push",
         "db:generate": "drizzle-kit generate",
-=======
-        "dev": "concurrently \"bun run --hot src/index.ts\" \"bun run --cwd ./client dev\"",
-        "install:client": "cd ./client && bun install",
-        "build:client": "cd ./client && bun run build",
-        "db:push": "drizzle-kit push",
-        "db:generate": "drizzle-kit generate",
->>>>>>> parent of f1c2318 (move from bun to node)
         "db:migrate": "bun run src/db/migrate.ts",
         "db:seed": "bun run src/db/seed.ts",
         "db:studio": "bun drizzle-kit studio",
         "test": "bun test --watch",
-        "build": "bun build src/index.ts --outdir src/build --target bun",
         "start": "bun run src/index.ts"
-<<<<<<< HEAD
->>>>>>> parent of f1c2318 (move from bun to node)
     },
     "dependencies": {
         "@hono/zod-validator": "^0.2.2",
-<<<<<<< HEAD
-        "@libsql/client": "^0.7.0",
+        "@libsql/client": "^0.10.0",
         "@lucia-auth/adapter-drizzle": "^1.1.0",
-        "@node-rs/argon2": "^1.8.3",
-=======
-    },
-    "dependencies": {
-        "@hono/zod-validator": "^0.2.2",
-        "@lucia-auth/adapter-drizzle": "^1.0.7",
->>>>>>> parent of f1c2318 (move from bun to node)
         "@paralleldrive/cuid2": "^2.2.2",
-        "drizzle-orm": "^0.32.2",
-        "hono": "^4.5.4",
-=======
-        "@lucia-auth/adapter-drizzle": "^1.0.7",
-        "@paralleldrive/cuid2": "^2.2.2",
-        "drizzle-orm": "^0.32.1",
-        "hono": "^4.5.1",
-<<<<<<< HEAD
->>>>>>> parent of f1c2318 (move from bun to node)
-=======
->>>>>>> parent of f1c2318 (move from bun to node)
+        "drizzle-orm": "^0.33.0",
+        "hono": "^4.5.10",
         "lucia": "^3.2.0",
         "nodemailer": "^6.9.14",
         "oslo": "^1.2.1",
         "zod": "^3.23.8"
     },
     "devDependencies": {
-        "@eslint/js": "^9.7.0",
-        "@libsql/client": "^0.6.2",
+        "@eslint/js": "^9.9.1",
+        "@total-typescript/ts-reset": "^0.6.0",
         "@trivago/prettier-plugin-sort-imports": "^4.3.0",
-<<<<<<< HEAD
-<<<<<<< HEAD
-        "@types/node": "^20.14.14",
+        "@types/bun": "latest",
         "@types/nodemailer": "^6.4.15",
-        "@types/react": "^18.3.3",
+        "@types/react": "^18.3.5",
         "@types/supertest": "^6.0.2",
-        "@typescript-eslint/parser": "^8.0.1",
-        "concurrently": "^8.2.2",
-        "drizzle-kit": "^0.23.2",
-=======
-        "@types/bun": "latest",
-        "@types/nodemailer": "^6.4.15",
-        "@types/react": "^18.3.3",
-        "@typescript-eslint/parser": "^7.17.0",
+        "@typescript-eslint/parser": "^8.3.0",
         "concurrently": "^8.2.2",
         "drizzle-kit": "^0.22.8",
->>>>>>> parent of f1c2318 (move from bun to node)
-=======
-        "@types/bun": "latest",
-        "@types/nodemailer": "^6.4.15",
-        "@types/react": "^18.3.3",
-        "@typescript-eslint/parser": "^7.17.0",
-        "concurrently": "^8.2.2",
-        "drizzle-kit": "^0.22.8",
->>>>>>> parent of f1c2318 (move from bun to node)
         "eslint-config-prettier": "^9.1.0",
         "globals": "^15.9.0",
         "prettier": "^3.3.3",
-<<<<<<< HEAD
-<<<<<<< HEAD
         "supertest": "^7.0.0",
-        "tsx": "^4.16.5",
         "typescript": "^5.5.4",
-        "typescript-eslint": "^8.0.1",
-        "vitest": "^2.0.5"
-=======
-        "typescript": "^5.5.4",
-        "typescript-eslint": "^7.17.0"
->>>>>>> parent of f1c2318 (move from bun to node)
-=======
-        "typescript": "^5.5.4",
-        "typescript-eslint": "^7.17.0"
->>>>>>> parent of f1c2318 (move from bun to node)
+        "typescript-eslint": "^8.3.0"
     }
 }

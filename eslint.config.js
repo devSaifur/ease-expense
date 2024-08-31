@@ -19,7 +19,7 @@ export default [
         rules: {
             '@typescript-eslint/no-floating-promises': 'error',
             '@typescript-eslint/no-namespace': [2, { allowDeclarations: true }],
-            'no-unused-vars': 'warn',
+            '@typescript-eslint/no-unused-vars': 'warn',
             'no-undef': 'warn',
         },
         languageOptions: {
