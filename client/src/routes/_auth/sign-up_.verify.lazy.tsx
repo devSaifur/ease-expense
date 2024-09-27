@@ -24,7 +24,7 @@ import { toast } from 'sonner'
 import { TOtpSchema, otpSchema } from '@server/lib/validators'
 
 export const Route = createLazyFileRoute('/_auth/sign-up/verify')({
-  component: () => <VerifyPage />,
+  component: VerifyPage,
 })
 
 function VerifyPage() {

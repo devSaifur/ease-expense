@@ -1,12 +1,13 @@
+import { ColumnDef } from '@tanstack/react-table'
+
 import { Checkbox } from '../ui/checkbox'
 import CellAction from './cell-action'
-import { ColumnDef } from '@tanstack/react-table'
 
 export type Expense = {
   id: string
   title: string
   amount: number
-  date: string
+  createdAt: string
 }
 
 export const columns: ColumnDef<Expense>[] = [
@@ -34,7 +35,7 @@ export const columns: ColumnDef<Expense>[] = [
     accessorKey: 'createdAt',
     header: 'Date',
     cell: ({ row }) => {
-      return new Date(row.original.date).toLocaleDateString()
+      return new Date(row.original.createdAt).toLocaleDateString()
     },
   },
   {

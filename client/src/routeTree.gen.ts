@@ -158,19 +158,121 @@ declare module '@tanstack/react-router' {
 
 // Create and export the route tree
 
-export const routeTree = rootRoute.addChildren({
-  AuthRoute: AuthRoute.addChildren({
-    AuthSignInLazyRoute,
-    AuthSignUpLazyRoute,
-    AuthSignUpVerifyLazyRoute,
-  }),
-  AuthenticatedRoute: AuthenticatedRoute.addChildren({
-    AuthenticatedExpensesLazyRoute,
-    AuthenticatedProfileLazyRoute,
-    AuthenticatedIndexLazyRoute,
-    AuthenticatedExpensesExpenseIdRoute,
-  }),
-})
+interface AuthRouteChildren {
+  AuthSignInLazyRoute: typeof AuthSignInLazyRoute
+  AuthSignUpLazyRoute: typeof AuthSignUpLazyRoute
+  AuthSignUpVerifyLazyRoute: typeof AuthSignUpVerifyLazyRoute
+}
+
+const AuthRouteChildren: AuthRouteChildren = {
+  AuthSignInLazyRoute: AuthSignInLazyRoute,
+  AuthSignUpLazyRoute: AuthSignUpLazyRoute,
+  AuthSignUpVerifyLazyRoute: AuthSignUpVerifyLazyRoute,
+}
+
+const AuthRouteWithChildren = AuthRoute._addFileChildren(AuthRouteChildren)
+
+interface AuthenticatedRouteChildren {
+  AuthenticatedExpensesLazyRoute: typeof AuthenticatedExpensesLazyRoute
+  AuthenticatedProfileLazyRoute: typeof AuthenticatedProfileLazyRoute
+  AuthenticatedIndexLazyRoute: typeof AuthenticatedIndexLazyRoute
+  AuthenticatedExpensesExpenseIdRoute: typeof AuthenticatedExpensesExpenseIdRoute
+}
+
+const AuthenticatedRouteChildren: AuthenticatedRouteChildren = {
+  AuthenticatedExpensesLazyRoute: AuthenticatedExpensesLazyRoute,
+  AuthenticatedProfileLazyRoute: AuthenticatedProfileLazyRoute,
+  AuthenticatedIndexLazyRoute: AuthenticatedIndexLazyRoute,
+  AuthenticatedExpensesExpenseIdRoute: AuthenticatedExpensesExpenseIdRoute,
+}
+
+const AuthenticatedRouteWithChildren = AuthenticatedRoute._addFileChildren(
+  AuthenticatedRouteChildren,
+)
+
+export interface FileRoutesByFullPath {
+  '': typeof AuthenticatedRouteWithChildren
+  '/sign-in': typeof AuthSignInLazyRoute
+  '/sign-up': typeof AuthSignUpLazyRoute
+  '/expenses': typeof AuthenticatedExpensesLazyRoute
+  '/profile': typeof AuthenticatedProfileLazyRoute
+  '/': typeof AuthenticatedIndexLazyRoute
+  '/expenses/$expenseId': typeof AuthenticatedExpensesExpenseIdRoute
+  '/sign-up/verify': typeof AuthSignUpVerifyLazyRoute
+}
+
+export interface FileRoutesByTo {
+  '': typeof AuthRouteWithChildren
+  '/sign-in': typeof AuthSignInLazyRoute
+  '/sign-up': typeof AuthSignUpLazyRoute
+  '/expenses': typeof AuthenticatedExpensesLazyRoute
+  '/profile': typeof AuthenticatedProfileLazyRoute
+  '/': typeof AuthenticatedIndexLazyRoute
+  '/expenses/$expenseId': typeof AuthenticatedExpensesExpenseIdRoute
+  '/sign-up/verify': typeof AuthSignUpVerifyLazyRoute
+}
+
+export interface FileRoutesById {
+  __root__: typeof rootRoute
+  '/_auth': typeof AuthRouteWithChildren
+  '/_authenticated': typeof AuthenticatedRouteWithChildren
+  '/_auth/sign-in': typeof AuthSignInLazyRoute
+  '/_auth/sign-up': typeof AuthSignUpLazyRoute
+  '/_authenticated/expenses': typeof AuthenticatedExpensesLazyRoute
+  '/_authenticated/profile': typeof AuthenticatedProfileLazyRoute
+  '/_authenticated/': typeof AuthenticatedIndexLazyRoute
+  '/_authenticated/expenses/$expenseId': typeof AuthenticatedExpensesExpenseIdRoute
+  '/_auth/sign-up/verify': typeof AuthSignUpVerifyLazyRoute
+}
+
+export interface FileRouteTypes {
+  fileRoutesByFullPath: FileRoutesByFullPath
+  fullPaths:
+    | ''
+    | '/sign-in'
+    | '/sign-up'
+    | '/expenses'
+    | '/profile'
+    | '/'
+    | '/expenses/$expenseId'
+    | '/sign-up/verify'
+  fileRoutesByTo: FileRoutesByTo
+  to:
+    | ''
+    | '/sign-in'
+    | '/sign-up'
+    | '/expenses'
+    | '/profile'
+    | '/'
+    | '/expenses/$expenseId'
+    | '/sign-up/verify'
+  id:
+    | '__root__'
+    | '/_auth'
+    | '/_authenticated'
+    | '/_auth/sign-in'
+    | '/_auth/sign-up'
+    | '/_authenticated/expenses'
+    | '/_authenticated/profile'
+    | '/_authenticated/'
+    | '/_authenticated/expenses/$expenseId'
+    | '/_auth/sign-up/verify'
+  fileRoutesById: FileRoutesById
+}
+
+export interface RootRouteChildren {
+  AuthRoute: typeof AuthRouteWithChildren
+  AuthenticatedRoute: typeof AuthenticatedRouteWithChildren
+}
+
+const rootRouteChildren: RootRouteChildren = {
+  AuthRoute: AuthRouteWithChildren,
+  AuthenticatedRoute: AuthenticatedRouteWithChildren,
+}
+
+export const routeTree = rootRoute
+  ._addFileChildren(rootRouteChildren)
+  ._addFileTypes<FileRouteTypes>()
 
 /* prettier-ignore-end */
 

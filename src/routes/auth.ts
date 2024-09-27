@@ -47,7 +47,7 @@ export const authRoute = new Hono<Context>()
                 expiresAt: createDate(new TimeSpan(15, 'm')), // 15 minutes
             })
 
-            await sendEmail(email, otp)
+            // await sendEmail(email, otp)
 
             const session = await lucia.createSession(userId, {})
             c.header('Set-Cookie', lucia.createSessionCookie(session.id).serialize(), { append: true })

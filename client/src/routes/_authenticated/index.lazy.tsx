@@ -17,7 +17,7 @@ import { useState } from 'react'
 import { Bar, BarChart } from 'recharts'
 
 export const Route = createLazyFileRoute('/_authenticated/')({
-  component: () => <HomePage />,
+  component: HomePage,
 })
 
 const chartConfig = {

@@ -25,10 +25,11 @@ export const getExpensesQueryOptions = queryOptions({
   queryFn: async () => {
     const res = await api.expenses.$get()
     if (!res.ok) {
-      throw new Error('Failed to fetch expenses')
+      throw new Error(res.statusText)
     }
     const expenses = await res.json()
     return expenses
   },
+
   staleTime: 1000 * 60 * 5, // 5 minutes
 })

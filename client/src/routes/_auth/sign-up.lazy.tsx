@@ -19,7 +19,7 @@ import { toast } from 'sonner'
 import { TRegisterSchema, registerSchema } from '@server/lib/validators'
 
 export const Route = createLazyFileRoute('/_auth/sign-up')({
-  component: () => <RegisterPage />,
+  component: RegisterPage,
 })
 
 function RegisterPage() {
@@ -28,8 +28,9 @@ function RegisterPage() {
     mutationFn: async (values: TRegisterSchema) => {
       const res = await api.auth.register.$post({ form: values })
       if (!res.ok) {
-        throw new Error('Failed to register')
+        throw new Error(res.statusText)
       }
+      return res
     },
     onSuccess: () => {
       toast.success(
@@ -37,8 +38,8 @@ function RegisterPage() {
       )
       return router.navigate({ to: '/sign-up/verify', replace: true })
     },
-    onError: () => {
-      toast.error('Failed to sign up user')
+    onError: (err) => {
+      toast.error(err.message)
     },
   })
 
@@ -66,7 +67,7 @@ function RegisterPage() {
               <FormItem>
                 <FormLabel>Name</FormLabel>
                 <FormControl>
-                  <Input placeholder="Name" {...field} />
+                  <Input placeholder="Name" {...field} autoComplete="name" />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -92,7 +93,12 @@ function RegisterPage() {
               <FormItem>
                 <FormLabel>Password</FormLabel>
                 <FormControl>
-                  <Input placeholder="********" type="password" {...field} />
+                  <Input
+                    placeholder="********"
+                    type="password"
+                    autoComplete="new-password"
+                    {...field}
+                  />
                 </FormControl>
                 <FormMessage />
               </FormItem>

@@ -91,6 +91,7 @@ export const expenses = sqliteTable('expense', {
         .primaryKey()
         .notNull()
         .$defaultFn(() => createId()),
+    title: text('title').notNull(),
     amount: real('amount').notNull(),
     userId: text('user_id')
         .notNull()

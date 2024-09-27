@@ -18,12 +18,13 @@ import { toast } from 'sonner'
 import { TLoginSchema, loginSchema } from '@server/lib/validators'
 
 export const Route = createLazyFileRoute('/_auth/sign-in')({
-  component: () => <SignInPage />,
+  component: SignInPage,
 })
 
 export default function SignInPage() {
   const queryClient = useQueryClient()
   const router = useRouter()
+
   const { mutate: login, isPending } = useMutation({
     mutationFn: async (values: TLoginSchema) => {
       const res = await api.auth.login.$post({ form: values })
@@ -66,7 +67,12 @@ export default function SignInPage() {
               <FormItem>
                 <FormLabel>Email</FormLabel>
                 <FormControl>
-                  <Input placeholder="Email" {...field} type="email" />
+                  <Input
+                    placeholder="Email"
+                    {...field}
+                    type="email"
+                    autoComplete="email"
+                  />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -79,7 +85,12 @@ export default function SignInPage() {
               <FormItem>
                 <FormLabel>Password</FormLabel>
                 <FormControl>
-                  <Input placeholder="******" type="password" {...field} />
+                  <Input
+                    placeholder="******"
+                    type="password"
+                    autoComplete="current-password"
+                    {...field}
+                  />
                 </FormControl>
                 <FormMessage />
               </FormItem>

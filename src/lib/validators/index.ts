@@ -11,9 +11,7 @@ export type TLoginSchema = z.infer<typeof loginSchema>
 
 export const registerSchema = z
     .object({
-        name: z.string().min(3, { message: 'Name must be at least 3 characters' }).max(100, {
-            message: 'Name must be less than 100 characters',
-        }),
+        name: z.string().min(1, { message: 'Name is required' }),
         email: z.string().email({ message: 'Invalid email' }),
         password: z
             .string()

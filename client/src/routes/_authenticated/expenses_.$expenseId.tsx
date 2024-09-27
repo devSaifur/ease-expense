@@ -20,7 +20,7 @@ import { toast } from 'sonner'
 import { TExpenseSchema, expenseSchema } from '@server/lib/validators'
 
 export const Route = createFileRoute('/_authenticated/expenses/$expenseId')({
-  component: () => <ExpensesPage />,
+  component: ExpensesPage,
   loader: async ({ params }) => {
     const res = await api.expenses[':id'].$get({
       param: { id: params.expenseId },
@@ -35,12 +35,12 @@ export const Route = createFileRoute('/_authenticated/expenses/$expenseId')({
 
 function ExpensesPage() {
   const queryClient = useQueryClient()
-  const { id, amount, date, accountId, categoryId } = Route.useLoaderData()
+  const { amount } = Route.useLoaderData()
   const router = useRouter()
 
   const { mutate: updateExpense, isPending: isUpdating } = useMutation({
     mutationFn: async (values: TExpenseSchema) => {
-      const res = await api.expenses.$patch({ json: values })
+      const res = await api.expenses.$post({ json: values })
       if (!res.ok) {
         throw new Error(res.statusText)
       }
@@ -55,8 +55,8 @@ function ExpensesPage() {
         const expenses = oldData.filter((e) => e.id !== updatedExpense.id)
         return [updatedExpense, ...expenses]
       })
-      router.invalidate()
-      router.navigate({ to: '/expenses' })
+      await router.invalidate()
+      await router.navigate({ to: '/expenses' })
     },
     onError: (error) => {
       toast.error(error.message)
@@ -66,10 +66,7 @@ function ExpensesPage() {
   const form = useForm<TExpenseSchema>({
     resolver: zodResolver(expenseSchema),
     defaultValues: {
-      accountId,
-      id,
       amount,
-      date: new Date(date),
     },
   })
 
